@@ -22,6 +22,16 @@ import {
 } from '../setup/index.js'
 import type { ProviderType, ProviderStatus } from '../setup/index.js'
 
+const mockHealthyOllama: ProviderStatus = {
+  type: 'ollama',
+  available: true,
+  configured: true,
+  healthy: true,
+  priority: 90,
+  models: ['llama2'],
+  endpoint: 'http://localhost:11434',
+}
+
 describe('NPM即拉即用系统', () => {
   describe('AutoDetector', () => {
     let detector: AutoDetector
@@ -283,9 +293,28 @@ describe('NPM即拉即用系统', () => {
 
     beforeEach(() => {
       starter = new QuickStarter()
+      vi.spyOn(starter['detector'], 'detect').mockResolvedValue({
+        providers: [mockHealthyOllama],
+        recommended: 'ollama',
+        environment: {
+          node: process.version,
+          platform: process.platform,
+          arch: process.arch,
+          memory: 8,
+          cpus: 4,
+        },
+        config: {
+          needsSetup: false,
+          missingKeys: [],
+          recommendations: [],
+        },
+      })
+      vi.spyOn(starter['detector'], 'quickDetect').mockResolvedValue('ollama')
+      vi.spyOn(starter['detector'], 'getCachedProvider').mockReturnValue(mockHealthyOllama)
     })
 
     afterEach(async () => {
+      vi.restoreAllMocks()
       if (starter.isInitialized()) {
         await starter.shutdown()
       }
