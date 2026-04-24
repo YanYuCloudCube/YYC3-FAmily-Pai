@@ -36,21 +36,29 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build documentation
+      - name: Build packages
+        run: pnpm -r build
+
+      - name: Generate API docs
         run: |
-          if [ -f "docs/package.json" ]; then
-            cd docs && pnpm install && pnpm run build
-          elif [ -f "package.json" ] && grep -q '"docs:" package.json; then
-            pnpm run docs
-          else
-            echo "⚠️ No docs build script found, skipping"
-            exit 0
-          fi
+          mkdir -p docs-site
+          echo "# YYC³ AI Family Documentation" > docs-site/index.md
+          echo "" >> docs-site/index.md
+          echo "## Packages" >> docs-site/index.md
+          for pkg in core ai-hub ui plugins i18n-core; do
+            echo "- [@yyc3/${pkg}](./${pkg}/index.html)" >> docs-site/index.md
+            if [ -f "packages/${pkg}/README.md" ]; then
+              mkdir -p "docs-site/${pkg}"
+              cp "packages/${pkg}/README.md" "docs-site/${pkg}/index.md"
+            fi
+          done
+          echo "" >> docs-site/index.md
+          echo "Generated on: $(date -u +%Y-%m-%d)" >> docs-site/index.md
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/.vitepress/dist
+          path: docs-site
 
   deploy:
     needs: build
