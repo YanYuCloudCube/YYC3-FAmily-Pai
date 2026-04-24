@@ -13,8 +13,62 @@ env:
 jobs:
   quality-gate:
     name: Quality Gate
-    uses: ./.github/workflows/packages-ci.yml
-    secrets: inherit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all packages
+        run: pnpm -r build
+
+      - name: Type check all packages
+        run: pnpm -r typecheck
+
+      - name: Lint all packages
+        run: pnpm -r lint
+
+      - name: Test all packages
+        run: |
+          set +e
+          for pkg in core ai-hub ui plugins i18n-core; do
+            echo "▶️ Testing @yyc3/$pkg ..."
+            pnpm --filter @yyc3/$pkg test 2>&1 | head -100
+            EXIT_CODE=${PIPESTATUS[0]}
+            if [ $EXIT_CODE -ne 0 ]; then
+              echo "::error::@yyc3/$pkg tests failed with exit code $EXIT_CODE"
+              echo "🔍 Full test output for @yyc3/$pkg:"
+              pnpm --filter @yyc3/$pkg test || true
+              exit $EXIT_CODE
+            fi
+            echo "✅ @yyc3/$pkg tests passed"
+          done
+
+      - name: Security audit
+        run: pnpm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Scan for Secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+        with:
+          config-path: .gitleaks.toml
+          verbose: true
+        continue-on-error: true
 
   publish-packages:
     name: Publish @yyc3/${{ matrix.package }}
