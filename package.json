@@ -7,7 +7,7 @@
     "prepare": "husky || true"
   },
   "devDependencies": {
-    "@size-limit/preset-small-lib": "^12.1.0",
+    "@size-limit/file": "^12.1.0",
     "husky": "^9.1.7",
     "license-checker": "^25.0.1",
     "size-limit": "^12.1.0",
