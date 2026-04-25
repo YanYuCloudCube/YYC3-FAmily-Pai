@@ -1,9 +1,9 @@
-import { logger } from '../chunk-KPOSPDCJ.js';
-import { FAMILY_PERSONAS } from '../chunk-7NKTWN3I.js';
+import { logger } from '../chunk-2WVG7ILL.js';
+import { FAMILY_PERSONAS } from '../chunk-QRTYEG24.js';
 
 /**
  * @preserve YYC³ AI Family Hub
- * @version 1.0.0
+ * @version 1.4.0
  * @license MIT
  * @copyright YYC³ AI Team
  * @see https://github.com/yyc3/YYC3-CloudPivot-Intelli-Matrix
