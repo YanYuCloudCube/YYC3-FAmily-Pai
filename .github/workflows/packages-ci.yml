@@ -65,15 +65,12 @@ jobs:
 
       - name: Test all packages
         run: |
-          set +e
           for pkg in core ai-hub ui plugins i18n-core; do
             echo "▶️ Testing @yyc3/$pkg ..."
-            pnpm --filter @yyc3/$pkg test 2>&1 | head -100
-            EXIT_CODE=${PIPESTATUS[0]}
+            pnpm --filter @yyc3/$pkg test
+            EXIT_CODE=$?
             if [ $EXIT_CODE -ne 0 ]; then
               echo "::error::@yyc3/$pkg tests failed with exit code $EXIT_CODE"
-              echo "🔍 Full test output for @yyc3/$pkg:"
-              pnpm --filter @yyc3/$pkg test || true
               exit $EXIT_CODE
             fi
             echo "✅ @yyc3/$pkg tests passed"
