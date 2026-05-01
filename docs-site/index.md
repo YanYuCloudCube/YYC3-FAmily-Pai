@@ -4,7 +4,7 @@ layout: home
 hero:
   name: YYC3 AI Family
   text: AI Family Hub
-  tagline: 8 Packages Monorepo
+  tagline: "10 Packages Monorepo"
   actions:
     - theme: brand
       text: Quick Start
@@ -14,21 +14,21 @@ hero:
       link: /architecture/overview
     - theme: alt
       text: GitHub
-      link: https://github.com/YanYuCloudCube/Family-PAI
+      link: "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai"
 
 features:
-  - title: 8 AI Family Members
-    details: Master Navigator Thinker Bolero Prophet Sentinel Creative TianShu
-  - title: 8 NPM Packages
-    details: core ai-hub emotion i18n-core ui plugins mcp-servers ide
-  - title: Five Dimensions Architecture
-    details: Time Space Attribute Event Relation
-  - title: Production Security
-    details: YYC3Error Logger RBAC E2E Encryption
-  - title: High Performance
-    details: Vitest 1036+ Tests 80% Coverage ESM Tree-shaking
-  - title: i18n Native
-    details: 10 Languages AI Translation ICU MCP Zero Dependencies
+  - title: "10 Packages Monorepo"
+    details: "core ai-hub emotion i18n-core ui plugins mcp-servers ide motion cli"
+  - title: "@yyc3/cli UI Toolkit"
+    details: "shadcn v4.5.0 full fusion, Registry, MCP, scaffolding"
+  - title: "@yyc3/motion Engine"
+    details: "CSS zero-dep, WAAPI, Framer Motion, 3D, particles"
+  - title: "AI Family Members"
+    details: "Navigator Thinker Bolero Prophet Sentinel Creative TianShu Aurora"
+  - title: "Five Dimensions"
+    details: "Time Space Attribute Event Relation"
+  - title: "Production Security"
+    details: "YYC3Error Logger RBAC E2E Encryption i18n 10 Languages"
 ---
 
 <style>
