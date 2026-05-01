@@ -29,6 +29,8 @@ export default defineConfig({
           { text: '@yyc3/plugins — 插件集合', link: '/packages/plugins' },
           { text: '@yyc3/mcp-servers — MCP 服务器', link: '/packages/mcp-servers' },
           { text: '@yyc3/ide — IDE 环境', link: '/packages/ide' },
+          { text: '@yyc3/motion — 动效引擎', link: '/packages/motion' },
+          { text: '@yyc3/cli — 智能编程库 CLI', link: '/packages/cli' },
         ],
       },
       {
@@ -50,9 +52,9 @@ export default defineConfig({
       {
         text: '资源',
         items: [
-          { text: 'GitHub', link: 'https://github.com/YanYuCloudCube/Family-PAI' },
+          { text: 'GitHub', link: 'https://github.com/YanYuCloudCube/YYC3-FAmily-Pai' },
           { text: 'NPM @yyc3', link: 'https://www.npmjs.com/org/yyc3' },
-          { text: '贡献指南', link: 'https://github.com/YanYuCloudCube/Family-PAI/blob/main/CONTRIBUTING.md' },
+          { text: '贡献指南', link: 'https://github.com/YanYuCloudCube/YYC3-FAmily-Pai/blob/main/CONTRIBUTING.md' },
         ],
       },
     ],
@@ -80,6 +82,8 @@ export default defineConfig({
             { text: '@yyc3/plugins', link: '/packages/plugins' },
             { text: '@yyc3/mcp-servers', link: '/packages/mcp-servers' },
             { text: '@yyc3/ide', link: '/packages/ide' },
+            { text: '@yyc3/motion', link: '/packages/motion' },
+            { text: '@yyc3/cli', link: '/packages/cli' },
           ],
         },
       ],
@@ -106,7 +110,7 @@ export default defineConfig({
     },
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/YanYuCloudCube/Family-PAI' },
+      { icon: 'github', link: 'https://github.com/YanYuCloudCube/YYC3-FAmily-Pai' },
     ],
 
     footer: {
