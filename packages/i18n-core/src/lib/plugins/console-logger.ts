@@ -63,7 +63,7 @@ export function createConsoleLogger(config: ConsoleLoggerConfig = {}): I18nPlugi
       }
     },
 
-    afterTranslate(result: string, key: string) {
+    afterTranslate(_result: string, key: string) {
       if (logPerformance && timingMap.has(key)) {
         const start = timingMap.get(key)!;
         const duration = performance.now() - start;

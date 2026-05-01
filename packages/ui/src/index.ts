@@ -3,9 +3,9 @@
  * description @yyc3/ui 模块入口
  * module @yyc3/ui
  * author YanYuCloudCube Team <admin@0379.email>
- * version 1.1.1
+ * version 2.0.0
  * created 2026-04-24
- * updated 2026-04-24
+ * updated 2026-04-26
  * status active
  * tags [config]
  *

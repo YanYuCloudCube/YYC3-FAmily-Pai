@@ -2,19 +2,19 @@ name: Packages CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [ main, develop ]
     paths:
-      - 'packages/**'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - 'tsconfig.base.json'
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "tsconfig.base.json"
   pull_request:
-    branches: [main]
+    branches: [ main ]
     paths:
-      - 'packages/**'
-      - 'pnpm-lock.yaml'
-      - 'pnpm-workspace.yaml'
-      - 'tsconfig.base.json'
+      - "packages/**"
+      - "pnpm-lock.yaml"
+      - "pnpm-workspace.yaml"
+      - "tsconfig.base.json"
   workflow_call:
     secrets:
       CODECOV_TOKEN:
@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [22]
+        node-version: [ 22 ]
 
     steps:
       - name: Checkout repository
@@ -65,7 +65,7 @@ jobs:
 
       - name: Test all packages
         run: |
-          for pkg in core ai-hub ui plugins i18n-core; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
             echo "▶️ Testing @yyc3/$pkg ..."
             pnpm --filter @yyc3/$pkg test
             EXIT_CODE=$?
@@ -175,7 +175,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Check license compliance
-        run: npx license-checker --production --failOn "GPL;LGPL;AGPL" --excludePrivatePackages
+        run: npx license-checker --production --failOn "GPL;LGPL;AGPL"
+          --excludePrivatePackages
         continue-on-error: true
 
   size-limit:

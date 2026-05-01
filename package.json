@@ -4,7 +4,18 @@
   "private": true,
   "description": "YYC³ AI Family — 八位拟人化AI家人的智能中枢 (Monorepo Root)",
   "scripts": {
-    "prepare": "husky || true"
+    "prepare": "husky || true",
+    "build": "pnpm -r --stream run build",
+    "dev": "pnpm -r --parallel run dev",
+    "test": "pnpm -r --stream run test",
+    "test:coverage": "pnpm -r --stream run test:coverage",
+    "lint": "pnpm -r --stream run lint",
+    "typecheck": "pnpm -r --stream run typecheck",
+    "clean": "pnpm -r --stream run clean"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   },
   "devDependencies": {
     "@size-limit/file": "^12.1.0",
@@ -12,8 +23,5 @@
     "license-checker": "^25.0.1",
     "size-limit": "^12.1.0",
     "typedoc": "^0.28.19"
-  },
-  "dependencies": {
-    "graphviz": "^0.0.9"
   }
 }

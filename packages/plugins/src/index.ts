@@ -38,5 +38,19 @@ export {
 
 export type { ContentPluginConfig } from './content/index.js'
 
-export const PLUGIN_VERSION = '1.1.0'
+export {
+  PluginEngine,
+} from './plugin-engine.js'
+
+export type {
+  PluginManifest,
+  PluginContext,
+  PluginLogger,
+  PluginAPI,
+  PluginInstance,
+  PluginStatus,
+  PluginEngineEvents,
+} from './plugin-engine.js'
+
+export const PLUGIN_VERSION = '1.4.0'
 export const PLUGIN_NAME = '@yyc3/plugins'

@@ -64,7 +64,7 @@ export class PerformanceTracker {
         }
       },
 
-      afterTranslate(result: string, key: string): string | undefined {
+      afterTranslate(_result: string, key: string): string | undefined {
         const startTime = self.timingMap.get(key);
         
         if (startTime !== undefined) {

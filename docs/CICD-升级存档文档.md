@@ -1,3 +1,16 @@
+---
+file: CICD-升级存档文档.md
+description: YYC³ AI Family CI/CD 升级存档 — 安全加固/Husky Hooks/流水线升级
+author: YanYuCloudCube Team <admin@0379.email>
+version: v1.0.0
+created: 2026-04-24
+updated: 2026-04-24
+status: published
+tags: [cicd],[升级],[存档],[安全加固]
+category: archive
+language: zh-CN
+---
+
 # 升级存档文档
           
 ## 🚀 开始执行 CI/CD 闭环优化

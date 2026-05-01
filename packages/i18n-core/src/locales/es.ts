@@ -15,3 +15,4 @@
  * brief @yyc3/i18n-core locales/es.ts 模块
  */
 // es translations placeholder
+export default {} as Record<string, string>

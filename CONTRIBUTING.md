@@ -1,3 +1,16 @@
+---
+file: CONTRIBUTING.md
+description: YYC³ FAmily π³ 贡献指南 — 代码规范/提交规范/PR流程
+author: YanYuCloudCube Team <admin@0379.email>
+version: v1.1.0
+created: 2026-03-21
+updated: 2026-04-29
+status: published
+tags: [贡献],[规范],[开发],[代码标准]
+category: project
+language: zh-CN
+---
+
 # 🤝 YYC³ FAmily π³ 贡献指南
 
 感谢你对 YYC³ AI Family 项目的关注！本文档描述了如何为项目做出贡献。
@@ -85,6 +98,7 @@ pnpm -C packages/core dev  # 开发单个包（监听模式）
 - 启用 `strict` 模式
 - 禁止使用 `any`（除非 `@ts-expect-error` 注释说明原因）
 - 公共 API 必须有完整的类型定义和 JSDoc 注释
+- 使用统一日志系统 (`createLogger`)，禁止直接调用 `console.log/warn/error`
 
 ### 命名约定
 
@@ -157,9 +171,12 @@ pnpm -C packages/core dev  # 开发单个包（监听模式）
 |-------|--------|
 | `core` | @yyc3/core |
 | `ai-hub` | @yyc3/ai-hub |
+| `emotion` | @yyc3/emotion |
 | `ui` | @yyc3/ui |
 | `plugins` | @yyc3/plugins |
 | `i18n` | @yyc3/i18n-core |
+| `mcp-servers` | @yyc3/mcp-servers |
+| `ide` | @yyc3/ide |
 | `root` | 根配置 |
 
 ---

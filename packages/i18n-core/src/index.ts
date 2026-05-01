@@ -3,7 +3,7 @@
  * description @yyc3/i18n-core 模块入口
  * module @yyc3/i18n-core
  * author YanYuCloudCube Team <admin@0379.email>
- * version 2.3.0
+ * version 1.4.0
  * created 2026-04-24
  * updated 2026-04-24
  * status active

@@ -15,7 +15,7 @@ export default defineConfig({
   minify: false,
   treeshake: true,
   outDir: 'dist',
-  external: ['openai', 'ollama', 'zod', 'eventemitter3'],
+  external: ['openai', 'ollama', 'zod', 'eventemitter3', '@yyc3/core'],
   target: 'es2022',
   esbuildOptions(options) {
     options.banner = {

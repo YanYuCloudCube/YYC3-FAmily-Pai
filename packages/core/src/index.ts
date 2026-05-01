@@ -19,6 +19,7 @@ export {
   UnifiedAuthManager,
   OpenAIProvider,
   OllamaProvider,
+  AnthropicProvider,
   AuthMonitor,
   AuthSwitcher,
 } from './auth/index.js'

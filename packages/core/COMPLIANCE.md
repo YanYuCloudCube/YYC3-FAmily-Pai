@@ -12,7 +12,7 @@
 # @yyc3/core 闭环达标报告
 
 **包名**: @yyc3/core  
-**版本**: v1.3.0  
+**版本**: v1.4.0
 **审计日期**: 2026-04-24  
 **审计结果**: ✅ **全部通过**
 
@@ -90,7 +90,7 @@ Duration    371ms
  * description @yyc3/core 模块入口
  * module @yyc3/core
  * author YanYuCloudCube Team <admin@0379.email>
- * version 1.3.0
+ * version 1.4.0
  * created 2026-04-24
  * updated 2026-04-24
  * status active

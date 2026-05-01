@@ -29,6 +29,44 @@ describe('YYC3AIHub', () => {
     const hub = new YYC3AIHub();
     expect(hub).toBeDefined();
   });
+
+  it('should expose agent manager', () => {
+    const hub = new YYC3AIHub();
+    expect(hub.getAgentManager()).toBeDefined()
+  })
+
+  it('should expose skill manager', () => {
+    const hub = new YYC3AIHub()
+    expect(hub.getSkillManager()).toBeDefined()
+  })
+
+  it('should expose MCP manager', () => {
+    const hub = new YYC3AIHub()
+    expect(hub.getMCPManager()).toBeDefined()
+  })
+
+  it('should expose auth', () => {
+    const hub = new YYC3AIHub()
+    expect(hub.getAuth()).toBeDefined()
+  })
+
+  it('should get agents list', () => {
+    const hub = new YYC3AIHub()
+    const agents = hub.getAgents()
+    expect(Array.isArray(agents)).toBe(true)
+  })
+
+  it('should get skills list', () => {
+    const hub = new YYC3AIHub()
+    const skills = hub.getSkills()
+    expect(Array.isArray(skills)).toBe(true)
+  })
+
+  it('should get MCP servers list', () => {
+    const hub = new YYC3AIHub()
+    const servers = hub.getMCPServers()
+    expect(Array.isArray(servers)).toBe(true)
+  })
 });
 
 describe('Family Compass - Personas', () => {

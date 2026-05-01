@@ -13,6 +13,7 @@ export default tseslint.config(
       },
       parserOptions: {
         project: './tsconfig.json',
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {

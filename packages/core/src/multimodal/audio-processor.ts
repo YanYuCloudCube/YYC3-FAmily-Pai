@@ -14,9 +14,9 @@
  *
  * brief 音频处理器
  */
-import type { 
-  AudioInput, 
-  AudioTranscriptionOptions, 
+import type {
+  AudioInput,
+  AudioTranscriptionOptions,
   AudioTranscriptionResult,
   TextToSpeechOptions,
   TextToSpeechResult
@@ -51,7 +51,7 @@ export class AudioProcessor {
   ): Promise<AudioTranscriptionResult> {
     try {
       const formData = new FormData()
-      
+
       let audioBlob: Blob
       if (typeof audio.data === 'string') {
         const binaryString = atob(audio.data)
@@ -61,12 +61,12 @@ export class AudioProcessor {
         }
         audioBlob = new Blob([bytes], { type: `audio/${audio.format}` })
       } else {
-        audioBlob = new Blob([audio.data], { type: `audio/${audio.format}` })
+        audioBlob = new Blob([new Uint8Array(audio.data as unknown as ArrayBuffer)], { type: `audio/${audio.format}` })
       }
-      
+
       formData.append('file', audioBlob, `audio.${audio.format}`)
       formData.append('model', options.model || 'whisper-1')
-      
+
       if (options.language) {
         formData.append('language', options.language)
       }

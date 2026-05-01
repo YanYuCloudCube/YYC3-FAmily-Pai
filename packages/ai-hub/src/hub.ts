@@ -14,12 +14,15 @@
  *
  * brief AI Hub 核心实现
  */
-import { YYC3Auth } from './auth.js';
+import { UnifiedAuthManager } from '@yyc3/core/auth';
+import { AgentRouter } from './agent-router.js';
 import { AgentManager } from './agents.js';
-import { SkillManager } from './skills.js';
-import { MCPManager } from './mcp.js';
-import { HubConfig, TaskContext, TaskResult } from './types.js';
+import { YYC3Auth } from './auth.js';
+import { YYC3Error, YYC3ErrorCode } from './errors/index.js';
 import { logger } from './logger.js';
+import { MCPManager } from './mcp.js';
+import { SkillManager } from './skills.js';
+import { HubConfig, TaskContext, TaskResult } from './types.js';
 
 interface AnalysisContext {
   task: string;
@@ -37,6 +40,7 @@ interface ExecutionPlan {
 }
 
 export class YYC3AIHub {
+  private coreAuth: UnifiedAuthManager;
   private auth: YYC3Auth;
   private agents: AgentManager;
   private skills: SkillManager;
@@ -44,6 +48,12 @@ export class YYC3AIHub {
   private initialized = false;
 
   constructor(private config: HubConfig = {}) {
+    this.coreAuth = new UnifiedAuthManager({
+      preferLocal: false,
+      autoDetect: true,
+      openai: config.apiKey ? { apiKey: config.apiKey } : undefined,
+      anthropic: config.anthropicApiKey ? { apiKey: config.anthropicApiKey } : undefined,
+    })
     this.auth = new YYC3Auth(config);
     this.agents = new AgentManager(this.auth);
     this.skills = new SkillManager();
@@ -53,20 +63,24 @@ export class YYC3AIHub {
   async initialize(): Promise<void> {
     logger.init('YYC³ AI Hub 初始化中...');
 
-    logger.step(1, '认证初始化');
+    logger.step(1, '认证初始化 (core UnifiedAuthManager)');
+    const providers = await this.coreAuth.autoDetect()
+    logger.stat('Core Providers', String(providers.length))
+
+    logger.step(2, '认证初始化 (hub auth)');
     await this.auth.initialize();
 
-    logger.step(2, '加载Agents');
+    logger.step(3, '加载Agents');
     await this.agents.load([
       './agents'
     ]);
 
-    logger.step(3, '加载Skills');
+    logger.step(4, '加载Skills');
     await this.skills.load([
       './skills'
     ]);
 
-    logger.step(4, '加载MCP服务器');
+    logger.step(5, '加载MCP服务器');
     await this.mcp.load([
       './config/mcp-servers.json',
       './config/vscode-mcp.json'
@@ -101,10 +115,11 @@ export class YYC3AIHub {
         }
       };
     } catch (error) {
+      const yyc3Error = YYC3Error.fromError(error, YYC3ErrorCode.HUB_EXECUTE_FAILED);
       return {
         success: false,
         output: '',
-        errors: [error instanceof Error ? error.message : String(error)],
+        errors: [yyc3Error.message],
         metrics: {
           tokensUsed: 0,
           duration: Date.now() - startTime,
@@ -116,7 +131,7 @@ export class YYC3AIHub {
 
   private async analyzeContext(task: string): Promise<AnalysisContext> {
     const matchingSkills = this.skills.findMatching(task);
-    
+
     return {
       task,
       matchingSkills: matchingSkills.map(s => s.id),
@@ -125,31 +140,7 @@ export class YYC3AIHub {
   }
 
   private suggestAgents(task: string): string[] {
-    const keywords: Record<string, string[]> = {
-      'backend-development': ['api', 'server', 'database', 'microservice', 'backend'],
-      'llm-application-dev': ['llm', 'rag', 'prompt', 'agent', 'ai'],
-      'kubernetes-operations': ['k8s', 'kubernetes', 'deploy', 'container', 'docker'],
-      'security-scanning': ['security', 'vulnerability', 'audit', '安全'],
-      'python-development': ['python', 'data', 'ml', 'machine learning'],
-      'javascript-typescript': ['javascript', 'typescript', 'node', 'react', 'vue'],
-      'rust-development': ['rust', 'cargo', '系统编程'],
-      'go-development': ['golang', 'go', '并发'],
-      'mobile-development': ['mobile', 'ios', 'android', 'flutter', 'react native'],
-      'devops': ['devops', 'ci', 'cd', 'pipeline', 'jenkins'],
-      'testing': ['test', '测试', 'unit', 'integration'],
-      'documentation': ['doc', '文档', 'readme', 'api doc']
-    };
-
-    const suggestions: string[] = [];
-    const lowerTask = task.toLowerCase();
-
-    for (const [agent, words] of Object.entries(keywords)) {
-      if (words.some(w => lowerTask.includes(w))) {
-        suggestions.push(agent);
-      }
-    }
-
-    return suggestions.length > 0 ? suggestions : ['general'];
+    return AgentRouter.route(task);
   }
 
   private async createPlan(context: AnalysisContext): Promise<ExecutionPlan> {

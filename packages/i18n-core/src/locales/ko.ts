@@ -15,3 +15,4 @@
  * brief @yyc3/i18n-core locales/ko.ts 模块
  */
 // ko translations placeholder
+export default {} as Record<string, string>

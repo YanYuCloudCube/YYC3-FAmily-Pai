@@ -7,6 +7,7 @@ export default defineConfig({
     components: 'src/components/index.ts',
     family: 'src/family/index.ts',
     themes: 'src/themes/index.ts',
+    shadcn: 'src/shadcn.ts',
   },
   format: ['esm'],
   dts: true,

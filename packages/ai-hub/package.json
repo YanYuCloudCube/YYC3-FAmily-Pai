@@ -87,6 +87,7 @@
     }
   ],
   "dependencies": {
+    "@yyc3/core": "workspace:^",
     "zod": "^3.22.0",
     "eventemitter3": "^5.0.1"
   },
