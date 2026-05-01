@@ -14,10 +14,10 @@
  *
  * brief @yyc3/ui components.tsx 单元测试
  */
-import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { describe, expect, it, vi } from 'vitest'
 import { Button } from '../components/button'
-import { Card } from '../components/card'
+import { Card, CardBody, CardFooter, CardHeader } from '../components/card'
 import { Input } from '../components/input'
 import { Modal } from '../components/modal'
 
@@ -63,12 +63,50 @@ describe('Card 组件', () => {
 
   it('应该支持自定义 className', () => {
     const { container } = render(
-      <Card title="Test" className="custom-card">
+      <Card className="custom-card">
         内容
       </Card>
     )
 
     expect(container.querySelector('.custom-card')).toBeInTheDocument()
+  })
+
+  it('应该支持 variant 属性', () => {
+    const { container } = render(
+      <Card variant="elevated">内容</Card>
+    )
+    expect(container.querySelector('.family-card--elevated')).toBeInTheDocument()
+  })
+
+  it('应该支持 padding 属性', () => {
+    const { container } = render(
+      <Card padding="lg">内容</Card>
+    )
+    expect(container.querySelector('.family-card--padding-lg')).toBeInTheDocument()
+  })
+
+  it('应该渲染 CardHeader/CardBody/CardFooter', () => {
+    const { container } = render(
+      <Card>
+        <CardHeader className="hdr">头部</CardHeader>
+        <CardBody className="bdy">内容</CardBody>
+        <CardFooter className="ftr">底部</CardFooter>
+      </Card>
+    )
+    expect(container.querySelector('.family-card__header')).toBeInTheDocument()
+    expect(container.querySelector('.family-card__body')).toBeInTheDocument()
+    expect(container.querySelector('.family-card__footer')).toBeInTheDocument()
+    expect(container.querySelector('.hdr')).toBeInTheDocument()
+    expect(container.querySelector('.bdy')).toBeInTheDocument()
+    expect(container.querySelector('.ftr')).toBeInTheDocument()
+  })
+
+  it('应该渲染默认 variant 和 padding', () => {
+    const { container } = render(
+      <Card>内容</Card>
+    )
+    expect(container.querySelector('.family-card--default')).toBeInTheDocument()
+    expect(container.querySelector('.family-card--padding-md')).toBeInTheDocument()
   })
 })
 
@@ -102,7 +140,7 @@ describe('Input 组件', () => {
 describe('Modal 组件', () => {
   it('默认不应该显示', () => {
     const { container } = render(
-      <Modal isOpen={false} onClose={() => {}} title="模态框">
+      <Modal isOpen={false} onClose={() => { }} title="模态框">
         内容
       </Modal>
     )
@@ -112,7 +150,7 @@ describe('Modal 组件', () => {
 
   it('isOpen 为 true 时应该显示', () => {
     render(
-      <Modal isOpen={true} onClose={() => {}} title="模态框">
+      <Modal isOpen={true} onClose={() => { }} title="模态框">
         模态框内容
       </Modal>
     )
@@ -123,7 +161,7 @@ describe('Modal 组件', () => {
 
   it('应该支持不同尺寸', () => {
     render(
-      <Modal isOpen={true} onClose={() => {}} title="大模态框" size="lg">
+      <Modal isOpen={true} onClose={() => { }} title="大模态框" size="lg">
         内容
       </Modal>
     )

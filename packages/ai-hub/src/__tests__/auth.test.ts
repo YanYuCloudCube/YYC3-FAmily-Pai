@@ -14,15 +14,22 @@
  *
  * brief @yyc3/ai-hub auth.ts 单元测试
  */
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { YYC3Auth } from '../../src/auth.js';
-import type { AuthProvider, AuthType } from '../../src/auth.js';
 
 describe('YYC3Auth', () => {
   let auth: YYC3Auth;
 
   beforeEach(() => {
     auth = new YYC3Auth();
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
+      ok: true,
+      json: () => Promise.resolve({}),
+    }));
+    vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
     vi.restoreAllMocks();
   });
 
@@ -72,19 +79,16 @@ describe('YYC3Auth', () => {
       delete process.env.OPENAI_API_KEY;
       delete process.env.ANTHROPIC_API_KEY;
 
-      global.fetch = vi.fn().mockRejectedValue(new Error('Network error'));
+      vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('Network error')));
 
       await expect(new YYC3Auth().initialize()).rejects.toThrow('未检测到可用的AI提供商');
 
-      global.fetch = undefined as any;
       process.env.OPENAI_API_KEY = originalOpenAI;
       process.env.ANTHROPIC_API_KEY = originalAnthropic;
     });
   });
 
-  // NOTE: 这些测试需要 fetch polyfill (OpenAI SDK v6+)
-  // 在 vitest.config.ts 中配置后可取消 skip
-  describe.skip('initialize - explicit provider (requires fetch polyfill)', () => {
+  describe('initialize - explicit provider', () => {
     it('should initialize OpenAI with API key', async () => {
       const provider = await new YYC3Auth({ authType: 'openai', apiKey: 'sk-test' }).initialize();
       expect(provider.type).toBe('openai');
@@ -132,8 +136,7 @@ describe('YYC3Auth', () => {
     });
   });
 
-  // NOTE: initialize() 需要 fetch polyfill
-  describe.skip('getModel (requires fetch polyfill)', () => {
+  describe('getModel', () => {
     it('should return opus model', async () => {
       await auth.initialize();
       expect(auth.getModel('opus')).toBeTruthy();
@@ -154,8 +157,7 @@ describe('YYC3Auth', () => {
     });
   });
 
-  // NOTE: initialize() 需要 fetch polyfill
-  describe.skip('getProvider (requires fetch polyfill)', () => {
+  describe('getProvider', () => {
     it('should throw error if not initialized', () => {
       expect(() => auth.getProvider()).toThrow('认证未初始化');
     });
@@ -168,8 +170,7 @@ describe('YYC3Auth', () => {
     });
   });
 
-  // NOTE: 需要 OpenAI SDK 实例化
-  describe.skip('custom model mapping (requires fetch polyfill)', () => {
+  describe('custom model mapping', () => {
     it('should use custom model mapping for OpenAI', async () => {
       const provider = await new YYC3Auth({
         authType: 'openai',

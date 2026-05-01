@@ -15,3 +15,4 @@
  * brief @yyc3/i18n-core locales/ar.ts 模块
  */
 // ar translations placeholder
+export default {} as Record<string, string>

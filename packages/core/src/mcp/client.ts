@@ -84,7 +84,7 @@ export class MCPClient extends EventEmitter<MCPClientEvents> {
     
     // 发送初始化请求
     const result = await this.request('initialize', {
-      protocolVersion: '2024-11-05',
+      protocolVersion: '2025-03-26',
       capabilities: this.config.capabilities || {
         tools: true,
         resources: true,

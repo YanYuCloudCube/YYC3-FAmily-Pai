@@ -15,5 +15,6 @@
  * brief @yyc3/core 模块入口
  */
 export { MCPClient } from './client.js'
-export { StdioTransport, HTTPTransport } from './transport.js'
-export type { MCPTransport, MCPMessage, MCPTool, MCPResource } from './types.js'
+export { HTTPTransport, SSETransport, StdioTransport, WebSocketTransport } from './transport.js'
+export type { HTTPTransportConfig, SSETransportConfig, StdioTransportConfig, WebSocketTransportConfig } from './transport.js'
+export type { MCPClientCapabilities, MCPMessage, MCPResource, MCPServerCapabilities, MCPTool, MCPToolResult, MCPTransport } from './types.js'

@@ -14,14 +14,12 @@
  *
  * brief 统一认证管理器
  */
-import { OpenAIProvider } from './openai-provider.js'
+import type { AIProviderType, ChatCompletionResponse, ChatMessage } from '../types.js'
+import { AnthropicProvider } from './anthropic-provider.js'
 import { OllamaProvider } from './ollama-provider.js'
+import { OpenAIProvider } from './openai-provider.js'
 import type { AuthProvider, AuthProviderInfo, AuthStatus } from './types.js'
-import type { AIProviderType, ChatMessage, ChatCompletionResponse } from '../types.js'
 
-/**
- * 统一认证管理器配置
- */
 export interface UnifiedAuthManagerConfig {
   preferLocal?: boolean
   autoDetect?: boolean
@@ -33,6 +31,12 @@ export interface UnifiedAuthManagerConfig {
   ollama?: {
     baseUrl?: string
     defaultModel?: string
+  }
+  anthropic?: {
+    apiKey?: string
+    baseUrl?: string
+    defaultModel?: string
+    apiVersion?: string
   }
 }
 
@@ -84,6 +88,18 @@ export class UnifiedAuthManager {
       errors.push({ provider: 'ollama', error: String(error) })
     }
 
+    // 检测 Anthropic
+    try {
+      const anthropic = new AnthropicProvider(this.config.anthropic)
+      const isValid = await anthropic.validate()
+      if (isValid) {
+        this.providers.set('anthropic', anthropic)
+        availableProviders.push(anthropic.getInfo())
+      }
+    } catch (error) {
+      errors.push({ provider: 'anthropic', error: String(error) })
+    }
+
     // 自动选择提供商
     if (availableProviders.length > 0 && !this.activeProvider) {
       this.activeProvider = this.selectBestProvider(availableProviders)
@@ -101,7 +117,7 @@ export class UnifiedAuthManager {
       const local = providers.find(p => p.isLocal)
       if (local) return local.name
     }
-    
+
     // 优先选择 OpenAI，其次 Ollama
     return providers[0].name
   }
@@ -159,7 +175,7 @@ export class UnifiedAuthManager {
    */
   getStatus(): AuthStatus {
     const providers = Array.from(this.providers.values()).map(p => p.getInfo())
-    
+
     return {
       activeProvider: this.activeProvider,
       providers,

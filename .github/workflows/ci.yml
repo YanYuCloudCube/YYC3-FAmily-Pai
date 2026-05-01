@@ -1,32 +1,59 @@
-name: CI Validation (Legacy - Disabled)
+name: CI Validation
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
 
 env:
   NODE_ENV: test
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
-  validation:
-    name: Jest Unit Suite
+  quality-gate:
+    name: Quality Gate
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        shell: bash
-        working-directory: server
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
           node-version: 22
+          cache: pnpm
 
       - name: Install dependencies
-        run: npm install
+        run: pnpm install --frozen-lockfile
 
-      - name: Jest unit tests
-        run: npm run test:ci
+      - name: Build all packages
+        run: pnpm -r --stream build
+
+      - name: Type check all packages
+        run: pnpm -r --stream typecheck
+
+      - name: Lint all packages
+        run: pnpm -r --stream lint
+
+      - name: Test all packages
+        run: pnpm -r --stream test
+
+      - name: Security audit
+        run: pnpm audit --audit-level=high
+        continue-on-error: true
+
+      - name: Scan for Secrets
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITLEAKS_LICENSE: ${{ secrets.GITLEAKS_LICENSE }}
+        with:
+          config-path: .gitleaks.toml
+          verbose: true
+        continue-on-error: true

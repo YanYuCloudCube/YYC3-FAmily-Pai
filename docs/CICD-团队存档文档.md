@@ -1,3 +1,16 @@
+---
+file: CICD-团队存档文档.md
+description: YYC³ AI Family CI/CD 团队存档信息 — 项目基础/NPM发包/安全合规
+author: YanYuCloudCube Team <admin@0379.email>
+version: v1.0.0
+created: 2026-04-24
+updated: 2026-04-24
+status: published
+tags: [cicd],[存档],[团队],[配置]
+category: archive
+language: zh-CN
+---
+
 # CICD存档文档
 
 ---

@@ -14,9 +14,9 @@
  *
  * brief @yyc3/ai-hub work.ts 单元测试
  */
-import { describe, it, expect, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it } from 'vitest';
 import { createFamilyWorkSystem } from '../../src/work/index.js';
-import type { TaskCategory, TaskPriority, CollaborationMode } from '../../src/work/types.js';
+import type { TaskCategory, TaskPriority } from '../../src/work/types.js';
 
 describe('FamilyWorkSystem', () => {
   let workSystem: ReturnType<typeof createFamilyWorkSystem>;
@@ -171,7 +171,7 @@ describe('FamilyWorkSystem', () => {
       });
 
       workSystem.submitTaskFeedback('user-1', task.id, 'qianxing', 5, 'Excellent work!');
-      
+
       const comments = workSystem.getTaskManager().getTask(task.id)?.comments || [];
       expect(comments.length).toBeGreaterThanOrEqual(1);
       expect(comments[comments.length - 1].content).toContain('5/5');
@@ -188,7 +188,7 @@ describe('FamilyWorkSystem', () => {
     it('should return status for all 8 members', () => {
       const statuses = workSystem.getFamilyMemberWorkStatus();
       expect(statuses).toHaveLength(8);
-      
+
       const memberIds = statuses.map(s => s.id);
       expect(memberIds).toContain('qianxing');
       expect(memberIds).toContain('wanwu');
@@ -231,7 +231,7 @@ describe('TaskManager integration', () => {
     });
 
     const tm = workSystem.getTaskManager();
-    
+
     expect(tm.updateTaskStatus(task.id, 'in_progress')).toBe(true);
     expect(tm.getTask(task.id)?.status).toBe('in_progress');
 
@@ -250,7 +250,7 @@ describe('TaskManager integration', () => {
     });
 
     const tm = workSystem.getTaskManager();
-    
+
     expect(tm.addWorkLog(task.id, {
       memberId: 'wanwu',
       memberName: '万物',
@@ -292,11 +292,103 @@ describe('TaskManager integration', () => {
 
     const tm = workSystem.getTaskManager();
     const summary = tm.getDashboardSummary();
-    
+
     expect(summary.todayTasks).toBeDefined();
     expect(typeof summary.todayTasks.pending).toBe('number');
     expect(typeof summary.todayTasks.inProgress).toBe('number');
     expect(typeof summary.todayTasks.completed).toBe('number');
     expect(summary.weekStats).toBeDefined();
+  });
+
+  it('should end collaboration session', async () => {
+    const { sessionId } = await workSystem.createAndStartTask({
+      userId: 'user-1',
+      title: 'End Collab Test',
+      description: '',
+      category: 'development_engineering' as TaskCategory,
+      priority: 'medium' as TaskPriority,
+    });
+
+    const engine = workSystem.getCollaborationEngine();
+    const result = engine.endCollaboration(sessionId);
+    expect(result).toBe(true);
+  });
+
+  it('should return false when ending non-existent session', () => {
+    const engine = workSystem.getCollaborationEngine();
+    const result = engine.endCollaboration('non-existent');
+    expect(result).toBe(false);
+  });
+
+  it('should get active session by task id', async () => {
+    const { task } = await workSystem.createAndStartTask({
+      userId: 'user-1',
+      title: 'Get Session Test',
+      description: '',
+      category: 'content_creation' as TaskCategory,
+      priority: 'low' as TaskPriority,
+    });
+
+    const engine = workSystem.getCollaborationEngine();
+    const session = engine.getActiveSession(task.id);
+    expect(session).toBeDefined();
+    expect(session!.taskId).toBe(task.id);
+  });
+
+  it('should get any active session without task id', async () => {
+    await workSystem.createAndStartTask({
+      userId: 'user-1',
+      title: 'Any Session Test',
+      description: '',
+      category: 'analysis_research' as TaskCategory,
+      priority: 'high' as TaskPriority,
+    });
+
+    const engine = workSystem.getCollaborationEngine();
+    const session = engine.getActiveSession();
+    expect(session).toBeDefined();
+  });
+
+  it('should return undefined for non-existent task id', () => {
+    const engine = workSystem.getCollaborationEngine();
+    const session = engine.getActiveSession('non-existent');
+    expect(session).toBeUndefined();
+  });
+
+  it('should update member progress and trigger handoff', async () => {
+    const { sessionId } = await workSystem.createAndStartTask({
+      userId: 'user-1',
+      title: 'Progress Test',
+      description: '',
+      category: 'development_engineering' as TaskCategory,
+      priority: 'high' as TaskPriority,
+    });
+
+    const engine = workSystem.getCollaborationEngine();
+    const session = engine.getActiveSession();
+    const firstMember = session!.members[0];
+    const result = engine.updateMemberProgress(sessionId, firstMember.memberId, 100);
+    expect(result).toBe(true);
+    expect(firstMember.status).toBe('completed');
+  });
+
+  it('should return false when updating progress for non-existent session', () => {
+    const engine = workSystem.getCollaborationEngine();
+    const result = engine.updateMemberProgress('non-existent', 'member-1', 50);
+    expect(result).toBe(false);
+  });
+
+  it('should return false when updating progress for non-existent member', async () => {
+    const { sessionId } = await workSystem.createAndStartTask({
+      userId: 'user-1',
+      title: 'Progress Member Test',
+      description: '',
+      category: 'security_auditing' as TaskCategory,
+      priority: 'medium' as TaskPriority,
+    });
+
+    const engine = workSystem.getCollaborationEngine();
+    const result = engine.updateMemberProgress(sessionId, 'non-existent-member', 50);
+    expect(result).toBe(false);
   });
 });

@@ -117,7 +117,7 @@ import { MCPServer, registerI18nTools, StdioTransport } from '@yyc3/i18n-core/mc
 
 const server = new MCPServer({
   name: 'i18n-tools',
-  version: '2.3.0',
+  version: '1.4.0',
   transport: new StdioTransport(),
 });
 registerI18nTools(server);
@@ -601,7 +601,7 @@ import {
 // 创建 MCP Server
 const server = new MCPServer({
   name: 'yyc3-i18n-tools',
-  version: '2.3.0',
+  version: '1.4.0',
   transport: new StdioTransport(),
 });
 

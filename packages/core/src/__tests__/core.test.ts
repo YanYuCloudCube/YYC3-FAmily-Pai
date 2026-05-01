@@ -14,8 +14,8 @@
  *
  * brief @yyc3/core core.ts 单元测试
  */
-import { describe, it, expect, beforeEach } from 'vitest'
-import { UnifiedAuthManager, SkillManager, MCPClient } from '../index.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { MCPClient, SkillManager, UnifiedAuthManager } from '../index.js'
 
 describe('UnifiedAuthManager', () => {
   let auth: UnifiedAuthManager
@@ -131,32 +131,40 @@ describe('SkillManager', () => {
 })
 
 describe('MCPClient', () => {
-  it.skip('应该创建 MCP 客户端实例', () => {
+  it('应该创建 MCP 客户端实例', () => {
+    const mockTransport = {
+      connect: vi.fn().mockResolvedValue(undefined),
+      close: vi.fn().mockResolvedValue(undefined),
+      send: vi.fn().mockResolvedValue(undefined),
+      onMessage: vi.fn(),
+      connected: false,
+    }
+
     const client = new MCPClient({
       name: 'test-client',
       version: '1.0.0',
-      transport: {
-        type: 'stdio',
-        command: 'node',
-        args: ['test.js'],
-      },
+      transport: mockTransport,
     })
 
     expect(client).toBeDefined()
   })
 
-  it.skip('应该能够获取工具列表', () => {
+  it('应该能够获取工具列表', () => {
+    const mockTransport = {
+      connect: vi.fn().mockResolvedValue(undefined),
+      close: vi.fn().mockResolvedValue(undefined),
+      send: vi.fn().mockResolvedValue(undefined),
+      onMessage: vi.fn(),
+      connected: false,
+    }
+
     const client = new MCPClient({
       name: 'test-client',
       version: '1.0.0',
-      transport: {
-        type: 'stdio',
-        command: 'node',
-        args: ['test.js'],
-      },
+      transport: mockTransport,
     })
 
-    const tools = client.getTools()
+    const tools = client.tools
     expect(Array.isArray(tools)).toBe(true)
   })
 })

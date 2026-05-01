@@ -1,3 +1,16 @@
+---
+file: 02-CORE-AUDIT.md
+description: "@yyc3/core v1.3.0 发布归档审计报告"
+author: YanYuCloudCube Team <admin@0379.email>
+version: v1.0.0
+created: 2026-04-23
+updated: 2026-04-23
+status: published
+tags: [core],[审计],[发布归档]
+category: audit
+language: zh-CN
+---
+
 # ✅ @yyc3/core v1.3.0 发布归档
 
 > **状态: 已发布 ✅ | npmjs.com 上线**

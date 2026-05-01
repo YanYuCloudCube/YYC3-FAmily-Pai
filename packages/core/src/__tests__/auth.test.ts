@@ -14,11 +14,12 @@
  *
  * brief @yyc3/core auth.ts 单元测试
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { UnifiedAuthManager } from '../auth/unified-auth.js'
-import { OpenAIProvider } from '../auth/openai-provider.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { AnthropicProvider } from '../auth/anthropic-provider.js'
 import { OllamaProvider } from '../auth/ollama-provider.js'
+import { OpenAIProvider } from '../auth/openai-provider.js'
 import type { AuthProvider, AuthProviderInfo } from '../auth/types.js'
+import { UnifiedAuthManager } from '../auth/unified-auth.js'
 
 describe('UnifiedAuthManager', () => {
   let auth: UnifiedAuthManager
@@ -65,10 +66,10 @@ describe('UnifiedAuthManager', () => {
       const openaiAuth = new UnifiedAuthManager({
         openai: { apiKey: 'test-key' },
       })
-      
+
       const providers = await openaiAuth.autoDetect()
       const openai = providers.find(p => p.name === 'openai')
-      
+
       if (openai) {
         expect(openai.name).toBe('openai')
         expect(openai.isLocal).toBe(false)
@@ -79,10 +80,10 @@ describe('UnifiedAuthManager', () => {
       const ollamaAuth = new UnifiedAuthManager({
         ollama: { baseUrl: 'http://localhost:11434' },
       })
-      
+
       const providers = await ollamaAuth.autoDetect()
       const ollama = providers.find(p => p.name === 'ollama')
-      
+
       if (ollama) {
         expect(ollama.name).toBe('ollama')
         expect(ollama.isLocal).toBe(true)
@@ -98,7 +99,7 @@ describe('UnifiedAuthManager', () => {
     it('自动检测后应该返回提供商', async () => {
       await auth.autoDetect()
       const provider = auth.getActiveProvider()
-      
+
       if (provider) {
         expect(provider).toBeDefined()
       }
@@ -108,7 +109,7 @@ describe('UnifiedAuthManager', () => {
   describe('getStatus', () => {
     it('应该返回认证状态', () => {
       const status = auth.getStatus()
-      
+
       expect(status).toHaveProperty('activeProvider')
       expect(status).toHaveProperty('providers')
       expect(status).toHaveProperty('lastChecked')
@@ -168,7 +169,7 @@ describe('UnifiedAuthManager', () => {
 
       auth.registerProvider(mockProvider)
       const providers = auth.getProviders()
-      
+
       expect(providers.some(p => p.name === 'openai')).toBe(true)
     })
   })
@@ -196,7 +197,7 @@ describe('OpenAIProvider', () => {
       apiKey: 'test-key',
     })
     const info = provider.getInfo()
-    
+
     expect(info.name).toBe('openai')
     expect(info.isLocal).toBe(false)
   })
@@ -216,8 +217,46 @@ describe('OllamaProvider', () => {
       baseUrl: 'http://localhost:11434',
     })
     const info = provider.getInfo()
-    
+
     expect(info.name).toBe('ollama')
     expect(info.isLocal).toBe(true)
+  })
+})
+
+describe('AnthropicProvider', () => {
+  it('应该创建 Anthropic 提供商实例', () => {
+    const provider = new AnthropicProvider({
+      apiKey: 'test-key',
+    })
+    expect(provider).toBeDefined()
+    expect(provider.name).toBe('anthropic')
+  })
+
+  it('应该返回提供商信息', () => {
+    const provider = new AnthropicProvider({
+      apiKey: 'test-key',
+    })
+    const info = provider.getInfo()
+
+    expect(info.name).toBe('anthropic')
+    expect(info.isLocal).toBe(false)
+    expect(info.displayName).toBe('Anthropic Claude')
+    expect(info.models.length).toBeGreaterThan(0)
+  })
+
+  it('没有 API Key 时 validate 应该返回 false', async () => {
+    const original = process.env.ANTHROPIC_API_KEY
+    delete process.env.ANTHROPIC_API_KEY
+    const provider = new AnthropicProvider()
+    const isValid = await provider.validate()
+    expect(isValid).toBe(false)
+    process.env.ANTHROPIC_API_KEY = original
+  })
+
+  it('应该返回模型列表', async () => {
+    const provider = new AnthropicProvider({ apiKey: 'test-key' })
+    const models = await provider.getModels()
+    expect(models.length).toBeGreaterThan(0)
+    expect(models).toContain('claude-sonnet-4-20250514')
   })
 })

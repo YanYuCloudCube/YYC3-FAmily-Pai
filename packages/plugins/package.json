@@ -36,7 +36,8 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@yyc3/core": "workspace:^"
+    "@yyc3/core": "workspace:^",
+    "eventemitter3": "^5.0.1"
   },
   "peerDependencies": {
     "react": ">=18.0.0",

@@ -14,13 +14,13 @@
  *
  * brief @yyc3/core multimodal.ts 单元测试
  */
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { MultimodalManager } from '../multimodal/manager.js'
-import { ImageProcessor } from '../multimodal/image-processor.js'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import type { UnifiedAuthManager } from '../auth/unified-auth.js'
 import { AudioProcessor } from '../multimodal/audio-processor.js'
 import { DocumentProcessor } from '../multimodal/document-processor.js'
-import type { UnifiedAuthManager } from '../auth/unified-auth.js'
-import type { ImageInput, AudioInput, DocumentInput } from '../multimodal/types.js'
+import { ImageProcessor } from '../multimodal/image-processor.js'
+import { MultimodalManager } from '../multimodal/manager.js'
+import type { AudioInput, DocumentInput, ImageInput } from '../multimodal/types.js'
 
 describe('MultimodalManager', () => {
   let manager: MultimodalManager
@@ -126,7 +126,13 @@ describe('AudioProcessor', () => {
   })
 
   describe('transcribe', () => {
-    it.skip('应该转录音频', async () => {
+    it('应该转录音频', async () => {
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        json: () => Promise.resolve({ text: '转录文本内容', language: 'zh' }),
+      })
+      vi.stubGlobal('fetch', mockFetch)
+
       const audio: AudioInput = {
         type: 'audio',
         format: 'mp3',
@@ -134,17 +140,30 @@ describe('AudioProcessor', () => {
       }
 
       const result = await processor.transcribe(audio)
-
       expect(result).toHaveProperty('text')
+      expect(result.text).toBe('转录文本内容')
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+
+      vi.restoreAllMocks()
     })
   })
 
   describe('synthesize', () => {
-    it.skip('应该合成语音', async () => {
-      const result = await processor.synthesize('Hello world')
+    it('应该合成语音', async () => {
+      const mockAudioBuffer = new ArrayBuffer(8)
+      const mockFetch = vi.fn().mockResolvedValue({
+        ok: true,
+        arrayBuffer: () => Promise.resolve(mockAudioBuffer),
+      })
+      vi.stubGlobal('fetch', mockFetch)
 
+      const result = await processor.synthesize('Hello world')
       expect(result).toHaveProperty('audio')
       expect(result).toHaveProperty('format')
+      expect(result.format).toBe('mp3')
+      expect(mockFetch).toHaveBeenCalledTimes(1)
+
+      vi.restoreAllMocks()
     })
   })
 })

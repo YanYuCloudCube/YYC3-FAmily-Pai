@@ -1,3 +1,16 @@
+---
+file: SECURITY.md
+description: YYC³ FAmily π³ 安全政策 — 漏洞披露/响应时间/安全最佳实践
+author: YanYuCloudCube Team <admin@0379.email>
+version: v1.1.0
+created: 2026-03-21
+updated: 2026-04-29
+status: published
+tags: [安全],[政策],[漏洞披露]
+category: project
+language: zh-CN
+---
+
 # 🔒 安全政策 (Security Policy)
 
 > **YanYuCloudCube Team** 安全承诺
@@ -8,11 +21,13 @@
 
 | 包 | 版本 | 支持状态 |
 |---|---|---|
-| @yyc3/core | >= 1.3.0 | ✅ 支持 |
-| @yyc3/ai-hub | >= 1.0.0 | ✅ 支持 |
-| @yyc3/ui | >= 1.1.0 | ✅ 支持 |
-| @yyc3/plugins | >= 1.1.0 | ✅ 支持 |
-| @yyc3/i18n-core | >= 2.3.0 | ✅ 支持 |
+| @yyc3/core | >= 1.4.0 | ✅ 支持 |
+| @yyc3/ai-hub | >= 1.4.0 | ✅ 支持 |
+| @yyc3/emotion | >= 1.0.0 | ✅ 支持 |
+| @yyc3/ui | >= 2.0.0 | ✅ 支持 |
+| @yyc3/plugins | >= 1.4.0 | ✅ 支持 |
+| @yyc3/i18n-core | >= 1.4.0 | ✅ 支持 |
+| @yyc3/mcp-servers | >= 1.0.0 | ✅ 支持 |
 
 ---
 

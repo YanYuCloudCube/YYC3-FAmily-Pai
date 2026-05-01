@@ -38,7 +38,6 @@ export class MCPServer {
   private transport: MCPTransport;
   private toolRegistrations = new Map<string, MCPToolRegistration>();
   private resources: MCPResource[] = [];
-  private messageId = 0;
 
   constructor(config: MCPServerConfig) {
     this.config = config;

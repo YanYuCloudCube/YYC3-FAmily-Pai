@@ -74,6 +74,16 @@ export interface MCPServerCapabilities {
   resources?: { subscribe?: boolean; listChanged?: boolean }
   prompts?: { listChanged?: boolean }
   logging?: object
+  sampling?: object
+  roots?: { listChanged?: boolean }
+}
+
+export interface MCPClientCapabilities {
+  tools?: { listChanged?: boolean }
+  resources?: { subscribe?: boolean; listChanged?: boolean }
+  prompts?: { listChanged?: boolean }
+  sampling?: object
+  roots?: { listChanged?: boolean }
 }
 
 /**

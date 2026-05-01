@@ -3,7 +3,7 @@ name: Release to npm & GHCR
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
 
 env:
   REGISTRY: ghcr.io
@@ -43,7 +43,7 @@ jobs:
 
       - name: Test all packages
         run: |
-          for pkg in core ai-hub ui plugins i18n-core; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers; do
             echo "▶️ Testing @yyc3/$pkg ..."
             pnpm --filter @yyc3/$pkg test
             EXIT_CODE=$?
@@ -73,7 +73,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [core, ai-hub, ui, plugins, i18n-core]
+        package:
+          [
+            core,
+            ai-hub,
+            emotion,
+            i18n-core,
+            ui,
+            plugins,
+            mcp-servers,
+            motion,
+            cli,
+          ]
 
     steps:
       - name: Checkout repository
@@ -88,7 +99,7 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
           cache: pnpm
 
       - name: Install dependencies
@@ -120,7 +131,8 @@ jobs:
         run: pnpm --filter @yyc3/${{ matrix.package }} run build
 
       - name: Publish to npm
-        run: pnpm --filter @yyc3/${{ matrix.package }} publish --access public --provenance --tag ${{ steps.tag.outputs.tag }}
+        run: pnpm --filter @yyc3/${{ matrix.package }} publish --access public
+          --provenance --tag ${{ steps.tag.outputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.YYC3_NPM_TOKEN }}
 
@@ -201,7 +213,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate changelog
-        run: npx conventional-changelog -p angular -i CHANGELOG.md -s -r 1 || echo "No changes"
+        run: npx conventional-changelog -p angular -i CHANGELOG.md -s -r 1 || echo "No
+          changes"
 
       - name: Commit changelog
         run: |
@@ -213,7 +226,7 @@ jobs:
 
   post-release-verify:
     name: Post Release Verification
-    needs: [publish-packages, docker-release]
+    needs: [ publish-packages, docker-release ]
     runs-on: ubuntu-latest
     if: success()
 

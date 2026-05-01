@@ -14,20 +14,49 @@
  *
  * brief @yyc3/core mcp.ts 单元测试
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { MCPClient } from '../mcp/client.js'
-import type { MCPTool, MCPPrompt, MCPResource, MCPClientConfig } from '../mcp/types.js'
+import type { MCPClientConfig, MCPPrompt, MCPResource, MCPTool } from '../mcp/types.js'
 
 describe('MCPClient', () => {
   let client: MCPClient
   let mockTransport: any
 
+  let _messageHandler: ((msg: any) => void) | undefined
+
   beforeEach(() => {
+    _messageHandler = undefined
     mockTransport = {
       connect: vi.fn().mockResolvedValue(undefined),
       close: vi.fn().mockResolvedValue(undefined),
-      send: vi.fn().mockResolvedValue(undefined),
-      onMessage: vi.fn(),
+      send: vi.fn().mockImplementation((msg: any) => {
+        if (!_messageHandler) return Promise.resolve()
+        if (msg.method === 'initialize') {
+          setImmediate(() => {
+            _messageHandler!({
+              jsonrpc: '2.0',
+              id: msg.id,
+              result: { capabilities: { tools: true, resources: true } },
+            })
+          })
+        } else if (msg.method === 'tools/list') {
+          setImmediate(() => {
+            _messageHandler!({ jsonrpc: '2.0', id: msg.id, result: { tools: [] } })
+          })
+        } else if (msg.method === 'resources/list') {
+          setImmediate(() => {
+            _messageHandler!({ jsonrpc: '2.0', id: msg.id, result: { resources: [] } })
+          })
+        } else if (msg.id) {
+          setImmediate(() => {
+            _messageHandler!({ jsonrpc: '2.0', id: msg.id, result: {} })
+          })
+        }
+        return Promise.resolve()
+      }),
+      onMessage: vi.fn().mockImplementation((handler: any) => {
+        _messageHandler = handler
+      }),
       connected: false,
     }
 
@@ -56,21 +85,7 @@ describe('MCPClient', () => {
   })
 
   describe('connect', () => {
-    it.skip('应该连接到服务器', async () => {
-      mockTransport.send = vi.fn().mockImplementation((msg: any) => {
-        if (msg.method === 'initialize') {
-          mockTransport.connected = true
-          return Promise.resolve({
-            jsonrpc: '2.0',
-            id: msg.id,
-            result: {
-              capabilities: { tools: true, resources: true },
-            },
-          })
-        }
-        return Promise.resolve({ jsonrpc: '2.0', id: msg.id, result: {} })
-      })
-
+    it('应该连接到服务器', async () => {
       await client.connect()
       expect(mockTransport.connect).toHaveBeenCalled()
     })
@@ -133,5 +148,80 @@ describe('MCP Types', () => {
 
     expect(resource.uri).toBe('test://resource')
     expect(resource.name).toBe('Test Resource')
+  })
+})
+
+describe('WebSocketTransport', () => {
+  it('应该创建实例并配置默认值', async () => {
+    const { WebSocketTransport } = await import('../mcp/transport.js')
+    const transport = new WebSocketTransport({ url: 'ws://localhost:8080' })
+    expect(transport).toBeDefined()
+    expect(transport.connected).toBe(false)
+  })
+
+  it('应该接受自定义配置', async () => {
+    const { WebSocketTransport } = await import('../mcp/transport.js')
+    const transport = new WebSocketTransport({
+      url: 'ws://localhost:8080',
+      reconnect: false,
+      maxReconnectAttempts: 3,
+      headers: { Authorization: 'Bearer test' },
+    })
+    expect(transport).toBeDefined()
+  })
+})
+
+describe('SSETransport', () => {
+  it('应该创建实例', async () => {
+    const { SSETransport } = await import('../mcp/transport.js')
+    const transport = new SSETransport({ url: 'http://localhost:8080/sse' })
+    expect(transport).toBeDefined()
+    expect(transport.connected).toBe(false)
+  })
+
+  it('应该接受自定义 headers', async () => {
+    const { SSETransport } = await import('../mcp/transport.js')
+    const transport = new SSETransport({
+      url: 'http://localhost:8080/sse',
+      headers: { Authorization: 'Bearer test' },
+    })
+    expect(transport).toBeDefined()
+  })
+})
+
+describe('StdioTransport', () => {
+  it('应该创建实例', async () => {
+    const { StdioTransport } = await import('../mcp/transport.js')
+    const transport = new StdioTransport({ command: 'node', args: ['server.js'] })
+    expect(transport).toBeDefined()
+    expect(transport.connected).toBe(false)
+  })
+
+  it('应该接受环境变量配置', async () => {
+    const { StdioTransport } = await import('../mcp/transport.js')
+    const transport = new StdioTransport({
+      command: 'node',
+      args: ['server.js'],
+      env: { NODE_ENV: 'test' },
+    })
+    expect(transport).toBeDefined()
+  })
+})
+
+describe('HTTPTransport', () => {
+  it('应该创建实例', async () => {
+    const { HTTPTransport } = await import('../mcp/transport.js')
+    const transport = new HTTPTransport({ url: 'http://localhost:8080/mcp' })
+    expect(transport).toBeDefined()
+    expect(transport.connected).toBe(false)
+  })
+
+  it('应该接受自定义 headers', async () => {
+    const { HTTPTransport } = await import('../mcp/transport.js')
+    const transport = new HTTPTransport({
+      url: 'http://localhost:8080/mcp',
+      headers: { Authorization: 'Bearer test' },
+    })
+    expect(transport).toBeDefined()
   })
 })

@@ -1,3 +1,16 @@
+---
+file: PIPELINE.md
+description: YYC³ FAmily π³ 发布流水线 — 5包发布状态总览
+author: YanYuCloudCube Team <admin@0379.email>
+version: v1.0.0
+created: 2026-04-23
+updated: 2026-04-23
+status: published
+tags: [流水线],[发布],[状态]
+category: archive
+language: zh-CN
+---
+
 # 📦 YYC³ FAmily π³ — 发布流水线
 
 > **战略原则：一包一包做到极致 → 锁仓发布 → 进入下一个**
