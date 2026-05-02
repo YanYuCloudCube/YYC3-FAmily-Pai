@@ -43,7 +43,7 @@ jobs:
 
       - name: Test all packages
         run: |
-          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
             echo "▶️ Testing @yyc3/$pkg ..."
             pnpm --filter @yyc3/$pkg test
             EXIT_CODE=$?
@@ -234,9 +234,22 @@ jobs:
       - name: Verify npm packages
         run: |
           echo "📦 Verifying published packages..."
-          for pkg in core ai-hub ui plugins i18n-core; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
             VERSION=$(npm view @yyc3/$pkg version 2>/dev/null || echo "not found")
             echo "  @yyc3/$pkg: $VERSION"
+          done
+
+      - name: Verify no workspace protocol leaked
+        run: |
+          echo "🔍 Checking for leaked workspace: protocol..."
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
+            DEPS=$(npm view @yyc3/$pkg dependencies --json 2>/dev/null || echo "{}")
+            if echo "$DEPS" | grep -q "workspace:"; then
+              echo "::error::@yyc3/$pkg has workspace: protocol in published dependencies!"
+              echo "$DEPS"
+              exit 1
+            fi
+            echo "  ✅ @yyc3/$pkg clean"
           done
 
       - name: Summary
@@ -244,6 +257,6 @@ jobs:
           echo "🎉 Release ${{ github.ref_name }} completed successfully!"
           echo ""
           echo "Published:"
-          echo "  - 5 npm packages (@yyc3/*)"
+          echo "  - 9 npm packages (@yyc3/*)"
           echo "  - Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
           echo "  - Changelog updated"

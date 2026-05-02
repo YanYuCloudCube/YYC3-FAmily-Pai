@@ -1,6 +1,6 @@
 {
   "name": "@yyc3/ui",
-  "version": "2.0.0",
+  "version": "2.0.2",
   "description": "YYC³ AI Family UI 组件库 — 即拉即用的 React AI 智能系统 UI 组件 + 56个shadcn/ui标准组件",
   "type": "module",
   "main": "./dist/index.js",
@@ -48,7 +48,7 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@yyc3/core": "workspace:^",
+    "@yyc3/core": "^1.4.0",
     "clsx": "^2.1.0",
     "radix-ui": "^1.0.0",
     "tailwind-merge": "^3.0.0",

@@ -1,6 +1,6 @@
 {
   "name": "@yyc3/plugins",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "YYC³ AI Family 插件集合 — LSP语言服务器插件、内容处理插件",
   "type": "module",
   "main": "./dist/index.js",
@@ -36,7 +36,7 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
-    "@yyc3/core": "workspace:^",
+    "@yyc3/core": "^1.4.0",
     "eventemitter3": "^5.0.1"
   },
   "peerDependencies": {

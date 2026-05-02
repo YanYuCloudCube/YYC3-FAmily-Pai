@@ -176,41 +176,6 @@ declare class AgentManager {
 }
 
 /**
- * file skills.ts
- * description 技能系统实现
- * module @yyc3/ai-hub
- * author YanYuCloudCube Team <admin@0379.email>
- * version 1.0.0
- * created 2026-04-24
- * updated 2026-04-24
- * status active
- * tags [module],[ai]
- *
- * copyright YanYuCloudCube Team
- * license MIT
- *
- * brief 技能系统实现
- */
-
-interface Skill {
-    id: string;
-    definition: SkillDefinition;
-    apply(context: string): Promise<string>;
-    matches(input: string): boolean;
-}
-declare class SkillManager {
-    private skills;
-    load(paths: string[]): Promise<void>;
-    private loadFromPath;
-    private parseSkillMarkdown;
-    register(definition: SkillDefinition): void;
-    get(id: string): Skill | undefined;
-    list(): string[];
-    findMatching(input: string): Skill[];
-    count(): number;
-}
-
-/**
  * file mcp.ts
  * description MCP 协议实现
  * module @yyc3/ai-hub
@@ -251,24 +216,43 @@ declare class MCPManager {
 }
 
 /**
- * file hub.ts
- * description AI Hub 核心实现
+ * file skills.ts
+ * description 技能系统实现
  * module @yyc3/ai-hub
  * author YanYuCloudCube Team <admin@0379.email>
  * version 1.0.0
  * created 2026-04-24
  * updated 2026-04-24
  * status active
- * tags [module]
+ * tags [module],[ai]
  *
  * copyright YanYuCloudCube Team
  * license MIT
  *
- * brief AI Hub 核心实现
+ * brief 技能系统实现
  */
+
+interface Skill {
+    id: string;
+    definition: SkillDefinition;
+    apply(context: string): Promise<string>;
+    matches(input: string): boolean;
+}
+declare class SkillManager {
+    private skills;
+    load(paths: string[]): Promise<void>;
+    private loadFromPath;
+    private parseSkillMarkdown;
+    register(definition: SkillDefinition): void;
+    get(id: string): Skill | undefined;
+    list(): string[];
+    findMatching(input: string): Skill[];
+    count(): number;
+}
 
 declare class YYC3AIHub {
     private config;
+    private coreAuth;
     private auth;
     private agents;
     private skills;
@@ -311,7 +295,7 @@ declare enum YYC3ErrorCode {
     AUTH_OPENAI_KEY_MISSING = "AUTH_1002",
     AUTH_ANTHROPIC_KEY_MISSING = "AUTH_1003",
     AUTH_NOT_INITIALIZED = "AUTH_1004",
-    AUTH_INIT_FAILED = "AGENT_1005",
+    AUTH_INIT_FAILED = "AUTH_1005",
     AGENT_NOT_FOUND = "AGENT_2001",
     AGENT_INVALID_DEFINITION = "AGENT_2002",
     AGENT_EXECUTION_FAILED = "AGENT_2003",
