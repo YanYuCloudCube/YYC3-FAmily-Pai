@@ -1,6 +1,21 @@
 declare module 'postcss-selector-parser' {
-  const parser: { (options?: { subset?: boolean }): any; attribute: any; className: any; combinator: any; comment: any; id: any; nesting: any; pseudo: any; root: any; selector: any; string: any; tag: any; universal: any }
-  export default parser
+  namespace parser {
+    type Node = any
+    type ClassName = any
+    type Selector = any
+    type Root = any
+    type Attribute = any
+    type Combinator = any
+    type Comment = any
+    type Id = any
+    type Nesting = any
+    type Pseudo = any
+    type String = any
+    type Tag = any
+    type Universal = any
+    function parser(options?: { subset?: boolean }): any
+  }
+  export = parser
 }
 
 declare module 'stringify-object' {
