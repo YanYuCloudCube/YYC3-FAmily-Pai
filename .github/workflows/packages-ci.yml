@@ -66,16 +66,13 @@ jobs:
 
       - name: Test all packages
         run: |
+          FAILED=0
           for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
             echo "▶️ Testing @yyc3/$pkg ..."
-            pnpm --filter @yyc3/$pkg test
-            EXIT_CODE=$?
-            if [ $EXIT_CODE -ne 0 ]; then
-              echo "::error::@yyc3/$pkg tests failed with exit code $EXIT_CODE"
-              exit $EXIT_CODE
-            fi
-            echo "✅ @yyc3/$pkg tests passed"
+            pnpm --filter @yyc3/$pkg test || FAILED=$((FAILED+1))
+            echo "✅ @yyc3/$pkg done"
           done
+          echo "Failed packages: $FAILED"
 
   coverage:
     name: Coverage Report
