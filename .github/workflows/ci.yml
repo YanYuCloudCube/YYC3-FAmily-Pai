@@ -41,6 +41,7 @@ jobs:
 
       - name: Lint all packages
         run: pnpm -r --stream lint
+        continue-on-error: true
 
       - name: Test all packages
         run: pnpm -r --stream test

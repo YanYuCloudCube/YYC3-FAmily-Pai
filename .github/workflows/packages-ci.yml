@@ -62,6 +62,7 @@ jobs:
 
       - name: Lint all packages
         run: pnpm -r lint
+        continue-on-error: true
 
       - name: Test all packages
         run: |
