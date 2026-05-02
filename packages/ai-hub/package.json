@@ -1,6 +1,6 @@
 {
   "name": "@yyc3/ai-hub",
-  "version": "1.4.0",
+  "version": "1.4.2",
   "description": "YYC³ AI Family Hub · 八位拟人化AI家人的智能中枢 — Family Compass时钟罗盘 + 人人主观通信 + 多Agent协作引擎",
   "author": "YanYuCloudCube Team <admin@0379.email>",
   "license": "MIT",
@@ -87,7 +87,7 @@
     }
   ],
   "dependencies": {
-    "@yyc3/core": "workspace:^",
+    "@yyc3/core": "^1.4.0",
     "zod": "^3.22.0",
     "eventemitter3": "^5.0.1"
   },

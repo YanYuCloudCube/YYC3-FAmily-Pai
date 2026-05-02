@@ -1,21 +1,197 @@
-import { logger } from './chunk-2WVG7ILL.js';
-export { FamilyCompass, createFamilyCompass } from './chunk-7ZZLCIPK.js';
-export { FAMILY_PERSONAS, getAllPersonas, getNextDutyMember, getPersona, getPersonaByHour } from './chunk-QRTYEG24.js';
-export { createFamilyWorkSystem } from './chunk-T7G4WUOR.js';
-import OpenAI from 'openai';
+import { logger } from './chunk-MSXOCKNB.js';
+export { FamilyCompass, createFamilyCompass } from './chunk-3BQL7E3D.js';
+export { FAMILY_PERSONAS, getAllPersonas, getNextDutyMember, getPersona, getPersonaByHour } from './chunk-PM4NNPOB.js';
+export { createFamilyWorkSystem } from './chunk-KN57KAAZ.js';
+import { UnifiedAuthManager } from '@yyc3/core/auth';
 import * as fs from 'fs';
 import * as path from 'path';
+import OpenAI from 'openai';
 import { z } from 'zod';
 import { spawn } from 'child_process';
 
 /**
  * @preserve YYC³ AI Family Hub
- * @version 1.4.0
+ * @version 1.4.2
  * @license MIT
  * @copyright YYC³ AI Team
  * @see https://github.com/yyc3/YYC3-CloudPivot-Intelli-Matrix
  */
 
+
+// src/agent-router.ts
+var DEFAULT_RULES = [
+  { agent: "security-scanning", keywords: ["security", "vulnerability", "audit", "\u5B89\u5168", "\u6F0F\u6D1E"], priority: 90 },
+  { agent: "kubernetes-operations", keywords: ["k8s", "kubernetes", "deploy", "container", "docker", "helm"], priority: 85 },
+  { agent: "llm-application-dev", keywords: ["llm", "rag", "prompt", "agent", "ai", "\u6A21\u578B", "embedding"], priority: 80 },
+  { agent: "backend-development", keywords: ["api", "server", "database", "microservice", "backend", "rest", "graphql"], priority: 75 },
+  { agent: "python-development", keywords: ["python", "data", "ml", "machine learning", "pytorch", "pandas"], priority: 70 },
+  { agent: "javascript-typescript", keywords: ["javascript", "typescript", "node", "react", "vue", "next", "nuxt"], priority: 70 },
+  { agent: "rust-development", keywords: ["rust", "cargo", "wasm", "\u7CFB\u7EDF\u7F16\u7A0B"], priority: 65 },
+  { agent: "go-development", keywords: ["golang", "go", "\u5E76\u53D1", "goroutine"], priority: 65 },
+  { agent: "mobile-development", keywords: ["mobile", "ios", "android", "flutter", "react native", "swift", "kotlin"], priority: 60 },
+  { agent: "devops", keywords: ["devops", "ci", "cd", "pipeline", "jenkins", "github actions"], priority: 55 },
+  { agent: "testing", keywords: ["test", "\u6D4B\u8BD5", "unit", "integration", "e2e", "vitest", "jest"], priority: 50 },
+  { agent: "documentation", keywords: ["doc", "\u6587\u6863", "readme", "api doc", "typedoc"], priority: 45 }
+];
+var AgentRouter = class {
+  static rules = [...DEFAULT_RULES];
+  static customRules = [];
+  static addRule(rule) {
+    this.customRules.push(rule);
+  }
+  static clearCustomRules() {
+    this.customRules = [];
+  }
+  static route(task) {
+    const lowerTask = task.toLowerCase();
+    const allRules = [...this.customRules, ...this.rules];
+    const scored = [];
+    for (const rule of allRules) {
+      let score = 0;
+      for (const keyword of rule.keywords) {
+        if (lowerTask.includes(keyword.toLowerCase())) {
+          score += keyword.length;
+        }
+      }
+      if (rule.patterns) {
+        for (const pattern of rule.patterns) {
+          if (pattern.test(task)) {
+            score += 10;
+          }
+        }
+      }
+      if (score > 0) {
+        scored.push({ agent: rule.agent, score: score * (rule.priority / 100) });
+      }
+    }
+    scored.sort((a, b) => b.score - a.score);
+    if (scored.length === 0) {
+      return ["general"];
+    }
+    return scored.slice(0, 3).map((s) => s.agent);
+  }
+};
+var AgentImpl = class {
+  constructor(definition, auth) {
+    this.definition = definition;
+    this.auth = auth;
+    this.id = definition.id;
+  }
+  definition;
+  auth;
+  id;
+  async execute(task, context) {
+    const startTime = Date.now();
+    const provider = this.auth.getProvider();
+    const model = this.auth.getModel(this.definition.model);
+    try {
+      let output = "";
+      if (provider.type === "openai" && provider.client) {
+        const response = await provider.client.chat.completions.create({
+          model,
+          messages: [
+            { role: "system", content: this.definition.systemPrompt },
+            { role: "user", content: task }
+          ]
+        });
+        output = response.choices[0]?.message?.content || "";
+      }
+      if (provider.type === "ollama" && provider.host) {
+        const response = await fetch(`${provider.host}/api/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model,
+            messages: [
+              { role: "system", content: this.definition.systemPrompt },
+              { role: "user", content: task }
+            ],
+            stream: false
+          })
+        });
+        const data = await response.json();
+        output = data.message?.content || "";
+      }
+      if (provider.type === "anthropic") {
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.ANTHROPIC_API_KEY || "",
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model,
+            max_tokens: 4096,
+            system: this.definition.systemPrompt,
+            messages: [{ role: "user", content: task }]
+          })
+        });
+        const data = await response.json();
+        output = data.content?.[0]?.text || "";
+      }
+      return {
+        success: true,
+        output,
+        duration: Date.now() - startTime,
+        tokensUsed: output.length
+      };
+    } catch (error) {
+      return {
+        success: false,
+        output: "",
+        duration: Date.now() - startTime,
+        errors: [error instanceof Error ? error.message : String(error)]
+      };
+    }
+  }
+};
+var AgentManager = class {
+  agents = /* @__PURE__ */ new Map();
+  auth;
+  constructor(auth) {
+    this.auth = auth;
+  }
+  async load(paths) {
+    for (const p of paths) {
+      await this.loadFromPath(p);
+    }
+  }
+  async loadFromPath(p) {
+    if (!fs.existsSync(p)) {
+      console.warn(`Agent\u8DEF\u5F84\u4E0D\u5B58\u5728: ${p}`);
+      return;
+    }
+    const stats = fs.statSync(p);
+    if (stats.isDirectory()) {
+      const files = fs.readdirSync(p);
+      for (const file of files) {
+        if (file.endsWith(".json")) {
+          const content = fs.readFileSync(path.join(p, file), "utf-8");
+          const definitions = JSON.parse(content);
+          definitions.forEach((def) => {
+            this.agents.set(def.id, new AgentImpl(def, this.auth));
+          });
+        }
+      }
+    }
+  }
+  register(definition) {
+    this.agents.set(definition.id, new AgentImpl(definition, this.auth));
+  }
+  get(id) {
+    return this.agents.get(id);
+  }
+  list() {
+    return Array.from(this.agents.keys());
+  }
+  getByCategory(category) {
+    return Array.from(this.agents.values()).filter((a) => a.definition.category === category || a.definition.id.startsWith(category));
+  }
+  count() {
+    return this.agents.size;
+  }
+};
 
 // src/errors/codes.ts
 var YYC3ErrorCode = /* @__PURE__ */ ((YYC3ErrorCode2) => {
@@ -23,7 +199,7 @@ var YYC3ErrorCode = /* @__PURE__ */ ((YYC3ErrorCode2) => {
   YYC3ErrorCode2["AUTH_OPENAI_KEY_MISSING"] = "AUTH_1002";
   YYC3ErrorCode2["AUTH_ANTHROPIC_KEY_MISSING"] = "AUTH_1003";
   YYC3ErrorCode2["AUTH_NOT_INITIALIZED"] = "AUTH_1004";
-  YYC3ErrorCode2["AUTH_INIT_FAILED"] = "AGENT_1005";
+  YYC3ErrorCode2["AUTH_INIT_FAILED"] = "AUTH_1005";
   YYC3ErrorCode2["AGENT_NOT_FOUND"] = "AGENT_2001";
   YYC3ErrorCode2["AGENT_INVALID_DEFINITION"] = "AGENT_2002";
   YYC3ErrorCode2["AGENT_EXECUTION_FAILED"] = "AGENT_2003";
@@ -86,7 +262,7 @@ var ERROR_MESSAGES = {
     zh: "\u8BA4\u8BC1\u672A\u521D\u59CB\u5316\u3002\u8BF7\u5148\u8C03\u7528 initialize()\u3002",
     en: "Authentication not initialized. Please call initialize() first."
   },
-  ["AGENT_1005" /* AUTH_INIT_FAILED */]: {
+  ["AUTH_1005" /* AUTH_INIT_FAILED */]: {
     zh: "\u8BA4\u8BC1\u521D\u59CB\u5316\u5931\u8D25\u3002",
     en: "Authentication initialization failed."
   },
@@ -354,202 +530,6 @@ var YYC3Auth = class {
     return this.getProvider().modelMapping[tier];
   }
 };
-var AgentImpl = class {
-  constructor(definition, auth) {
-    this.definition = definition;
-    this.auth = auth;
-    this.id = definition.id;
-  }
-  definition;
-  auth;
-  id;
-  async execute(task, context) {
-    const startTime = Date.now();
-    const provider = this.auth.getProvider();
-    const model = this.auth.getModel(this.definition.model);
-    try {
-      let output = "";
-      if (provider.type === "openai" && provider.client) {
-        const response = await provider.client.chat.completions.create({
-          model,
-          messages: [
-            { role: "system", content: this.definition.systemPrompt },
-            { role: "user", content: task }
-          ]
-        });
-        output = response.choices[0]?.message?.content || "";
-      }
-      if (provider.type === "ollama" && provider.host) {
-        const response = await fetch(`${provider.host}/api/chat`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model,
-            messages: [
-              { role: "system", content: this.definition.systemPrompt },
-              { role: "user", content: task }
-            ],
-            stream: false
-          })
-        });
-        const data = await response.json();
-        output = data.message?.content || "";
-      }
-      if (provider.type === "anthropic") {
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": process.env.ANTHROPIC_API_KEY || "",
-            "anthropic-version": "2023-06-01"
-          },
-          body: JSON.stringify({
-            model,
-            max_tokens: 4096,
-            system: this.definition.systemPrompt,
-            messages: [{ role: "user", content: task }]
-          })
-        });
-        const data = await response.json();
-        output = data.content?.[0]?.text || "";
-      }
-      return {
-        success: true,
-        output,
-        duration: Date.now() - startTime,
-        tokensUsed: output.length
-      };
-    } catch (error) {
-      return {
-        success: false,
-        output: "",
-        duration: Date.now() - startTime,
-        errors: [error instanceof Error ? error.message : String(error)]
-      };
-    }
-  }
-};
-var AgentManager = class {
-  agents = /* @__PURE__ */ new Map();
-  auth;
-  constructor(auth) {
-    this.auth = auth;
-  }
-  async load(paths) {
-    for (const p of paths) {
-      await this.loadFromPath(p);
-    }
-  }
-  async loadFromPath(p) {
-    if (!fs.existsSync(p)) {
-      console.warn(`Agent\u8DEF\u5F84\u4E0D\u5B58\u5728: ${p}`);
-      return;
-    }
-    const stats = fs.statSync(p);
-    if (stats.isDirectory()) {
-      const files = fs.readdirSync(p);
-      for (const file of files) {
-        if (file.endsWith(".json")) {
-          const content = fs.readFileSync(path.join(p, file), "utf-8");
-          const definitions = JSON.parse(content);
-          definitions.forEach((def) => {
-            this.agents.set(def.id, new AgentImpl(def, this.auth));
-          });
-        }
-      }
-    }
-  }
-  register(definition) {
-    this.agents.set(definition.id, new AgentImpl(definition, this.auth));
-  }
-  get(id) {
-    return this.agents.get(id);
-  }
-  list() {
-    return Array.from(this.agents.keys());
-  }
-  getByCategory(category) {
-    return Array.from(this.agents.values()).filter((a) => a.definition.category === category || a.definition.id.startsWith(category));
-  }
-  count() {
-    return this.agents.size;
-  }
-};
-var SkillImpl = class {
-  constructor(definition) {
-    this.definition = definition;
-    this.id = definition.id;
-  }
-  definition;
-  id;
-  async apply(context) {
-    return `${this.definition.prompt}
-
-## Context
-${context}`;
-  }
-  matches(input) {
-    if (typeof this.definition.trigger === "string") {
-      return input.includes(this.definition.trigger);
-    }
-    return this.definition.trigger.test(input);
-  }
-};
-var SkillManager = class {
-  skills = /* @__PURE__ */ new Map();
-  async load(paths) {
-    for (const p of paths) {
-      await this.loadFromPath(p);
-    }
-  }
-  async loadFromPath(p) {
-    if (!fs.existsSync(p)) {
-      console.warn(`Skill\u8DEF\u5F84\u4E0D\u5B58\u5728: ${p}`);
-      return;
-    }
-    const stats = fs.statSync(p);
-    if (stats.isDirectory()) {
-      const files = fs.readdirSync(p, { recursive: true });
-      for (const file of files) {
-        if (file.endsWith(".md") && file.includes("SKILL")) {
-          const content = fs.readFileSync(path.join(p, file), "utf-8");
-          const skill = this.parseSkillMarkdown(content);
-          if (skill) {
-            this.skills.set(skill.id, new SkillImpl(skill));
-          }
-        }
-      }
-    }
-  }
-  parseSkillMarkdown(content) {
-    const idMatch = content.match(/##\s+(.+)/);
-    const descMatch = content.match(/\*\*描述\*\*[：:]\s*(.+)/);
-    const triggerMatch = content.match(/\*\*触发\*\*[：:]\s*(.+)/);
-    if (!idMatch) return null;
-    return {
-      id: idMatch[1].toLowerCase().replace(/\s+/g, "-"),
-      name: idMatch[1],
-      description: descMatch?.[1] || "",
-      trigger: triggerMatch?.[1] || "",
-      prompt: content
-    };
-  }
-  register(definition) {
-    this.skills.set(definition.id, new SkillImpl(definition));
-  }
-  get(id) {
-    return this.skills.get(id);
-  }
-  list() {
-    return Array.from(this.skills.keys());
-  }
-  findMatching(input) {
-    return Array.from(this.skills.values()).filter((skill) => skill.matches(input));
-  }
-  count() {
-    return this.skills.size;
-  }
-};
 var MCPServerMetadataSchema = z.object({
   displayName: z.string().max(128).optional(),
   category: z.string().max(64).optional(),
@@ -681,17 +661,99 @@ var MCPManager = class {
     return Array.from(this.servers.values()).filter((s) => s.config.metadata?.category === category);
   }
 };
+var SkillImpl = class {
+  constructor(definition) {
+    this.definition = definition;
+    this.id = definition.id;
+  }
+  definition;
+  id;
+  async apply(context) {
+    return `${this.definition.prompt}
+
+## Context
+${context}`;
+  }
+  matches(input) {
+    if (typeof this.definition.trigger === "string") {
+      return input.includes(this.definition.trigger);
+    }
+    return this.definition.trigger.test(input);
+  }
+};
+var SkillManager = class {
+  skills = /* @__PURE__ */ new Map();
+  async load(paths) {
+    for (const p of paths) {
+      await this.loadFromPath(p);
+    }
+  }
+  async loadFromPath(p) {
+    if (!fs.existsSync(p)) {
+      console.warn(`Skill\u8DEF\u5F84\u4E0D\u5B58\u5728: ${p}`);
+      return;
+    }
+    const stats = fs.statSync(p);
+    if (stats.isDirectory()) {
+      const files = fs.readdirSync(p, { recursive: true });
+      for (const file of files) {
+        if (file.endsWith(".md") && file.includes("SKILL")) {
+          const content = fs.readFileSync(path.join(p, file), "utf-8");
+          const skill = this.parseSkillMarkdown(content);
+          if (skill) {
+            this.skills.set(skill.id, new SkillImpl(skill));
+          }
+        }
+      }
+    }
+  }
+  parseSkillMarkdown(content) {
+    const idMatch = content.match(/##\s+(.+)/);
+    const descMatch = content.match(/\*\*描述\*\*[：:]\s*(.+)/);
+    const triggerMatch = content.match(/\*\*触发\*\*[：:]\s*(.+)/);
+    if (!idMatch) return null;
+    return {
+      id: idMatch[1].toLowerCase().replace(/\s+/g, "-"),
+      name: idMatch[1],
+      description: descMatch?.[1] || "",
+      trigger: triggerMatch?.[1] || "",
+      prompt: content
+    };
+  }
+  register(definition) {
+    this.skills.set(definition.id, new SkillImpl(definition));
+  }
+  get(id) {
+    return this.skills.get(id);
+  }
+  list() {
+    return Array.from(this.skills.keys());
+  }
+  findMatching(input) {
+    return Array.from(this.skills.values()).filter((skill) => skill.matches(input));
+  }
+  count() {
+    return this.skills.size;
+  }
+};
 
 // src/hub.ts
 var YYC3AIHub = class {
   constructor(config = {}) {
     this.config = config;
+    this.coreAuth = new UnifiedAuthManager({
+      preferLocal: false,
+      autoDetect: true,
+      openai: config.apiKey ? { apiKey: config.apiKey } : void 0,
+      anthropic: config.anthropicApiKey ? { apiKey: config.anthropicApiKey } : void 0
+    });
     this.auth = new YYC3Auth(config);
     this.agents = new AgentManager(this.auth);
     this.skills = new SkillManager();
     this.mcp = new MCPManager();
   }
   config;
+  coreAuth;
   auth;
   agents;
   skills;
@@ -699,17 +761,20 @@ var YYC3AIHub = class {
   initialized = false;
   async initialize() {
     logger.init("YYC\xB3 AI Hub \u521D\u59CB\u5316\u4E2D...");
-    logger.step(1, "\u8BA4\u8BC1\u521D\u59CB\u5316");
+    logger.step(1, "\u8BA4\u8BC1\u521D\u59CB\u5316 (core UnifiedAuthManager)");
+    const providers = await this.coreAuth.autoDetect();
+    logger.stat("Core Providers", String(providers.length));
+    logger.step(2, "\u8BA4\u8BC1\u521D\u59CB\u5316 (hub auth)");
     await this.auth.initialize();
-    logger.step(2, "\u52A0\u8F7DAgents");
+    logger.step(3, "\u52A0\u8F7DAgents");
     await this.agents.load([
       "./agents"
     ]);
-    logger.step(3, "\u52A0\u8F7DSkills");
+    logger.step(4, "\u52A0\u8F7DSkills");
     await this.skills.load([
       "./skills"
     ]);
-    logger.step(4, "\u52A0\u8F7DMCP\u670D\u52A1\u5668");
+    logger.step(5, "\u52A0\u8F7DMCP\u670D\u52A1\u5668");
     await this.mcp.load([
       "./config/mcp-servers.json",
       "./config/vscode-mcp.json"
@@ -739,10 +804,11 @@ var YYC3AIHub = class {
         }
       };
     } catch (error) {
+      const yyc3Error = YYC3Error.fromError(error, "HUB_5002" /* HUB_EXECUTE_FAILED */);
       return {
         success: false,
         output: "",
-        errors: [error instanceof Error ? error.message : String(error)],
+        errors: [yyc3Error.message],
         metrics: {
           tokensUsed: 0,
           duration: Date.now() - startTime,
@@ -760,28 +826,7 @@ var YYC3AIHub = class {
     };
   }
   suggestAgents(task) {
-    const keywords = {
-      "backend-development": ["api", "server", "database", "microservice", "backend"],
-      "llm-application-dev": ["llm", "rag", "prompt", "agent", "ai"],
-      "kubernetes-operations": ["k8s", "kubernetes", "deploy", "container", "docker"],
-      "security-scanning": ["security", "vulnerability", "audit", "\u5B89\u5168"],
-      "python-development": ["python", "data", "ml", "machine learning"],
-      "javascript-typescript": ["javascript", "typescript", "node", "react", "vue"],
-      "rust-development": ["rust", "cargo", "\u7CFB\u7EDF\u7F16\u7A0B"],
-      "go-development": ["golang", "go", "\u5E76\u53D1"],
-      "mobile-development": ["mobile", "ios", "android", "flutter", "react native"],
-      "devops": ["devops", "ci", "cd", "pipeline", "jenkins"],
-      "testing": ["test", "\u6D4B\u8BD5", "unit", "integration"],
-      "documentation": ["doc", "\u6587\u6863", "readme", "api doc"]
-    };
-    const suggestions = [];
-    const lowerTask = task.toLowerCase();
-    for (const [agent, words] of Object.entries(keywords)) {
-      if (words.some((w) => lowerTask.includes(w))) {
-        suggestions.push(agent);
-      }
-    }
-    return suggestions.length > 0 ? suggestions : ["general"];
+    return AgentRouter.route(task);
   }
   async createPlan(context) {
     return {
