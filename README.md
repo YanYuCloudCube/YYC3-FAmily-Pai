@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/yyc3-dist/yanyu_cloud_256x256.png" alt="YYC³ Logo" width="120" height="120" />
+  <img src="public/Family-π³.png" alt="YYC³ FAmily π³" width="100%" />
 </p>
 
 <h1 align="center">YYC³ FAmily π³</h1>
