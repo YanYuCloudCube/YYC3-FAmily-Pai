@@ -36,8 +36,8 @@ importers:
   packages/ai-hub:
     dependencies:
       '@yyc3/core':
-        specifier: workspace:^
-        version: link:../core
+        specifier: ^1.4.0
+        version: 1.4.0
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.4
@@ -450,8 +450,8 @@ importers:
   packages/plugins:
     dependencies:
       '@yyc3/core':
-        specifier: workspace:^
-        version: link:../core
+        specifier: ^1.4.0
+        version: 1.4.0
       eventemitter3:
         specifier: ^5.0.1
         version: 5.0.4
@@ -499,8 +499,8 @@ importers:
         specifier: ^1.0.0
         version: 1.4.1(@date-fns/tz@1.4.1)(@types/react@18.3.28)(date-fns@4.1.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@yyc3/core':
-        specifier: workspace:^
-        version: link:../core
+        specifier: ^1.4.0
+        version: 1.4.0
       class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.1
@@ -2734,6 +2734,10 @@ packages:
 
   '@vueuse/shared@12.8.2':
     resolution: {integrity: sha512-dznP38YzxZoNloI0qpEfpkms8knDtaoQ6Y/sfS0L7Yki4zh40LFHEhur0odJC6xTHG5dxWVPiUWBXn+wCG2s5w==}
+
+  '@yyc3/core@1.4.0':
+    resolution: {integrity: sha512-kOROJg7UtFlTEc/8JirtOmRnd1g01X+iQWxi0G/BsAcJSim4GBSAYNtPCXu6jQZ+TiNXsnLyQ2qKYi5up4tVJA==}
+    engines: {node: '>=18.0.0'}
 
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -7909,6 +7913,11 @@ snapshots:
       vue: 3.5.33(typescript@5.9.3)
     transitivePeerDependencies:
       - typescript
+
+  '@yyc3/core@1.4.0':
+    dependencies:
+      eventemitter3: 5.0.4
+      zod: 3.25.76
 
   abbrev@1.1.1: {}
 
