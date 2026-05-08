@@ -31,6 +31,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs', '*.cjs', '*.stories.tsx'],
+    ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs', '*.cjs', 'src/**/*.stories.tsx'],
   }
 )
