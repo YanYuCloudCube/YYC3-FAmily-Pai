@@ -26,6 +26,7 @@ export default defineConfig({
           { text: '@yyc3/emotion — 情感引擎', link: '/packages/emotion' },
           { text: '@yyc3/i18n-core — 国际化', link: '/packages/i18n-core' },
           { text: '@yyc3/ui — UI 组件库', link: '/packages/ui' },
+          { text: '@yyc3/effects — 特效组件库', link: '/packages/effects' },
           { text: '@yyc3/plugins — 插件集合', link: '/packages/plugins' },
           { text: '@yyc3/mcp-servers — MCP 服务器', link: '/packages/mcp-servers' },
           { text: '@yyc3/ide — IDE 环境', link: '/packages/ide' },
@@ -79,6 +80,7 @@ export default defineConfig({
           text: '界面与扩展',
           items: [
             { text: '@yyc3/ui', link: '/packages/ui' },
+            { text: '@yyc3/effects', link: '/packages/effects' },
             { text: '@yyc3/plugins', link: '/packages/plugins' },
             { text: '@yyc3/mcp-servers', link: '/packages/mcp-servers' },
             { text: '@yyc3/ide', link: '/packages/ide' },
