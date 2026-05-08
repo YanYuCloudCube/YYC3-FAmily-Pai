@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>AI Family 智能中枢 — 八位拟人化 AI 家人的统一工作区</strong><br>
-  <em>Monorepo · 10 Packages · 全栈 AI 智能体生态 · 1,906 Tests</em>
+  <em>Monorepo · 11 Packages · 全栈 AI 智能体生态 · 1,906 Tests</em>
 </p>
 
 <p align="center">
@@ -16,7 +16,7 @@
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="MIT" />
   <br/>
   <img src="https://img.shields.io/badge/TypeScript-5.3+-3178c6?style=flat-square&logo=typescript&logoColor=white" alt="TypeScript" />
-  <img src="https://img.shields.io/badge/packages-10-blue?style=flat-square" alt="10 Packages" />
+  <img src="https://img.shields.io/badge/packages-11-blue?style=flat-square" alt="11 Packages" />
   <img src="https://img.shields.io/badge/tests-1_906%20passed-brightgreen?style=flat-square" alt="Tests" />
   <img src="https://img.shields.io/badge/Node.js-%3E%3D18-339933?style=flat-square&logo=node.js&logoColor=white" alt="Node.js" />
 </p>
@@ -43,19 +43,20 @@
 
 ## 📦 NPM 包总览
 
-### 核心发布包 (9)
+### 核心发布包 (10)
 
 | #   | 包                    | 版本  | 说明                                             | npm                                                                                                                         |
 | --- | --------------------- | ----- | ------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
 | 1   | **@yyc3/core**        | 1.4.0 | 核心引擎 — 认证 / MCP / 技能 / 智能体 / 多模态   | [![npm](https://img.shields.io/npm/v/@yyc3/core?style=flat-square)](https://www.npmjs.com/package/@yyc3/core)               |
 | 2   | **@yyc3/ai-hub**      | 1.4.2 | AI 集成中心 — 八位家人 / Family Compass / 工作流 | [![npm](https://img.shields.io/npm/v/@yyc3/ai-hub?style=flat-square)](https://www.npmjs.com/package/@yyc3/ai-hub)           |
 | 3   | **@yyc3/ui**          | 2.0.2 | UI 组件库 — 56+ 组件 / shadcn/ui / 主题系统      | [![npm](https://img.shields.io/npm/v/@yyc3/ui?style=flat-square)](https://www.npmjs.com/package/@yyc3/ui)                   |
-| 4   | **@yyc3/plugins**     | 1.4.2 | 插件集合 — LSP 语言服务器 + 内容处理             | [![npm](https://img.shields.io/npm/v/@yyc3/plugins?style=flat-square)](https://www.npmjs.com/package/@yyc3/plugins)         |
-| 5   | **@yyc3/i18n-core**   | 2.4.0 | 国际化框架 — ICU / AI 翻译 / 10 语言 / 零依赖    | [![npm](https://img.shields.io/npm/v/@yyc3/i18n-core?style=flat-square)](https://www.npmjs.com/package/@yyc3/i18n-core)     |
-| 6   | **@yyc3/emotion**     | 1.0.0 | 情感引擎 — 多模态融合 / 音乐桥接 / 事件总线      | [![npm](https://img.shields.io/npm/v/@yyc3/emotion?style=flat-square)](https://www.npmjs.com/package/@yyc3/emotion)         |
-| 7   | **@yyc3/mcp-servers** | 1.0.0 | MCP 服务器 — 注册表 / 服务端 / 协议实现          | [![npm](https://img.shields.io/npm/v/@yyc3/mcp-servers?style=flat-square)](https://www.npmjs.com/package/@yyc3/mcp-servers) |
-| 8   | **@yyc3/motion**      | 1.0.0 | 动效引擎 — CSS / WAAPI / Framer Motion 三层渐进  | [![npm](https://img.shields.io/npm/v/@yyc3/motion?style=flat-square)](https://www.npmjs.com/package/@yyc3/motion)           |
-| 9   | **@yyc3/cli**         | 1.0.0 | 智能编程库 CLI — 12 命令 / MCP Server / 脚手架   | [![npm](https://img.shields.io/npm/v/@yyc3/cli?style=flat-square)](https://www.npmjs.com/package/@yyc3/cli)                 |
+| 4   | **@yyc3/effects**     | 1.0.0 | 特效组件库 — 赛博朋克 / 液态玻璃 / 3D / 粒子    | [![npm](https://img.shields.io/npm/v/@yyc3/effects?style=flat-square)](https://www.npmjs.com/package/@yyc3/effects)         |
+| 5   | **@yyc3/plugins**     | 1.4.2 | 插件集合 — LSP 语言服务器 + 内容处理             | [![npm](https://img.shields.io/npm/v/@yyc3/plugins?style=flat-square)](https://www.npmjs.com/package/@yyc3/plugins)         |
+| 6   | **@yyc3/i18n-core**   | 2.4.0 | 国际化框架 — ICU / AI 翻译 / 10 语言 / 零依赖    | [![npm](https://img.shields.io/npm/v/@yyc3/i18n-core?style=flat-square)](https://www.npmjs.com/package/@yyc3/i18n-core)     |
+| 7   | **@yyc3/emotion**     | 1.0.0 | 情感引擎 — 多模态融合 / 音乐桥接 / 事件总线      | [![npm](https://img.shields.io/npm/v/@yyc3/emotion?style=flat-square)](https://www.npmjs.com/package/@yyc3/emotion)         |
+| 8   | **@yyc3/mcp-servers** | 1.0.0 | MCP 服务器 — 注册表 / 服务端 / 协议实现          | [![npm](https://img.shields.io/npm/v/@yyc3/mcp-servers?style=flat-square)](https://www.npmjs.com/package/@yyc3/mcp-servers) |
+| 9   | **@yyc3/motion**      | 1.0.0 | 动效引擎 — CSS / WAAPI / Framer Motion 三层渐进  | [![npm](https://img.shields.io/npm/v/@yyc3/motion?style=flat-square)](https://www.npmjs.com/package/@yyc3/motion)           |
+| 10  | **@yyc3/cli**         | 1.1.0 | 智能编程库 CLI — 11主题×18场景 / MCP Server      | [![npm](https://img.shields.io/npm/v/@yyc3/cli?style=flat-square)](https://www.npmjs.com/package/@yyc3/cli)                 |
 
 ### 内部开发包
 
@@ -73,6 +74,7 @@ YYC3-π³/
 │   ├── core/            @yyc3/core          核心引擎
 │   ├── ai-hub/          @yyc3/ai-hub        AI 集成中心
 │   ├── emotion/         @yyc3/emotion       情感引擎
+│   ├── effects/         @yyc3/effects       特效组件库 ★NEW
 │   ├── i18n-core/       @yyc3/i18n-core     国际化框架
 │   ├── ui/              @yyc3/ui            UI 组件库
 │   ├── plugins/         @yyc3/plugins       插件集合
@@ -83,7 +85,6 @@ YYC3-π³/
 ├── docs-site/           docs.yyc3.top (VitePress)
 ├── .github/workflows/   CI/CD 自动化
 ├── public/              品牌 Logo / 主题曲
-├── scripts/             审核 / 发布脚本
 └── pnpm-workspace.yaml  Monorepo 配置
 ```
 
@@ -97,7 +98,8 @@ Layer 0 (零依赖)          Layer 1 (依赖 core)
 │ @yyc3/i18n-core │       │ @yyc3/plugins    │
 │ @yyc3/mcp-server│       └──────────────────┘
 │ @yyc3/motion    │
-│ @yyc3/cli       │
+│ @yyc3/cli       │       Layer 2 (仅依赖 react)
+│ @yyc3/effects ★ │──────▶└──────────────────┘
 └─────────────────┘
 ```
 
@@ -119,12 +121,11 @@ pnpm add @yyc3/emotion                       # 情感引擎
 ### CLI 脚手架
 
 ```bash
-# 创建新项目
+# 创建新项目 — Theme × Scene 正交组合
 npx create-yyc3-app my-project
-npx create-yyc3-app dashboard-app -t dashboard --preset yyc3-dark
-
-# 初始化到现有项目
-npx @yyc3/cli init -p yyc3-brand
+npx create-yyc3-app cyber-crm --theme cyberpunk --scenes crm,ai-chat
+npx create-yyc3-app aurora-dash --theme aurora --scenes data-dashboard
+```
 
 # 添加组件
 npx @yyc3/cli add button card dialog

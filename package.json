@@ -1,6 +1,6 @@
 {
   "name": "yyc3-family-pai",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "private": true,
   "description": "YYC³ AI Family — 八位拟人化AI家人的智能中枢 (Monorepo Root)",
   "scripts": {
