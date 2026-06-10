@@ -196,7 +196,10 @@ export type RegistryItem = z.infer<typeof registryItemSchema>
 export type RegistryBaseItem = Extract<RegistryItem, { type: "registry:base" }>
 
 // Helper type for registry:font items specifically.
-export type RegistryFontItem = Extract<RegistryItem, { type: "registry:font" }>
+export type RegistryFontItem = {
+  type: "registry:font"
+  font: z.infer<typeof registryItemFontSchema>
+} & z.infer<typeof registryItemCommonSchema>
 
 export const registrySchema = z.object({
   name: z.string(),

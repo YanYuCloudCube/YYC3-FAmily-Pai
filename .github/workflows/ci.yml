@@ -41,11 +41,9 @@ jobs:
 
       - name: Lint all packages
         run: pnpm -r --stream lint
-        continue-on-error: true
 
       - name: Test all packages
         run: pnpm -r --stream test
-        continue-on-error: true
 
       - name: Security audit
         run: pnpm audit --audit-level=high

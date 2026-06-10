@@ -1,6 +1,6 @@
-import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
-import globals from 'globals'
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
   js.configs.recommended,
@@ -20,7 +20,7 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/no-unused-vars': [
         'warn',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', destructuredArrayIgnorePattern: '^_', ignoreRestSiblings: true },
       ],
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
@@ -29,6 +29,21 @@ export default tseslint.config(
       'no-console': 'warn',
       'prefer-const': 'warn',
       'preserve-caught-error': 'warn',
+      'no-empty': ['error', { allowEmptyCatch: true }],
+      '@typescript-eslint/no-unused-expressions': [
+        'error',
+        {
+          allowShortCircuit: true,
+          allowTernary: true,
+          allowTaggedTemplates: true,
+        },
+      ],
+    },
+  },
+  {
+    files: ['bridge/**'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
     },
   },
   {
@@ -40,6 +55,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs', '*.cjs', 'coverage/**'],
+    ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs', '*.cjs', 'coverage/**', 'examples/**'],
   }
-)
+);

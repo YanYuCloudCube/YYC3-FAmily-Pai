@@ -16,5 +16,4 @@
  */
 export * from './core'
 export * from './components'
-export * from './family'
 export * from './themes'

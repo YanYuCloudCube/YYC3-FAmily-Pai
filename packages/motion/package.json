@@ -8,30 +8,31 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./css": {
-      "import": "./dist/css/index.js",
-      "types": "./dist/css/index.d.ts"
+      "types": "./dist/css/index.d.ts",
+      "import": "./dist/css/index.js"
     },
     "./waapi": {
-      "import": "./dist/waapi/index.js",
-      "types": "./dist/waapi/index.d.ts"
+      "types": "./dist/waapi/index.d.ts",
+      "import": "./dist/waapi/index.js"
     },
     "./framer": {
-      "import": "./dist/framer/index.js",
-      "types": "./dist/framer/index.d.ts"
+      "types": "./dist/framer/index.d.ts",
+      "import": "./dist/framer/index.js"
     },
     "./hooks": {
-      "import": "./dist/hooks/index.js",
-      "types": "./dist/hooks/index.d.ts"
+      "types": "./dist/hooks/index.d.ts",
+      "import": "./dist/hooks/index.js"
     },
     "./components": {
-      "import": "./dist/components/index.js",
-      "types": "./dist/components/index.d.ts"
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.js"
     }
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md",
@@ -46,7 +47,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "pnpm build"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm typecheck"
   },
   "peerDependencies": {
     "framer-motion": ">=11.0.0",
@@ -92,15 +94,22 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YanYuCloudCube/YYC3-pi3",
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai",
     "directory": "packages/motion"
   },
-  "homepage": "https://github.com/YanYuCloudCube/YYC3-pi3#readme",
+  "homepage": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "engines": {
-    "node": ">=18.0.0"
-  }
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "60 kB"
+    }
+  ]
 }

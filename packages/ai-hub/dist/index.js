@@ -2,10 +2,10 @@ import { logger } from './chunk-MSXOCKNB.js';
 export { FamilyCompass, createFamilyCompass } from './chunk-3BQL7E3D.js';
 export { FAMILY_PERSONAS, getAllPersonas, getNextDutyMember, getPersona, getPersonaByHour } from './chunk-PM4NNPOB.js';
 export { createFamilyWorkSystem } from './chunk-KN57KAAZ.js';
+import OpenAI from 'openai';
 import { UnifiedAuthManager } from '@yyc3/core/auth';
 import * as fs from 'fs';
 import * as path from 'path';
-import OpenAI from 'openai';
 import { z } from 'zod';
 import { spawn } from 'child_process';
 
@@ -17,181 +17,6 @@ import { spawn } from 'child_process';
  * @see https://github.com/yyc3/YYC3-CloudPivot-Intelli-Matrix
  */
 
-
-// src/agent-router.ts
-var DEFAULT_RULES = [
-  { agent: "security-scanning", keywords: ["security", "vulnerability", "audit", "\u5B89\u5168", "\u6F0F\u6D1E"], priority: 90 },
-  { agent: "kubernetes-operations", keywords: ["k8s", "kubernetes", "deploy", "container", "docker", "helm"], priority: 85 },
-  { agent: "llm-application-dev", keywords: ["llm", "rag", "prompt", "agent", "ai", "\u6A21\u578B", "embedding"], priority: 80 },
-  { agent: "backend-development", keywords: ["api", "server", "database", "microservice", "backend", "rest", "graphql"], priority: 75 },
-  { agent: "python-development", keywords: ["python", "data", "ml", "machine learning", "pytorch", "pandas"], priority: 70 },
-  { agent: "javascript-typescript", keywords: ["javascript", "typescript", "node", "react", "vue", "next", "nuxt"], priority: 70 },
-  { agent: "rust-development", keywords: ["rust", "cargo", "wasm", "\u7CFB\u7EDF\u7F16\u7A0B"], priority: 65 },
-  { agent: "go-development", keywords: ["golang", "go", "\u5E76\u53D1", "goroutine"], priority: 65 },
-  { agent: "mobile-development", keywords: ["mobile", "ios", "android", "flutter", "react native", "swift", "kotlin"], priority: 60 },
-  { agent: "devops", keywords: ["devops", "ci", "cd", "pipeline", "jenkins", "github actions"], priority: 55 },
-  { agent: "testing", keywords: ["test", "\u6D4B\u8BD5", "unit", "integration", "e2e", "vitest", "jest"], priority: 50 },
-  { agent: "documentation", keywords: ["doc", "\u6587\u6863", "readme", "api doc", "typedoc"], priority: 45 }
-];
-var AgentRouter = class {
-  static rules = [...DEFAULT_RULES];
-  static customRules = [];
-  static addRule(rule) {
-    this.customRules.push(rule);
-  }
-  static clearCustomRules() {
-    this.customRules = [];
-  }
-  static route(task) {
-    const lowerTask = task.toLowerCase();
-    const allRules = [...this.customRules, ...this.rules];
-    const scored = [];
-    for (const rule of allRules) {
-      let score = 0;
-      for (const keyword of rule.keywords) {
-        if (lowerTask.includes(keyword.toLowerCase())) {
-          score += keyword.length;
-        }
-      }
-      if (rule.patterns) {
-        for (const pattern of rule.patterns) {
-          if (pattern.test(task)) {
-            score += 10;
-          }
-        }
-      }
-      if (score > 0) {
-        scored.push({ agent: rule.agent, score: score * (rule.priority / 100) });
-      }
-    }
-    scored.sort((a, b) => b.score - a.score);
-    if (scored.length === 0) {
-      return ["general"];
-    }
-    return scored.slice(0, 3).map((s) => s.agent);
-  }
-};
-var AgentImpl = class {
-  constructor(definition, auth) {
-    this.definition = definition;
-    this.auth = auth;
-    this.id = definition.id;
-  }
-  definition;
-  auth;
-  id;
-  async execute(task, context) {
-    const startTime = Date.now();
-    const provider = this.auth.getProvider();
-    const model = this.auth.getModel(this.definition.model);
-    try {
-      let output = "";
-      if (provider.type === "openai" && provider.client) {
-        const response = await provider.client.chat.completions.create({
-          model,
-          messages: [
-            { role: "system", content: this.definition.systemPrompt },
-            { role: "user", content: task }
-          ]
-        });
-        output = response.choices[0]?.message?.content || "";
-      }
-      if (provider.type === "ollama" && provider.host) {
-        const response = await fetch(`${provider.host}/api/chat`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            model,
-            messages: [
-              { role: "system", content: this.definition.systemPrompt },
-              { role: "user", content: task }
-            ],
-            stream: false
-          })
-        });
-        const data = await response.json();
-        output = data.message?.content || "";
-      }
-      if (provider.type === "anthropic") {
-        const response = await fetch("https://api.anthropic.com/v1/messages", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-api-key": process.env.ANTHROPIC_API_KEY || "",
-            "anthropic-version": "2023-06-01"
-          },
-          body: JSON.stringify({
-            model,
-            max_tokens: 4096,
-            system: this.definition.systemPrompt,
-            messages: [{ role: "user", content: task }]
-          })
-        });
-        const data = await response.json();
-        output = data.content?.[0]?.text || "";
-      }
-      return {
-        success: true,
-        output,
-        duration: Date.now() - startTime,
-        tokensUsed: output.length
-      };
-    } catch (error) {
-      return {
-        success: false,
-        output: "",
-        duration: Date.now() - startTime,
-        errors: [error instanceof Error ? error.message : String(error)]
-      };
-    }
-  }
-};
-var AgentManager = class {
-  agents = /* @__PURE__ */ new Map();
-  auth;
-  constructor(auth) {
-    this.auth = auth;
-  }
-  async load(paths) {
-    for (const p of paths) {
-      await this.loadFromPath(p);
-    }
-  }
-  async loadFromPath(p) {
-    if (!fs.existsSync(p)) {
-      console.warn(`Agent\u8DEF\u5F84\u4E0D\u5B58\u5728: ${p}`);
-      return;
-    }
-    const stats = fs.statSync(p);
-    if (stats.isDirectory()) {
-      const files = fs.readdirSync(p);
-      for (const file of files) {
-        if (file.endsWith(".json")) {
-          const content = fs.readFileSync(path.join(p, file), "utf-8");
-          const definitions = JSON.parse(content);
-          definitions.forEach((def) => {
-            this.agents.set(def.id, new AgentImpl(def, this.auth));
-          });
-        }
-      }
-    }
-  }
-  register(definition) {
-    this.agents.set(definition.id, new AgentImpl(definition, this.auth));
-  }
-  get(id) {
-    return this.agents.get(id);
-  }
-  list() {
-    return Array.from(this.agents.keys());
-  }
-  getByCategory(category) {
-    return Array.from(this.agents.values()).filter((a) => a.definition.category === category || a.definition.id.startsWith(category));
-  }
-  count() {
-    return this.agents.size;
-  }
-};
 
 // src/errors/codes.ts
 var YYC3ErrorCode = /* @__PURE__ */ ((YYC3ErrorCode2) => {
@@ -528,6 +353,181 @@ var YYC3Auth = class {
   }
   getModel(tier) {
     return this.getProvider().modelMapping[tier];
+  }
+};
+
+// src/agent-router.ts
+var DEFAULT_RULES = [
+  { agent: "security-scanning", keywords: ["security", "vulnerability", "audit", "\u5B89\u5168", "\u6F0F\u6D1E"], priority: 90 },
+  { agent: "kubernetes-operations", keywords: ["k8s", "kubernetes", "deploy", "container", "docker", "helm"], priority: 85 },
+  { agent: "llm-application-dev", keywords: ["llm", "rag", "prompt", "agent", "ai", "\u6A21\u578B", "embedding"], priority: 80 },
+  { agent: "backend-development", keywords: ["api", "server", "database", "microservice", "backend", "rest", "graphql"], priority: 75 },
+  { agent: "python-development", keywords: ["python", "data", "ml", "machine learning", "pytorch", "pandas"], priority: 70 },
+  { agent: "javascript-typescript", keywords: ["javascript", "typescript", "node", "react", "vue", "next", "nuxt"], priority: 70 },
+  { agent: "rust-development", keywords: ["rust", "cargo", "wasm", "\u7CFB\u7EDF\u7F16\u7A0B"], priority: 65 },
+  { agent: "go-development", keywords: ["golang", "go", "\u5E76\u53D1", "goroutine"], priority: 65 },
+  { agent: "mobile-development", keywords: ["mobile", "ios", "android", "flutter", "react native", "swift", "kotlin"], priority: 60 },
+  { agent: "devops", keywords: ["devops", "ci", "cd", "pipeline", "jenkins", "github actions"], priority: 55 },
+  { agent: "testing", keywords: ["test", "\u6D4B\u8BD5", "unit", "integration", "e2e", "vitest", "jest"], priority: 50 },
+  { agent: "documentation", keywords: ["doc", "\u6587\u6863", "readme", "api doc", "typedoc"], priority: 45 }
+];
+var AgentRouter = class {
+  static rules = [...DEFAULT_RULES];
+  static customRules = [];
+  static addRule(rule) {
+    this.customRules.push(rule);
+  }
+  static clearCustomRules() {
+    this.customRules = [];
+  }
+  static route(task) {
+    const lowerTask = task.toLowerCase();
+    const allRules = [...this.customRules, ...this.rules];
+    const scored = [];
+    for (const rule of allRules) {
+      let score = 0;
+      for (const keyword of rule.keywords) {
+        if (lowerTask.includes(keyword.toLowerCase())) {
+          score += keyword.length;
+        }
+      }
+      if (rule.patterns) {
+        for (const pattern of rule.patterns) {
+          if (pattern.test(task)) {
+            score += 10;
+          }
+        }
+      }
+      if (score > 0) {
+        scored.push({ agent: rule.agent, score: score * (rule.priority / 100) });
+      }
+    }
+    scored.sort((a, b) => b.score - a.score);
+    if (scored.length === 0) {
+      return ["general"];
+    }
+    return scored.slice(0, 3).map((s) => s.agent);
+  }
+};
+var AgentImpl = class {
+  constructor(definition, auth) {
+    this.definition = definition;
+    this.auth = auth;
+    this.id = definition.id;
+  }
+  definition;
+  auth;
+  id;
+  async execute(task, context) {
+    const startTime = Date.now();
+    const provider = this.auth.getProvider();
+    const model = this.auth.getModel(this.definition.model);
+    try {
+      let output = "";
+      if (provider.type === "openai" && provider.client) {
+        const response = await provider.client.chat.completions.create({
+          model,
+          messages: [
+            { role: "system", content: this.definition.systemPrompt },
+            { role: "user", content: task }
+          ]
+        });
+        output = response.choices[0]?.message?.content || "";
+      }
+      if (provider.type === "ollama" && provider.host) {
+        const response = await fetch(`${provider.host}/api/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            model,
+            messages: [
+              { role: "system", content: this.definition.systemPrompt },
+              { role: "user", content: task }
+            ],
+            stream: false
+          })
+        });
+        const data = await response.json();
+        output = data.message?.content || "";
+      }
+      if (provider.type === "anthropic") {
+        const response = await fetch("https://api.anthropic.com/v1/messages", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": process.env.ANTHROPIC_API_KEY || "",
+            "anthropic-version": "2023-06-01"
+          },
+          body: JSON.stringify({
+            model,
+            max_tokens: 4096,
+            system: this.definition.systemPrompt,
+            messages: [{ role: "user", content: task }]
+          })
+        });
+        const data = await response.json();
+        output = data.content?.[0]?.text || "";
+      }
+      return {
+        success: true,
+        output,
+        duration: Date.now() - startTime,
+        tokensUsed: output.length
+      };
+    } catch (error) {
+      return {
+        success: false,
+        output: "",
+        duration: Date.now() - startTime,
+        errors: [error instanceof Error ? error.message : String(error)]
+      };
+    }
+  }
+};
+var AgentManager = class {
+  agents = /* @__PURE__ */ new Map();
+  auth;
+  constructor(auth) {
+    this.auth = auth;
+  }
+  async load(paths) {
+    for (const p of paths) {
+      await this.loadFromPath(p);
+    }
+  }
+  async loadFromPath(p) {
+    if (!fs.existsSync(p)) {
+      console.warn(`Agent\u8DEF\u5F84\u4E0D\u5B58\u5728: ${p}`);
+      return;
+    }
+    const stats = fs.statSync(p);
+    if (stats.isDirectory()) {
+      const files = fs.readdirSync(p);
+      for (const file of files) {
+        if (file.endsWith(".json")) {
+          const content = fs.readFileSync(path.join(p, file), "utf-8");
+          const definitions = JSON.parse(content);
+          definitions.forEach((def) => {
+            this.agents.set(def.id, new AgentImpl(def, this.auth));
+          });
+        }
+      }
+    }
+  }
+  register(definition) {
+    this.agents.set(definition.id, new AgentImpl(definition, this.auth));
+  }
+  get(id) {
+    return this.agents.get(id);
+  }
+  list() {
+    return Array.from(this.agents.keys());
+  }
+  getByCategory(category) {
+    return Array.from(this.agents.values()).filter((a) => a.definition.category === category || a.definition.id.startsWith(category));
+  }
+  count() {
+    return this.agents.size;
   }
 };
 var MCPServerMetadataSchema = z.object({
@@ -883,6 +883,813 @@ var YYC3AIHub = class {
   }
 };
 
-export { ValidationError, YYC3AIHub, YYC3Auth, YYC3Error, YYC3ErrorCode, YYC3_ERROR_DOMAINS, YYC3_ERROR_DOMAINS_EN, getLocale, setLocale };
+// src/streaming/stream-manager.ts
+var StreamManager = class {
+  listeners = [];
+  aborted = false;
+  onChunk(listener) {
+    this.listeners.push(listener);
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== listener);
+    };
+  }
+  emit(chunk) {
+    if (this.aborted) return;
+    for (const listener of this.listeners) {
+      listener(chunk);
+    }
+  }
+  emitText(content, agentId) {
+    this.emit({
+      type: "text",
+      content,
+      agentId,
+      timestamp: Date.now()
+    });
+  }
+  emitThinking(content, agentId) {
+    this.emit({
+      type: "thinking",
+      content,
+      agentId,
+      timestamp: Date.now()
+    });
+  }
+  emitToolCall(content, agentId) {
+    this.emit({
+      type: "tool_call",
+      content,
+      agentId,
+      timestamp: Date.now()
+    });
+  }
+  emitDone() {
+    this.emit({
+      type: "done",
+      content: "",
+      timestamp: Date.now()
+    });
+  }
+  emitError(error) {
+    this.emit({
+      type: "error",
+      content: error,
+      timestamp: Date.now()
+    });
+  }
+  abort() {
+    this.aborted = true;
+  }
+  isAborted() {
+    return this.aborted;
+  }
+  reset() {
+    this.aborted = false;
+    this.listeners = [];
+  }
+  static createChunk(type, content, agentId) {
+    return { type, content, agentId, timestamp: Date.now() };
+  }
+};
+function collectStream(chunks) {
+  return chunks.filter((c) => c.type === "text").map((c) => c.content).join("");
+}
+
+// src/middleware/middleware.ts
+var MiddlewareChain = class {
+  middlewares = [];
+  use(middleware) {
+    this.middlewares.push(middleware);
+    return this;
+  }
+  remove(name) {
+    this.middlewares = this.middlewares.filter((m) => m.name !== name);
+    return this;
+  }
+  list() {
+    return this.middlewares.map((m) => m.name);
+  }
+  async executeBefore(ctx) {
+    let current = ctx;
+    for (const mw of this.middlewares) {
+      if (mw.before) {
+        current = await mw.before(current);
+      }
+    }
+    return current;
+  }
+  async executeAfter(ctx, result) {
+    let current = result;
+    for (const mw of this.middlewares) {
+      if (mw.after) {
+        current = await mw.after(ctx, current);
+      }
+    }
+    return current;
+  }
+  async executeOnError(ctx, error) {
+    let current = error;
+    for (const mw of this.middlewares) {
+      if (mw.onError) {
+        current = await mw.onError(ctx, current);
+      }
+    }
+    return current;
+  }
+  has(name) {
+    return this.middlewares.some((m) => m.name === name);
+  }
+  clear() {
+    this.middlewares = [];
+  }
+};
+function createLoggingMiddleware() {
+  return {
+    name: "logging",
+    async before(ctx) {
+      ctx.metadata.startTime = Date.now();
+      return ctx;
+    },
+    async after(ctx, result) {
+      const duration = Date.now() - (ctx.metadata.startTime || 0);
+      return { ...result, duration };
+    }
+  };
+}
+function createRetryMiddleware(maxRetries = 3) {
+  return {
+    name: "retry",
+    async onError(ctx, error) {
+      const attempts = (ctx.metadata.retryAttempts || 0) + 1;
+      ctx.metadata.retryAttempts = attempts;
+      if (attempts < maxRetries) {
+        const wrapped = new Error(`Retry ${attempts}/${maxRetries}: ${error.message}`);
+        wrapped.cause = error;
+        return wrapped;
+      }
+      return error;
+    }
+  };
+}
+function createCacheMiddleware(ttl = 6e4) {
+  const cache = /* @__PURE__ */ new Map();
+  return {
+    name: "cache",
+    async before(ctx) {
+      const key = `${ctx.agentId}:${ctx.task}`;
+      const cached = cache.get(key);
+      if (cached && Date.now() < cached.expires) {
+        ctx.metadata.cachedResult = cached.result;
+      }
+      return ctx;
+    },
+    async after(ctx, result) {
+      const key = `${ctx.agentId}:${ctx.task}`;
+      cache.set(key, { result, expires: Date.now() + ttl });
+      return result;
+    }
+  };
+}
+function createRateLimitMiddleware(maxRps = 10) {
+  let timestamps = [];
+  return {
+    name: "rate-limit",
+    async before(ctx) {
+      const now = Date.now();
+      timestamps = timestamps.filter((t) => now - t < 1e3);
+      if (timestamps.length >= maxRps) {
+        throw new Error(`Rate limit exceeded: ${maxRps} requests per second`);
+      }
+      timestamps.push(now);
+      return ctx;
+    }
+  };
+}
+
+// src/router/semantic-router.ts
+function tokenize(text) {
+  return text.toLowerCase().split(/[\s,.;:!?(){}[\]"'/\\]+/).filter((t) => t.length > 1);
+}
+function computeTF(tokens) {
+  const tf = /* @__PURE__ */ new Map();
+  for (const token of tokens) {
+    tf.set(token, (tf.get(token) || 0) + 1);
+  }
+  for (const [key, val] of tf) {
+    tf.set(key, val / tokens.length);
+  }
+  return tf;
+}
+function cosineSimilarity(a, b) {
+  const allKeys = /* @__PURE__ */ new Set([...a.keys(), ...b.keys()]);
+  let dotProduct = 0;
+  let normA = 0;
+  let normB = 0;
+  for (const key of allKeys) {
+    const va = a.get(key) || 0;
+    const vb = b.get(key) || 0;
+    dotProduct += va * vb;
+    normA += va * va;
+    normB += vb * vb;
+  }
+  if (normA === 0 || normB === 0) return 0;
+  return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+}
+var SemanticRouter = class extends AgentRouter {
+  semanticRoutes = [];
+  routeVectors = /* @__PURE__ */ new Map();
+  addSemanticRoute(route) {
+    this.semanticRoutes.push(route);
+    for (const example of route.examples) {
+      const key = `${route.agent}:${example}`;
+      this.routeVectors.set(key, computeTF(tokenize(example)));
+    }
+  }
+  async route(task) {
+    const taskVector = computeTF(tokenize(task));
+    const scored = [];
+    for (const route of this.semanticRoutes) {
+      let maxSimilarity = 0;
+      for (const example of route.examples) {
+        const key = `${route.agent}:${example}`;
+        const exampleVector = this.routeVectors.get(key);
+        if (exampleVector) {
+          const similarity = cosineSimilarity(taskVector, exampleVector);
+          maxSimilarity = Math.max(maxSimilarity, similarity);
+        }
+      }
+      if (maxSimilarity >= route.threshold) {
+        scored.push({ agent: route.agent, score: maxSimilarity });
+      }
+    }
+    const keywordResults = AgentRouter.route(task);
+    for (const agent of keywordResults) {
+      if (!scored.find((s) => s.agent === agent)) {
+        scored.push({ agent, score: 0.5 });
+      }
+    }
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, 3).map((s) => s.agent);
+  }
+  getSemanticRoutes() {
+    return [...this.semanticRoutes];
+  }
+  clearSemanticRoutes() {
+    this.semanticRoutes = [];
+    this.routeVectors.clear();
+  }
+};
+
+// src/router/task-inference.ts
+var KEYWORD_PATTERNS = [
+  { pattern: /TODO:?\s*(.+)/gi, type: "feature", priority: "medium" },
+  { pattern: /FIXME:?\s*(.+)/gi, type: "bug", priority: "high" },
+  { pattern: /BUG:?\s*(.+)/gi, type: "bug", priority: "high" },
+  { pattern: /HACK:?\s*(.+)/gi, type: "refactor", priority: "medium" },
+  { pattern: /OPTIMIZE:?\s*(.+)/gi, type: "refactor", priority: "low" },
+  { pattern: /NOTE:?\s*(.+)/gi, type: "documentation", priority: "low" },
+  { pattern: /需要实现(.+)/g, type: "feature", priority: "medium" },
+  { pattern: /修复(.+)问题/g, type: "bug", priority: "high" },
+  { pattern: /重构(.+)/g, type: "refactor", priority: "medium" },
+  { pattern: /添加(.+)功能/g, type: "feature", priority: "medium" },
+  { pattern: /完善(.+)/g, type: "feature", priority: "low" },
+  { pattern: /优化(.+)/g, type: "refactor", priority: "low" },
+  { pattern: /测试(.+)/g, type: "test", priority: "medium" },
+  { pattern: /编写(.+)文档/g, type: "documentation", priority: "low" }
+];
+function inferTasksFromText(text) {
+  const results = [];
+  const seen = /* @__PURE__ */ new Set();
+  for (const { pattern, type, priority } of KEYWORD_PATTERNS) {
+    pattern.lastIndex = 0;
+    let match;
+    while ((match = pattern.exec(text)) !== null) {
+      const title = match[1]?.trim();
+      if (!title || title.length < 3 || seen.has(title.toLowerCase())) continue;
+      seen.add(title.toLowerCase());
+      results.push({
+        task: {
+          title,
+          description: `Auto-extracted: "${match[0].trim()}"`,
+          priority,
+          type
+        },
+        confidence: 0.7,
+        reasoning: `Keyword pattern: ${pattern.source}`,
+        context: text.substring(Math.max(0, match.index - 50), match.index + match[0].length + 50)
+      });
+    }
+  }
+  return results;
+}
+function inferTasksFromCode(code, language) {
+  return inferTasksFromText(code).map((inf) => ({
+    ...inf,
+    task: {
+      ...inf.task,
+      description: `From ${language} code comment: ${inf.task.description}`
+    },
+    confidence: 0.85
+  }));
+}
+function inferTasksFromConversation(messages) {
+  const fullText = messages.map((m) => m.content).join("\n\n");
+  return inferTasksFromText(fullText).map((inf) => ({
+    ...inf,
+    task: {
+      ...inf.task,
+      description: `From AI conversation: ${inf.task.description}`
+    }
+  }));
+}
+function inferTasksFromDescription(description) {
+  const lines = description.split(/[\n;；。]/).map((l) => l.trim()).filter((l) => l.length > 3);
+  if (lines.length <= 1) {
+    return [{
+      task: {
+        title: description.slice(0, 80),
+        description,
+        priority: "medium",
+        type: "feature"
+      },
+      confidence: 0.75,
+      reasoning: "User direct description",
+      context: description
+    }];
+  }
+  return lines.map((line, i) => ({
+    task: {
+      title: line.slice(0, 80),
+      description: line,
+      priority: "medium",
+      type: "feature"
+    },
+    confidence: 0.65,
+    reasoning: `User description item ${i + 1}`,
+    context: line
+  }));
+}
+function inferTaskDependencies(tasks) {
+  const deps = /* @__PURE__ */ new Map();
+  for (let i = 0; i < tasks.length; i++) {
+    const taskDeps = [];
+    const titleLower = (tasks[i].title + " " + (tasks[i].description || "")).toLowerCase();
+    for (let j = 0; j < tasks.length; j++) {
+      if (i === j) continue;
+      const otherWords = tasks[j].title.toLowerCase().split(/\s+/).filter((w) => w.length > 2);
+      const matchCount = otherWords.filter((w) => titleLower.includes(w)).length;
+      if (matchCount >= 2) {
+        taskDeps.push(tasks[j].id);
+      }
+    }
+    if (taskDeps.length > 0) deps.set(tasks[i].id, taskDeps);
+  }
+  return deps;
+}
+
+// src/router/quick-actions.ts
+function escapeHTML(text) {
+  const entities = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  };
+  return text.replace(/[&<>"']/g, (c) => entities[c]);
+}
+function formatCodeLocal(code) {
+  return code.split("\n").map((line) => line.trimEnd()).join("\n");
+}
+function wrapAsMarkdown(code, language = "text") {
+  return `\`\`\`${language}
+${code}
+\`\`\``;
+}
+function wrapAsHTML(code, language = "text") {
+  return `<pre><code class="language-${language}">${escapeHTML(code)}</code></pre>`;
+}
+var PROMPT_BUILDERS = {
+  refactor(ctx) {
+    const lang = ctx.language || "text";
+    return {
+      systemPrompt: "You are an expert code refactoring specialist.",
+      userPrompt: `Language: ${lang}
+
+Original Code:
+\`\`\`${lang}
+${ctx.text}
+\`\`\`
+
+Refactoring Goals:
+- Improve readability
+- Reduce duplication
+- Apply design patterns
+- Enhance maintainability
+
+Only output the refactored code, no explanations.`,
+      actionType: "refactor"
+    };
+  },
+  optimize(ctx) {
+    const lang = ctx.language || "text";
+    return {
+      systemPrompt: "You are an expert code optimizer.",
+      userPrompt: `Language: ${lang}
+
+Original Code:
+\`\`\`${lang}
+${ctx.text}
+\`\`\`
+
+Optimization Goals:
+- Improve performance
+- Reduce memory usage
+- Optimize algorithms
+
+Provide optimized code with brief explanation.`,
+      actionType: "optimize"
+    };
+  },
+  explain(ctx) {
+    const lang = ctx.language || "text";
+    return {
+      systemPrompt: "You are an expert code educator.",
+      userPrompt: `Language: ${lang}
+
+Code:
+\`\`\`${lang}
+${ctx.text}
+\`\`\`
+
+Please explain this code:
+- Overall purpose and functionality
+- Key components and their roles
+- How the code works
+- Important patterns used
+
+Format as Markdown.`,
+      actionType: "explain"
+    };
+  },
+  comment(ctx) {
+    const lang = ctx.language || "text";
+    return {
+      systemPrompt: "You are an expert code commenter.",
+      userPrompt: `Language: ${lang}
+
+Code:
+\`\`\`${lang}
+${ctx.text}
+\`\`\`
+
+Add comprehensive comments including:
+- Function/class descriptions
+- Parameter and return value explanations
+- Complex logic explanations
+
+Only output the commented code.`,
+      actionType: "comment"
+    };
+  },
+  "find-issues"(ctx) {
+    const lang = ctx.language || "text";
+    return {
+      systemPrompt: "You are an expert code reviewer.",
+      userPrompt: `Language: ${lang}
+
+Code:
+\`\`\`${lang}
+${ctx.text}
+\`\`\`
+
+Identify issues:
+- Bugs and errors
+- Security vulnerabilities
+- Performance problems
+- Code smells
+
+For each, provide type, severity, location, description, and fix.
+Format as Markdown.`,
+      actionType: "find-issues"
+    };
+  },
+  "test-generate"(ctx) {
+    const lang = ctx.language || "text";
+    return {
+      systemPrompt: "You are an expert test engineer.",
+      userPrompt: `Language: ${lang}
+
+Code to Test:
+\`\`\`${lang}
+${ctx.text}
+\`\`\`
+
+Generate comprehensive test cases:
+- Unit tests
+- Edge cases
+- Error handling tests
+
+Use Vitest framework. Only output test code.`,
+      actionType: "test-generate"
+    };
+  },
+  "document-generate"(ctx) {
+    const lang = ctx.language || "text";
+    return {
+      systemPrompt: "You are an expert technical writer.",
+      userPrompt: `Language: ${lang}
+
+Code to Document:
+\`\`\`${lang}
+${ctx.text}
+\`\`\`
+
+Generate documentation:
+- Function/class description
+- Parameters and return values
+- Usage examples
+- Edge cases and limitations
+
+Format as Markdown.`,
+      actionType: "document-generate"
+    };
+  },
+  translate(ctx, params) {
+    const targetLang = params?.targetLang || "en";
+    return {
+      systemPrompt: "You are an expert translator.",
+      userPrompt: `Original Text:
+${ctx.text}
+
+Translate to ${targetLang}. Maintain tone and meaning.
+Only output the translated text.`,
+      actionType: "translate"
+    };
+  },
+  rewrite(ctx) {
+    return {
+      systemPrompt: "You are an expert writer.",
+      userPrompt: `Original Text:
+${ctx.text}
+
+Rewrite for clarity, conciseness, and impact.
+Only output the rewritten text.`,
+      actionType: "rewrite"
+    };
+  },
+  expand(ctx) {
+    return {
+      systemPrompt: "You are an expert writer.",
+      userPrompt: `Original Text:
+${ctx.text}
+
+Expand with relevant details, examples, and explanations.
+Only output the expanded text.`,
+      actionType: "expand"
+    };
+  },
+  correct(ctx) {
+    return {
+      systemPrompt: "You are an expert editor.",
+      userPrompt: `Original Text:
+${ctx.text}
+
+Correct grammar, spelling, and punctuation errors.
+Maintain original meaning and style. Only output corrected text.`,
+      actionType: "correct"
+    };
+  },
+  summarize(ctx) {
+    return {
+      systemPrompt: "You are an expert document summarizer.",
+      userPrompt: `Original Text:
+${ctx.text}
+
+Create a summary:
+- Main points
+- Key insights
+- Important details
+- Conclusions
+
+Format as Markdown.`,
+      actionType: "summarize"
+    };
+  },
+  convert(ctx, params) {
+    const toFormat = params?.toFormat || "markdown";
+    return {
+      systemPrompt: "You are an expert document converter.",
+      userPrompt: `Original Text:
+${ctx.text}
+
+Convert to ${toFormat} format.
+Maintain all content and structure. Only output converted text.`,
+      actionType: "convert"
+    };
+  }
+};
+function buildPrompt(actionType, ctx, params) {
+  const builder = PROMPT_BUILDERS[actionType];
+  if (!builder) throw new Error(`Unknown action type: ${actionType}`);
+  return builder(ctx, params);
+}
+function getAvailableActions() {
+  return Object.keys(PROMPT_BUILDERS);
+}
+function executeLocalAction(actionType, ctx) {
+  switch (actionType) {
+    case "copy":
+      return ctx.text;
+    case "copy-markdown":
+      return wrapAsMarkdown(ctx.text, ctx.language);
+    case "copy-html":
+      return wrapAsHTML(ctx.text, ctx.language);
+    case "format":
+      return formatCodeLocal(ctx.text);
+    default:
+      throw new Error(`Unknown local action: ${actionType}`);
+  }
+}
+
+// src/router/reminder.ts
+var idCounter = 0;
+function createReminderId() {
+  return `reminder-${Date.now()}-${++idCounter}`;
+}
+function createReminder(taskId, type, message, remindAt) {
+  return { id: createReminderId(), taskId, type, message, remindAt, triggered: false };
+}
+function createDeadlineReminder(taskId, dueDate, leadMs = 24 * 60 * 60 * 1e3) {
+  const remindAt = dueDate - leadMs;
+  if (remindAt <= Date.now()) return null;
+  return createReminder(taskId, "deadline", "Task due within 24 hours", remindAt);
+}
+function createDependencyReminder(taskId, depTask) {
+  if (depTask.status === "done") return null;
+  return createReminder(
+    taskId,
+    "dependency",
+    `Dependency "${depTask.title}" completed, ready to start`,
+    Date.now()
+  );
+}
+function createBlockingReminder(taskId, blockingTask) {
+  return createReminder(
+    taskId,
+    "blocking",
+    `Blocked by "${blockingTask.title}"`,
+    Date.now()
+  );
+}
+function createProgressReminder(taskId, progress) {
+  return createReminder(
+    taskId,
+    "progress",
+    `Task progress reached ${progress}%`,
+    Date.now()
+  );
+}
+function checkDueReminders(reminders, now = Date.now()) {
+  return reminders.filter((r) => !r.triggered && r.remindAt <= now);
+}
+function markTriggered(reminders, ids) {
+  const idSet = new Set(ids);
+  return reminders.map((r) => idSet.has(r.id) ? { ...r, triggered: true } : r);
+}
+var ReminderEngine = class {
+  reminders = [];
+  add(reminder) {
+    this.reminders.push(reminder);
+  }
+  checkDue(now = Date.now()) {
+    return checkDueReminders(this.reminders, now);
+  }
+  markTriggered(ids) {
+    this.reminders = markTriggered(this.reminders, ids);
+  }
+  getAll() {
+    return [...this.reminders];
+  }
+  clear() {
+    this.reminders = [];
+  }
+};
+
+// src/router/task-formatter.ts
+var PRIORITY_LABELS = {
+  critical: "P0",
+  high: "P1",
+  medium: "P2",
+  low: "P3"
+};
+var STATUS_LABELS = {
+  todo: "\u5F85\u529E",
+  "in-progress": "\u8FDB\u884C\u4E2D",
+  review: "\u5BA1\u6838\u4E2D",
+  done: "\u5DF2\u5B8C\u6210",
+  blocked: "\u963B\u585E"
+};
+function formatTaskAsText(task) {
+  let text = `# ${task.title}
+
+`;
+  if (task.description) text += `## \u63CF\u8FF0
+${task.description}
+
+`;
+  text += `## \u72B6\u6001
+${task.status}
+
+`;
+  text += `## \u4F18\u5148\u7EA7
+${task.priority}
+
+`;
+  if (task.type) text += `## \u7C7B\u578B
+${task.type}
+
+`;
+  if (task.dueDate) text += `## \u622A\u6B62\u65E5\u671F
+${new Date(task.dueDate).toLocaleString("zh-CN")}
+
+`;
+  if (task.estimatedHours) text += `## \u9884\u4F30\u65F6\u95F4
+${task.estimatedHours} \u5C0F\u65F6
+
+`;
+  if (task.tags && task.tags.length > 0) text += `## \u6807\u7B7E
+${task.tags.join(", ")}
+
+`;
+  if (task.subtasks && task.subtasks.length > 0) {
+    text += `## \u5B50\u4EFB\u52A1
+`;
+    task.subtasks.forEach((st, i) => {
+      text += `${i + 1}. ${st.isCompleted ? "\u2713" : "\u25CB"} ${st.title}
+`;
+    });
+    text += "\n";
+  }
+  return text;
+}
+function formatTaskAsMarkdown(task) {
+  let md = `- [${task.status === "done" ? "x" : " "}] ${task.title}
+`;
+  if (task.description) md += `  - ${task.description}
+`;
+  if (task.dueDate) md += `  - ${new Date(task.dueDate).toLocaleDateString("zh-CN")}
+`;
+  md += `  - ${PRIORITY_LABELS[task.priority]} ${task.priority}
+`;
+  return md;
+}
+function formatTaskAsCodeComment(task, lang = "typescript") {
+  const styles = {
+    javascript: ["// TODO: ", ""],
+    typescript: ["// TODO: ", ""],
+    python: ["# TODO: ", ""],
+    html: ["<!-- TODO: ", " -->"],
+    css: ["/* TODO: ", " */"]
+  };
+  const [start, end] = styles[lang] || styles.typescript;
+  let comment = `${start}${task.title}`;
+  if (task.description) comment += ` - ${task.description}`;
+  comment += ` [${task.priority}]${end}`;
+  return comment;
+}
+function getHighestPriority(priorities) {
+  const order = ["critical", "high", "medium", "low"];
+  for (const p of order) {
+    if (priorities.includes(p)) return p;
+  }
+  return "medium";
+}
+function exportTasksAsJSON(tasks) {
+  return JSON.stringify(tasks, null, 2);
+}
+function exportTasksAsMarkdown(tasks, now = /* @__PURE__ */ new Date()) {
+  let md = `# \u4EFB\u52A1\u5217\u8868
+
+> \u5BFC\u51FA\u65F6\u95F4: ${now.toLocaleString("zh-CN")}
+
+`;
+  const grouped = /* @__PURE__ */ new Map();
+  for (const t of tasks) {
+    const key = t.status;
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push(t);
+  }
+  for (const [status, list] of grouped) {
+    md += `## ${STATUS_LABELS[status] || status} (${list.length})
+
+`;
+    for (const t of list) md += formatTaskAsMarkdown(t) + "\n";
+    md += "\n";
+  }
+  return md;
+}
+
+export { MiddlewareChain, ReminderEngine, SemanticRouter, StreamManager, ValidationError, YYC3AIHub, YYC3Auth, YYC3Error, YYC3ErrorCode, YYC3_ERROR_DOMAINS, YYC3_ERROR_DOMAINS_EN, buildPrompt, checkDueReminders, collectStream, createBlockingReminder, createCacheMiddleware, createDeadlineReminder, createDependencyReminder, createLoggingMiddleware, createProgressReminder, createRateLimitMiddleware, createReminder, createReminderId, createRetryMiddleware, escapeHTML, executeLocalAction, exportTasksAsJSON, exportTasksAsMarkdown, formatCodeLocal, formatTaskAsCodeComment, formatTaskAsMarkdown, formatTaskAsText, getAvailableActions, getHighestPriority, getLocale, inferTaskDependencies, inferTasksFromCode, inferTasksFromConversation, inferTasksFromDescription, inferTasksFromText, markTriggered, setLocale, wrapAsHTML, wrapAsMarkdown };
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

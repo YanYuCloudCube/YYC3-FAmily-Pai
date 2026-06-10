@@ -1,4 +1,4 @@
-import { createLogger } from "./utils/logger";
+import { createLogger } from "./logger";
 const log = createLogger("performanceBenchmark");
 /**
  * @file performanceBenchmark.ts
@@ -128,7 +128,7 @@ class PerformanceBenchmark {
     // 强制重排
     const element = document.createElement("div");
     document.body.appendChild(element);
-    element.offsetHeight; // 强制重排
+    void element.offsetHeight; // 强制重排
     document.body.removeChild(element);
 
     const duration = performance.now() - start;

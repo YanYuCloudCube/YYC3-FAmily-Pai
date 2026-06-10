@@ -930,9 +930,9 @@ async function promptForMinimalConfig(
   opts: z.infer<typeof initOptionsSchema>
 ) {
   let style = defaultConfig.style
-  let baseColor = "neutral"
+  const baseColor = "neutral"
   let cssVariables = defaultConfig.tailwind.cssVariables
-  let iconLibrary = defaultConfig.iconLibrary ?? "lucide"
+  const iconLibrary = defaultConfig.iconLibrary ?? "lucide"
 
   if (!opts.defaults) {
     const [styles, tailwindVersion] = await Promise.all([

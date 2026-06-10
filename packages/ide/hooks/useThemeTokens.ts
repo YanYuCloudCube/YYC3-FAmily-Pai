@@ -31,7 +31,7 @@
 // ================================================================
 
 import { useMemo } from "react";
-import { useTheme } from "../ThemeStore";
+import { useTheme } from "../stores/ThemeStore";
 
 // ── Modal-level tokens (弹窗组件) ──
 export interface ModalTokens {

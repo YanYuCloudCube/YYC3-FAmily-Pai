@@ -103,7 +103,7 @@ export interface TaskFilters {
 
 // ── Store ──
 
-interface TaskBoardState {
+export interface TaskBoardState {
   tasks: Task[];
   reminders: Reminder[];
   pendingInferences: TaskInference[];

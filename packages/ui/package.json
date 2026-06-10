@@ -8,30 +8,27 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./core": {
-      "import": "./dist/core.js",
-      "types": "./dist/core.d.ts"
+      "types": "./dist/core.d.ts",
+      "import": "./dist/core.js"
     },
     "./components": {
-      "import": "./dist/components.js",
-      "types": "./dist/components.d.ts"
-    },
-    "./family": {
-      "import": "./dist/family.js",
-      "types": "./dist/family.d.ts"
+      "types": "./dist/components.d.ts",
+      "import": "./dist/components.js"
     },
     "./themes": {
-      "import": "./dist/themes.js",
-      "types": "./dist/themes.d.ts"
+      "types": "./dist/themes.d.ts",
+      "import": "./dist/themes.js"
     },
     "./shadcn": {
-      "import": "./dist/shadcn.js",
-      "types": "./dist/shadcn.d.ts"
+      "types": "./dist/shadcn.d.ts",
+      "import": "./dist/shadcn.js"
     }
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md",
@@ -45,40 +42,45 @@
     "lint": "eslint src/",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "pnpm build"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm typecheck"
   },
   "dependencies": {
-    "@yyc3/core": "^1.4.0",
-    "clsx": "^2.1.0",
-    "radix-ui": "^1.0.0",
-    "tailwind-merge": "^3.0.0",
     "@base-ui/react": "^1.0.0",
+    "@yyc3/core": "^1.4.0",
     "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.0",
     "cmdk": "^1.0.0",
     "embla-carousel-react": "^8.0.0",
     "input-otp": "^1.4.0",
     "lucide-react": "^0.460.0",
+    "radix-ui": "^1.0.0",
     "react-day-picker": "^9.0.0",
     "react-resizable-panels": "^2.0.0",
     "recharts": "^2.15.0",
     "sonner": "^1.7.0",
+    "tailwind-merge": "^3.0.0",
     "vaul": "^1.1.0"
   },
   "peerDependencies": {
+    "next-themes": ">=0.4.0",
     "react": ">=18.0.0 || >=19.0.0",
     "react-dom": ">=18.0.0 || >=19.0.0",
-    "react-hook-form": ">=7.0.0",
-    "next-themes": ">=0.4.0"
+    "react-hook-form": ">=7.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@radix-ui/react-icons": "^1.3.2",
+    "@radix-ui/react-slot": "^1.2.5",
     "@testing-library/jest-dom": "^6.9.1",
-    "@testing-library/react": "^14.3.1",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.0",
-    "@vitest/coverage-v8": "^1.0.0",
+    "@testing-library/react": "^16.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/coverage-v8": "^1.0.0",
+    "date-fns": "^4.4.0",
     "eslint": "^10.1.0",
+    "framer-motion": "^11.18.2",
     "globals": "^17.4.0",
     "jsdom": "^29.0.2",
     "react": "^18.3.1",
@@ -103,13 +105,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YanYuCloudCube/Family-PAI.git",
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai.git",
     "directory": "packages/ui"
   },
   "bugs": {
-    "url": "https://github.com/YanYuCloudCube/Family-PAI/issues"
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai/issues"
   },
-  "homepage": "https://github.com/YanYuCloudCube/Family-PAI#readme",
+  "homepage": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai#readme",
   "engines": {
     "node": ">=18.0.0"
   },

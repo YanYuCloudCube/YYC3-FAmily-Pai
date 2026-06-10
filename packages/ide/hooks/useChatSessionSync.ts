@@ -14,7 +14,7 @@
  * @tags P2,chat,session,sync,bidirectional
  */
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef} from "react";
 import { useSessionStore } from "../stores/useSessionStore";
 import { useWorkspaceStore } from "../stores/useWorkspaceStore";
 import {
@@ -22,7 +22,7 @@ import {
   loadMessages,
   type ChatSession,
   type PersistedMessage,
-} from "../ChatHistoryStore";
+} from "../stores/ChatHistoryStore";
 
 /**
  * Hook: useChatSessionSync
@@ -136,6 +136,5 @@ export function useChatSessionSync(
       }
     }
     // Only run on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 }

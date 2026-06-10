@@ -32,6 +32,13 @@ export {
   PerformanceTracker, createConsoleLogger
 } from "./lib/plugins/index.js";
 
+// Audit & Debug Utilities
+export { createAuditedT, i18nAudit } from "./lib/i18n-audit.js";
+export type { AuditedTOptions } from "./lib/i18n-audit.js";
+
+// Lit Web Component Integration
+export { I18nController } from "./lib/lit-controller.js";
+
 // Formatter utilities
 export { formatRelativeTime, interpolate, pluralize } from "./lib/formatter.js";
 export type { TranslateParams } from "./lib/formatter.js";

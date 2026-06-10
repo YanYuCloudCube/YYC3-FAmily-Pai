@@ -43,7 +43,7 @@ jobs:
 
       - name: Test all packages
         run: |
-          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli effects; do
             echo "▶️ Testing @yyc3/$pkg ..."
             pnpm --filter @yyc3/$pkg test
             EXIT_CODE=$?
@@ -84,6 +84,7 @@ jobs:
             mcp-servers,
             motion,
             cli,
+            effects,
           ]
 
     steps:
@@ -213,7 +214,8 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Generate changelog
-        run: npx conventional-changelog -p angular -i CHANGELOG.md -s -r 1 || echo "No
+        run:
+          npx conventional-changelog -p angular -i CHANGELOG.md -s -r 1 || echo "No
           changes"
 
       - name: Commit changelog
@@ -226,7 +228,7 @@ jobs:
 
   post-release-verify:
     name: Post Release Verification
-    needs: [ publish-packages, docker-release ]
+    needs: [publish-packages, docker-release]
     runs-on: ubuntu-latest
     if: success()
 

@@ -14,7 +14,7 @@
  *
  * brief Input 输入框组件
  */
-import React, { forwardRef } from 'react'
+import React, { forwardRef, useId } from 'react'
 import { classNames } from '../core/utils'
 
 export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -39,7 +39,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref
   ) => {
-    const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`
+    const reactId = useId()
+    const inputId = id || `input-${reactId}`
 
     return (
       <div className="family-input-wrapper">
@@ -56,8 +57,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className={classNames(
               'family-input',
               error && 'family-input--error',
-              leftIcon && 'family-input--has-left-icon',
-              rightIcon && 'family-input--has-right-icon',
+              !!leftIcon && 'family-input--has-left-icon',
+              !!rightIcon && 'family-input--has-right-icon',
               className
             )}
             {...props}

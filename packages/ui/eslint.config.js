@@ -1,6 +1,6 @@
+import globals from 'globals'
 import js from '@eslint/js'
 import tseslint from 'typescript-eslint'
-import globals from 'globals'
 
 export default tseslint.config(
   js.configs.recommended,
@@ -13,7 +13,7 @@ export default tseslint.config(
         ...globals.browser,
       },
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.eslint.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -29,10 +29,9 @@ export default tseslint.config(
       '@typescript-eslint/no-empty-object-type': 'warn',
       'no-console': 'off',
       'prefer-const': 'warn',
-      'preserve-caught-error': 'warn',
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs', '*.cjs'],
-  }
+    ignores: ['node_modules/**', 'dist/**', '*.js', '*.mjs'],
+  },
 )

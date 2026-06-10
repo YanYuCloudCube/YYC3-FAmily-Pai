@@ -8,9 +8,17 @@
       "type": "registry:component",
       "title": "Spotlight",
       "description": "鼠标跟随聚光灯效果组件，framer-motion Spring 动画",
-      "dependencies": ["framer-motion"],
-      "categories": ["animation", "3d", "interaction"],
-      "meta": { "layer": "three" }
+      "dependencies": [
+        "framer-motion"
+      ],
+      "categories": [
+        "animation",
+        "3d",
+        "interaction"
+      ],
+      "meta": {
+        "layer": "three"
+      }
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -18,9 +26,17 @@
       "type": "registry:component",
       "title": "Card3D",
       "description": "3D 透视卡片，鼠标跟踪旋转 ±7.5°，三层 Z 轴深度",
-      "dependencies": ["framer-motion"],
-      "categories": ["animation", "3d", "card"],
-      "meta": { "layer": "three" }
+      "dependencies": [
+        "framer-motion"
+      ],
+      "categories": [
+        "animation",
+        "3d",
+        "card"
+      ],
+      "meta": {
+        "layer": "three"
+      }
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -28,9 +44,16 @@
       "type": "registry:component",
       "title": "SplineScene",
       "description": "Spline 3D 场景懒加载，Suspense + lazy 包装",
-      "dependencies": ["@splinetool/react-spline"],
-      "categories": ["3d", "spline"],
-      "meta": { "layer": "spline" }
+      "dependencies": [
+        "@splinetool/react-spline"
+      ],
+      "categories": [
+        "3d",
+        "spline"
+      ],
+      "meta": {
+        "layer": "spline"
+      }
     },
     {
       "$schema": "https://ui.shadcn.com/schema/registry-item.json",
@@ -38,8 +61,75 @@
       "type": "registry:component",
       "title": "ParticleCanvas",
       "description": "Canvas 2D 粒子网络背景，零依赖，霓虹色粒子 + 连线 + 鼠标交互",
-      "categories": ["animation", "particle", "background"],
-      "meta": { "layer": "particle", "zeroDep": true }
+      "categories": [
+        "animation",
+        "particle",
+        "background"
+      ],
+      "meta": {
+        "layer": "particle",
+        "zeroDep": true
+      }
+    },
+    {
+      "name": "ai-intelligent-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/ai-intelligent-template.json",
+      "label": "AI 智能"
+    },
+    {
+      "name": "aurora-gradient-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/aurora-gradient-template.json",
+      "label": "极光渐变"
+    },
+    {
+      "name": "business-management-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/business-management-template.json",
+      "label": "商务管理"
+    },
+    {
+      "name": "cli-devops-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/cli-devops-template.json",
+      "label": "终端DevOps"
+    },
+    {
+      "name": "cyber-futuristic-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/cyber-futuristic-template.json",
+      "label": "赛博未来"
+    },
+    {
+      "name": "dashboard-data-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/dashboard-data-template.json",
+      "label": "数据仪表盘"
+    },
+    {
+      "name": "education-learning-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/education-learning-template.json",
+      "label": "教育学习"
+    },
+    {
+      "name": "finance-quantitative-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/finance-quantitative-template.json",
+      "label": "金融量化"
+    },
+    {
+      "name": "medical-health-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/medical-health-template.json",
+      "label": "医疗健康"
+    },
+    {
+      "name": "minimal-zero-template",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/minimal-zero-template.json",
+      "label": "极简零依赖"
     }
   ]
 }

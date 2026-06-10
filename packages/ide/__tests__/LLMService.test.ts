@@ -8,7 +8,7 @@ import {
   type ProviderConfig,
   type ProviderId,
   type ChatMessage,
-} from '../LLMService'
+} from '../services/LLMService'
 
 describe('LLMService', () => {
   describe('PROVIDER_CONFIGS', () => {

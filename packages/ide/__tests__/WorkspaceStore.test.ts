@@ -16,29 +16,29 @@ describe('useWorkspaceStore', () => {
   })
 
   it('createWorkspace 应该创建工作区', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('测试项目', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('测试项目', 'project')
     expect(ws).toBeDefined()
     expect(ws.name).toBe('测试项目')
-    expect(ws.type).toBe('frontend')
+    expect(ws.type).toBe('project')
     expect(ws.id).toBeDefined()
     expect(ws.sessionIds).toEqual([])
     expect(useWorkspaceStore.getState().workspaces).toHaveLength(1)
   })
 
   it('activateWorkspace 应该激活工作区', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'project')
     useWorkspaceStore.getState().activateWorkspace(ws.id)
     expect(useWorkspaceStore.getState().activeWorkspaceId).toBe(ws.id)
   })
 
   it('deleteWorkspace 应该删除工作区', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'project')
     useWorkspaceStore.getState().deleteWorkspace(ws.id)
     expect(useWorkspaceStore.getState().workspaces).toHaveLength(0)
   })
 
   it('duplicateWorkspace 应该复制工作区', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('原项目', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('原项目', 'project')
     const dup = useWorkspaceStore.getState().duplicateWorkspace(ws.id)
     expect(dup.name).toContain('副本')
     expect(dup.id).not.toBe(ws.id)
@@ -46,14 +46,14 @@ describe('useWorkspaceStore', () => {
   })
 
   it('updateWorkspace 应该更新工作区', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'project')
     useWorkspaceStore.getState().updateWorkspace(ws.id, { name: '更新后' })
     const updated = useWorkspaceStore.getState().workspaces.find((w: any) => w.id === ws.id)
     expect(updated!.name).toBe('更新后')
   })
 
   it('exportWorkspace 应该返回 JSON 字符串', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'project')
     const json = useWorkspaceStore.getState().exportWorkspace(ws.id)
     expect(typeof json).toBe('string')
     const parsed = JSON.parse(json)
@@ -61,14 +61,14 @@ describe('useWorkspaceStore', () => {
   })
 
   it('addSessionToWorkspace 应该添加会话ID', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'project')
     useWorkspaceStore.getState().addSessionToWorkspace(ws.id, 'session-1')
     const updated = useWorkspaceStore.getState().workspaces.find((w: any) => w.id === ws.id)
     expect(updated!.sessionIds).toContain('session-1')
   })
 
   it('removeSessionFromWorkspace 应该移除会话ID', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('测试', 'project')
     useWorkspaceStore.getState().addSessionToWorkspace(ws.id, 'session-1')
     useWorkspaceStore.getState().removeSessionFromWorkspace(ws.id, 'session-1')
     const updated = useWorkspaceStore.getState().workspaces.find((w: any) => w.id === ws.id)
@@ -76,16 +76,16 @@ describe('useWorkspaceStore', () => {
   })
 
   it('getFilteredWorkspaces 应该按类型过滤', () => {
-    useWorkspaceStore.getState().createWorkspace('前端', 'frontend')
-    useWorkspaceStore.getState().createWorkspace('后端', 'backend')
-    useWorkspaceStore.getState().updateFilter({ type: 'frontend' })
+    useWorkspaceStore.getState().createWorkspace('前端', 'project')
+    useWorkspaceStore.getState().createWorkspace('AI', 'ai-session')
+    useWorkspaceStore.getState().updateFilter({ type: 'project' })
     const filtered = useWorkspaceStore.getState().getFilteredWorkspaces()
     expect(filtered).toHaveLength(1)
-    expect(filtered[0].type).toBe('frontend')
+    expect(filtered[0].type).toBe('project')
   })
 
   it('importWorkspace 应该导入工作区', () => {
-    const ws = useWorkspaceStore.getState().createWorkspace('导出', 'frontend')
+    const ws = useWorkspaceStore.getState().createWorkspace('导出', 'project')
     const json = useWorkspaceStore.getState().exportWorkspace(ws.id)
     const imported = useWorkspaceStore.getState().importWorkspace(json)
     expect(imported.name).toBe('导出')

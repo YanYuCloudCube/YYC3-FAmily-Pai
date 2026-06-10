@@ -49,7 +49,6 @@ export interface ConnectivityIndicatorProps {
 export default function ConnectivityIndicator({
   activeModel,
   activeModelId,
-  activeFile,
   globalConn,
   getActiveProvider,
   setConnectivityResult,

@@ -18,6 +18,8 @@ export { GlitchText, type GlitchTextProps } from './GlitchText'
 export { NeonCard, type NeonCardProps, type NeonCardThemeMode } from './NeonCard'
 export { ParticleCanvas, type ParticleCanvasConfig, type ParticleCanvasProps } from './ParticleCanvas'
 
+export { ParticleEmitter, type ParticleEmitterProps } from './ParticleEmitter'
+
 export {
   BookPage, FlipCard, FloatingCard,
   GlassRefractionCard, PerspectiveContainer,

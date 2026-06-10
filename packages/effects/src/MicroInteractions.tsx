@@ -9,8 +9,8 @@
  * tags: [component],[effect]
  */
 
-import React, { useState } from 'react';
 import { motion, useAnimation } from 'motion/react';
+import React, { useRef, useState } from 'react';
 
 // 按钮涟漪效果
 interface RippleButtonProps {
@@ -351,9 +351,10 @@ export function AnimatedCounter({
   suffix = '',
 }: AnimatedCounterProps) {
   const [displayValue, setDisplayValue] = useState(0);
+  const displayRef = useRef(0);
 
   React.useEffect(() => {
-    const startValue = displayValue;
+    const startValue = displayRef.current;
     const endValue = value;
     const startTime = Date.now();
 
@@ -362,6 +363,7 @@ export function AnimatedCounter({
       const progress = Math.min((now - startTime) / (duration * 1000), 1);
       const currentValue = Math.floor(startValue + (endValue - startValue) * progress);
 
+      displayRef.current = currentValue;
       setDisplayValue(currentValue);
 
       if (progress < 1) {

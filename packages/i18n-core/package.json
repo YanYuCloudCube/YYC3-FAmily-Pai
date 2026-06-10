@@ -34,29 +34,29 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YanYuCloudCube/Family-PAI.git",
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai.git",
     "directory": "packages/i18n-core"
   },
-  "homepage": "https://github.com/YanYuCloudCube/Family-PAI#readme",
+  "homepage": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai#readme",
   "bugs": {
-    "url": "https://github.com/YanYuCloudCube/Family-PAI/issues"
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai/issues"
   },
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/index.js"
     },
     "./cache": {
       "import": "./dist/lib/cache.js",
       "types": "./dist/lib/cache.d.ts"
     },
     "./plugins": {
-      "import": "./dist/plugins/index.js",
-      "types": "./dist/plugins/index.d.ts"
+      "import": "./dist/lib/plugins/index.js",
+      "types": "./dist/lib/plugins/index.d.ts"
     },
     "./icu": {
       "import": "./dist/lib/icu/parser.js",
@@ -88,7 +88,7 @@
     "lint:fix": "eslint 'src/**/*.ts' --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "clean": "rm -rf dist coverage",
-    "prepublishOnly": "npm run clean && npm run build && npm test",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "engines": {

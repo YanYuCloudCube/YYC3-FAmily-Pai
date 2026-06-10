@@ -13,7 +13,7 @@
  */
 
 import type { PluginManifest } from "../types";
-import type { PluginAPI } from "../PluginSystem";
+import type { PluginAPI } from "../services/PluginSystem";
 
 // ── Plugin Manifest ──
 

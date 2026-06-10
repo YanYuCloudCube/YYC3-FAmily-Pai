@@ -1,4 +1,4 @@
-import { createLogger } from "./utils/logger";
+import { createLogger } from "../utils/logger";
 const log = createLogger("useSentry");
 /**
  * @file useSentry.ts
@@ -15,7 +15,7 @@ const log = createLogger("useSentry");
 
 import { useEffect, useCallback } from "react";
 import * as Sentry from "@sentry/react";
-import { sentryService, type SentryConfig } from "./SentryService";
+import { sentryService, type SentryConfig } from "../services/SentryService";
 
 interface UseSentryOptions extends Partial<SentryConfig> {
   enabled?: boolean;

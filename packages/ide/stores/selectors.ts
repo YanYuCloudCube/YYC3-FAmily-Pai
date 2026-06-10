@@ -1,4 +1,4 @@
-import { createLogger } from "./utils/logger";
+import { createLogger } from "../utils/logger";
 const log = createLogger("selectors");
 /**
  * @file stores/selectors.ts
@@ -13,10 +13,10 @@ const log = createLogger("selectors");
  * @tags stores,zustand,selectors,performance,optimization
  */
 
-import { useStore, createSelectorHooks } from "zustand";
+import { useCallback, useMemo } from "react";
 import type { StoreApi } from "zustand";
 import { shallow } from "zustand/shallow";
-import { useMemo, useCallback } from "react";
+import { useStoreWithEqualityFn as useStore } from "zustand/traditional";
 
 // ===== 通用 Selector 工具 =====
 

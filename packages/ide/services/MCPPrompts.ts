@@ -11,8 +11,8 @@
  * @tags mcp,prompts,templates
  */
 
-import type { MCPClient, MCPPrompt } from "./MCPClient";
 import { createLogger } from "../utils/logger";
+import type { MCPClient, MCPPrompt } from "./MCPClient";
 const log = createLogger("MCPPrompts");
 
 export interface PromptTemplate {
@@ -143,7 +143,7 @@ export class MCPPromptManager {
    */
   async getPrompt(name: string, args?: Record<string, string>): Promise<PromptMessage[]> {
     const result = await this.client.getPrompt(name, args);
-    return result.messages;
+    return result.messages as PromptMessage[];
   }
 
   /**
@@ -301,7 +301,7 @@ export class MCPPromptManager {
    */
   private savePromptHistory(
     name: string,
-    arguments: Record<string, string>
+    promptArgs: Record<string, string>
   ): void {
     const historyKey = "mcp_prompt_history";
     const historyRaw = localStorage.getItem(historyKey);
@@ -309,7 +309,7 @@ export class MCPPromptManager {
 
     history.push({
       name,
-      arguments,
+      arguments: promptArgs,
       timestamp: Date.now(),
     });
 

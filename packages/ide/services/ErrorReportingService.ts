@@ -33,6 +33,7 @@ export type ErrorCategory =
   | "editor" // 编辑器相关错误
   | "file_system" // 文件系统操作错误
   | "plugin" // 插件系统错误
+  | "context" // 上下文相关错误
   | "unknown";
 
 /** 错误上报事件 */

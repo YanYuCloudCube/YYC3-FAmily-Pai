@@ -11,7 +11,7 @@
  * @tags storage,monitoring,performance,cleanup
  */
 
-import { getDB, type StoredFile } from "./adapters/IndexedDBAdapter";
+import { getDB, type StoredFile } from "../adapters/IndexedDBAdapter";
 import { createLogger } from "../utils/logger";
 const log = createLogger("StorageMonitor");
 

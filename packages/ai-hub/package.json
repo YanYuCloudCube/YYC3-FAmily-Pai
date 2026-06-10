@@ -9,20 +9,20 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./family": {
-      "import": "./dist/family/index.js",
-      "types": "./dist/family/index.d.ts"
+      "types": "./dist/family/index.d.ts",
+      "import": "./dist/family/index.js"
     },
     "./family-compass": {
-      "import": "./dist/family-compass/index.js",
-      "types": "./dist/family-compass/index.d.ts"
+      "types": "./dist/family-compass/index.d.ts",
+      "import": "./dist/family-compass/index.js"
     },
     "./work": {
-      "import": "./dist/work/index.js",
-      "types": "./dist/work/index.d.ts"
+      "types": "./dist/work/index.d.ts",
+      "import": "./dist/work/index.js"
     },
     "./package.json": "./package.json"
   },
@@ -65,12 +65,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/YanYuCloudCube/Family-PAI.git",
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai.git",
     "directory": "packages/ai-hub"
   },
-  "homepage": "https://github.com/YanYuCloudCube/Family-PAI#readme",
+  "homepage": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai#readme",
   "bugs": {
-    "url": "https://github.com/YanYuCloudCube/Family-PAI/issues"
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai/issues"
   },
   "engines": {
     "node": ">=18.0.0",

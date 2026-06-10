@@ -28,6 +28,29 @@ interface TauriApi {
   fs: TauriFsApi;
   dialog: TauriDialogApi;
   clipboard: TauriClipboardApi;
+  notification: {
+    sendNotification: (options: { title: string; body?: string; icon?: string }) => void;
+    requestPermission: () => Promise<string>;
+    isPermissionGranted: () => Promise<boolean>;
+  };
+  shell: {
+    open: (url: string) => Promise<void>;
+    Command: {
+      new (program: string, args?: string[]): {
+        execute: () => Promise<{ code: number; stdout: string; stderr: string }>;
+        spawn: () => Promise<void>;
+      };
+      create: (program: string, args?: string[]) => {
+        execute: () => Promise<{ code: number; stdout: string; stderr: string }>;
+        spawn: () => Promise<void>;
+      };
+    };
+  };
+  window: {
+    getCurrent: () => { close: () => void; minimize: () => void; toggleMaximize: () => void };
+    create: (label: string, options?: Record<string, unknown>) => unknown;
+    appWindow: { close: () => void; minimize: () => void; toggleMaximize: () => void; setTitle: (title: string) => void };
+  };
 }
 
 interface Window {

@@ -8,30 +8,31 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./auth": {
-      "import": "./dist/auth/index.js",
-      "types": "./dist/auth/index.d.ts"
+      "types": "./dist/auth/index.d.ts",
+      "import": "./dist/auth/index.js"
     },
     "./mcp": {
-      "import": "./dist/mcp/index.js",
-      "types": "./dist/mcp/index.d.ts"
+      "types": "./dist/mcp/index.d.ts",
+      "import": "./dist/mcp/index.js"
     },
     "./skills": {
-      "import": "./dist/skills/index.js",
-      "types": "./dist/skills/index.d.ts"
+      "types": "./dist/skills/index.d.ts",
+      "import": "./dist/skills/index.js"
     },
     "./ai-family": {
-      "import": "./dist/ai-family/index.js",
-      "types": "./dist/ai-family/index.d.ts"
+      "types": "./dist/ai-family/index.d.ts",
+      "import": "./dist/ai-family/index.js"
     },
     "./multimodal": {
-      "import": "./dist/multimodal/index.js",
-      "types": "./dist/multimodal/index.d.ts"
+      "types": "./dist/multimodal/index.d.ts",
+      "import": "./dist/multimodal/index.js"
     }
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md",
@@ -44,9 +45,9 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "vitest run",
-    "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "pnpm build"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm typecheck"
   },
   "dependencies": {
     "eventemitter3": "^5.0.1",
@@ -85,15 +86,16 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YanYuCloudCube/Family-PAI.git",
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai.git",
     "directory": "packages/core"
   },
   "bugs": {
-    "url": "https://github.com/YanYuCloudCube/Family-PAI/issues"
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai/issues"
   },
-  "homepage": "https://github.com/YanYuCloudCube/Family-PAI#readme",
+  "homepage": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai#readme",
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   },
   "publishConfig": {
     "access": "public",

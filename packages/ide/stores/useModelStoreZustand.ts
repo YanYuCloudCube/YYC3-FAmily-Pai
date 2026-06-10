@@ -69,7 +69,7 @@ export interface PerfDataPoint {
 }
 
 // ===== Store State =====
-interface ModelStoreState {
+export interface ModelStoreState {
   // Active model selection
   activeModelId: string;
 

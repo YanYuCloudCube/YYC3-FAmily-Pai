@@ -193,7 +193,6 @@ export class PluginEngine extends EventEmitter<PluginEngineEvents> {
   }
 
   private createContext(plugin: PluginInstance): PluginContext {
-    const engine = this
     const pluginId = plugin.manifest.id
 
     const logger: PluginLogger = {
@@ -203,13 +202,16 @@ export class PluginEngine extends EventEmitter<PluginEngineEvents> {
     }
 
     const api: PluginAPI = {
-      getPlugin: (id) => engine.getPlugin(id),
-      getConfig: (key) => engine.globalConfig[key],
+      getPlugin: (id) => this.getPlugin(id),
+      getConfig: (key) => this.globalConfig[key],
       on: (event, handler) => {
-        engine.on(event as any, handler as any)
-        return () => engine.off(event as any, handler as any)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.on(event as any, handler as any)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        return () => this.off(event as any, handler as any)
       },
-      emit: (event, ...args) => engine.emit(event as any, ...(args as [any])),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      emit: (event, ...args) => this.emit(event as any, ...(args as [any])),
     }
 
     return {

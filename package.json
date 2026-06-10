@@ -11,13 +11,19 @@
     "test:coverage": "pnpm -r --stream run test:coverage",
     "lint": "pnpm -r --stream run lint",
     "typecheck": "pnpm -r --stream run typecheck",
-    "clean": "pnpm -r --stream run clean"
+    "clean": "pnpm -r --stream run clean",
+    "docs:api": "typedoc",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "pnpm run build && changeset publish"
   },
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=8.0.0"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.7.0",
+    "@changesets/cli": "^2.31.0",
     "@size-limit/file": "^12.1.0",
     "husky": "^9.1.7",
     "license-checker": "^25.0.1",

@@ -14,7 +14,6 @@
 
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
-import { persist } from "zustand/middleware";
 import { FILE_CONTENTS, type FileNode } from "../fileData";
 
 // ===== Types =====
@@ -37,7 +36,7 @@ export interface GitLogEntry {
   branch: string;
 }
 
-interface FileStoreState {
+export interface FileStoreState {
   // File contents
   fileContents: Record<string, string>;
   // Tabs
@@ -144,7 +143,7 @@ function simpleFormat(code: string, lang: string): string {
   const lines = code.split("\n");
   let indent = 0;
   const formatted: string[] = [];
-  const openers = /[{(\[]\\s*$/;
+  const openers = /[{(\u005b]\s*$/;
   const closers = /^\s*[})\]]/;
 
   for (const rawLine of lines) {
