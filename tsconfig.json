@@ -1,0 +1,20 @@
+{
+  "files": [],
+  "references": [
+    { "path": "packages/core" },
+    { "path": "packages/ai-hub" },
+    { "path": "packages/emotion" },
+    { "path": "packages/i18n-core" },
+    { "path": "packages/ui" },
+    { "path": "packages/effects" },
+    { "path": "packages/plugins" },
+    { "path": "packages/mcp-servers" },
+    { "path": "packages/motion" },
+    { "path": "packages/ide" },
+    { "path": "packages/cli" }
+  ],
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "esModuleInterop": true
+  }
+}
