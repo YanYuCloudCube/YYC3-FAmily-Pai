@@ -101,11 +101,28 @@ class I18nAuditLogger {
 
 export const i18nAudit = new I18nAuditLogger();
 
-export function createAuditedT(location: string) {
+export interface AuditedTOptions {
+  /** Key prefixes to exclude from missing-translation detection, default: ["config.", "layout.", "theme."] */
+  excludePrefixes?: string[];
+}
+
+export function createAuditedT(location: string, options?: AuditedTOptions) {
+  const excludePrefixes = options?.excludePrefixes ?? ["config.", "layout.", "theme."];
+
   return (key: string, params?: Record<string, string>): string => {
     const result = t(key, params);
 
-    if (result === key && !key.startsWith("{") && !key.startsWith("config.")) {
+    // Skip keys starting with excluded prefixes
+    if (excludePrefixes.some((prefix) => key.startsWith(prefix))) {
+      return result;
+    }
+
+    // Skip obvious placeholder/pattern keys
+    if (key.startsWith("{")) {
+      return result;
+    }
+
+    if (result === key) {
       i18nAudit.log(key, key, location);
     } else if (result === `${key}.label` || result === `${key}.help`) {
       i18nAudit.log(key, result.replace(`${key}.`, ""), location);

@@ -1,4 +1,3 @@
-import { spinner } from "../utils/spinner"
 import { execa } from "execa"
 import fs from "fs-extra"
 import prompts from "prompts"
@@ -11,6 +10,7 @@ import {
   vi,
   type MockInstance,
 } from "vitest"
+import { spinner } from "../utils/spinner"
 
 import { createProject } from "./create-project"
 
@@ -21,7 +21,9 @@ vi.mock("prompts")
 vi.mock("@/src/utils/get-package-manager", () => ({
   getPackageManager: vi.fn().mockResolvedValue("npm"),
 }))
-vi.mock("@/src/utils/spinner")
+vi.mock("../utils/spinner", () => ({
+  spinner: vi.fn(),
+}))
 vi.mock("@/src/utils/logger", () => ({
   logger: {
     break: vi.fn(),
@@ -84,7 +86,7 @@ describe("createProject", () => {
       warn: vi.fn(),
       info: vi.fn(),
     }
-    vi.mocked(spinner).mockReturnValue(mockSpinner as any)
+      ; (spinner as any).mockReturnValue(mockSpinner as any)
   })
 
   afterEach(() => {

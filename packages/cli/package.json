@@ -9,10 +9,11 @@
   },
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     }
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md",
@@ -22,11 +23,12 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "typecheck": "echo '@yyc3/cli typecheck skipped (shadcn fork)'",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint src/",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "pnpm build"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm typecheck"
   },
   "dependencies": {
     "@antfu/ni": "^30.1.0",
@@ -65,10 +67,12 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/fs-extra": "^11.0.0",
+    "@types/node": "^22.19.19",
     "@types/prompts": "^2.4.9",
     "eslint": "^10.1.0",
     "globals": "^16.2.0",
     "msw": "^2.14.2",
+    "postcss-selector-parser": "^7.1.1",
     "tsup": "^8.5.0",
     "typescript": "^5.8.0",
     "typescript-eslint": "^8.58.0",
@@ -98,14 +102,33 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YanYuCloudCube/FAmily-pi3.git",
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai.git",
     "directory": "packages/cli"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
   },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  }
+  },
+  "homepage": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai#readme",
+  "bugs": {
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai/issues"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "1 kB"
+    },
+    {
+      "path": "dist/bin.js",
+      "limit": "1 kB"
+    },
+    {
+      "path": "dist/create-app.js",
+      "limit": "20 kB"
+    }
+  ]
 }

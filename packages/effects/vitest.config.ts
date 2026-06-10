@@ -1,10 +1,15 @@
-import { defineConfig } from "vitest/config"
+import path from 'path'
+import { defineConfig } from 'vitest/config'
 
 export default defineConfig({
   test: {
-    environment: "jsdom",
+    environment: 'happy-dom',
     globals: true,
-    include: ["src/**/*.test.{ts,tsx}"],
-    passWithNoTests: true,
+    setupFiles: ['./vitest.setup.ts'],
+  },
+  resolve: {
+    alias: {
+      'motion/react': path.resolve(import.meta.dirname, './src/__mocks__/motion-react.ts'),
+    },
   },
 })

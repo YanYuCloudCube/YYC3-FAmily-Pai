@@ -40,7 +40,7 @@ export function Modal({
 }: ModalProps) {
   const modalRef = React.useRef<HTMLDivElement>(null)
 
-  useClickOutside(modalRef, () => {
+  useClickOutside(modalRef as React.RefObject<HTMLElement>, () => {
     if (closeOnOverlayClick) {
       onClose()
     }

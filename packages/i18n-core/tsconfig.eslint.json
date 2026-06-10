@@ -3,12 +3,7 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "bundler",
-    "lib": [
-      "ES2022",
-      "es2022.intl",
-      "DOM",
-      "DOM.Iterable"
-    ],
+    "lib": ["ES2022", "es2022.intl", "DOM", "DOM.Iterable"],
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
@@ -24,12 +19,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": [
-    "src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts"
-  ]
+  "include": ["src"]
 }

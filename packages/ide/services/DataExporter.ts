@@ -12,7 +12,7 @@
  */
 
 import { createLogger } from "../utils/logger";
-import { getDB } from "./adapters/IndexedDBAdapter";
+import { getDB } from "../adapters/IndexedDBAdapter";
 const log = createLogger("DataExporter");
 
 export interface ExportData {

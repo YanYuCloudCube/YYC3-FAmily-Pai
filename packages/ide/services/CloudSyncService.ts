@@ -11,7 +11,7 @@
  * @tags sync,cloud,offline,cross-device
  */
 
-import { getDB } from "./adapters/IndexedDBAdapter";
+import { getDB } from "../adapters/IndexedDBAdapter";
 import { createLogger } from "../utils/logger";
 const log = createLogger("CloudSync");
 

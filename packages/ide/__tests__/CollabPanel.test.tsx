@@ -16,10 +16,10 @@
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import CollabPanel from "../CollabPanel";
+import CollabPanel from "../panels/CollabPanel";
 
 // Mock PanelHeader
-vi.mock("../PanelManager", () => ({
+vi.mock("../panels/PanelManager", () => ({
   PanelHeader: ({ title }: any) => (
     <div data-testid="panel-header">
       <span data-testid="panel-title">{title}</span>

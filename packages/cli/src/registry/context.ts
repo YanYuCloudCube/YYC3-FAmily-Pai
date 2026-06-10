@@ -2,7 +2,7 @@ interface RegistryContext {
   headers: Record<string, Record<string, string>>
 }
 
-let context: RegistryContext = {
+const context: RegistryContext = {
   headers: {},
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "@yyc3/mcp-servers",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "YYC³ AI Family MCP Server 集合 — 8个即插即用的 Model Context Protocol Server",
   "type": "module",
   "main": "./dist/index.js",
@@ -8,18 +8,19 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./types": {
-      "import": "./dist/types/index.js",
-      "types": "./dist/types/index.d.ts"
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/types/index.js"
     },
     "./registry": {
-      "import": "./dist/registry/index.js",
-      "types": "./dist/registry/index.d.ts"
+      "types": "./dist/registry/index.d.ts",
+      "import": "./dist/registry/index.js"
     }
   },
+  "sideEffects": false,
   "files": [
     "dist",
     "README.md",
@@ -34,7 +35,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "prepublishOnly": "pnpm build"
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm typecheck"
   },
   "dependencies": {},
   "devDependencies": {
@@ -62,15 +64,22 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/YanYuCloudCube/YYC3-pi3",
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai",
     "directory": "packages/mcp-servers"
   },
-  "homepage": "https://github.com/YanYuCloudCube/YYC3-pi3#readme",
+  "homepage": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai#readme",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
   },
   "engines": {
-    "node": ">=18.0.0"
-  }
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "size-limit": [
+    {
+      "path": "dist/index.js",
+      "limit": "100 kB"
+    }
+  ]
 }

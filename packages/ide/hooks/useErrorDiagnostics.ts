@@ -23,8 +23,8 @@ import {
   type DiagnosticCategory,
   type AutoFix,
 } from "../ai/ErrorAnalyzer";
-import { useFileStore } from "../FileStore";
-import { useWorkflowEventBus } from "../WorkflowEventBus";
+import { useFileStore } from "../stores/FileStore";
+import { useWorkflowEventBus } from "../components/WorkflowEventBus";
 
 // ── 配置 ──
 

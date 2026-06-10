@@ -11,7 +11,7 @@
  * @tags snapshot,backup,restore,project
  */
 
-import { getDB } from "./adapters/IndexedDBAdapter";
+import { getDB } from "../adapters/IndexedDBAdapter";
 import { createLogger } from "../utils/logger";
 const log = createLogger("Snapshot");
 

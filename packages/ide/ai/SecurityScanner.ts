@@ -349,19 +349,19 @@ const SECURITY_RULES: SecurityRule[] = [
       const SECRET_PATTERNS = [
         {
           pattern:
-            /(?:api[_-]?key|apikey)\s*[:=]\s*["'`]([A-Za-z0-9_\-]{20,})["'`]/i,
+            /(?:api[_-]?key|apikey)\s*[:=]\s*["'`]([A-Za-z0-9_-]{20,})["'`]/i,
           name: "API Key",
         },
         {
           pattern:
-            /(?:secret|token|password|passwd|pwd)\s*[:=]\s*["'`]([A-Za-z0-9_\-]{8,})["'`]/i,
+            /(?:secret|token|password|passwd|pwd)\s*[:=]\s*["'`]([A-Za-z0-9_-]{8,})["'`]/i,
           name: "密钥/令牌",
         },
         { pattern: /\bsk[-_][A-Za-z0-9]{20,}/, name: "OpenAI/Stripe 密钥" },
         { pattern: /\bghp_[A-Za-z0-9]{36,}/, name: "GitHub Personal Token" },
-        { pattern: /\bAIza[A-Za-z0-9_\-]{35}/, name: "Google API Key" },
+        { pattern: /\bAIza[A-Za-z0-9_-]{35}/, name: "Google API Key" },
         { pattern: /\bAKIA[A-Z0-9]{16,}/, name: "AWS Access Key" },
-        { pattern: /\bxox[bpars]-[A-Za-z0-9\-]{10,}/, name: "Slack Token" },
+        { pattern: /\bxox[bpars]-[A-Za-z0-9-]{10,}/, name: "Slack Token" },
         { pattern: /-----BEGIN\s+(?:RSA\s+)?PRIVATE\s+KEY-----/, name: "私钥" },
       ];
 
@@ -1012,7 +1012,7 @@ const SECURITY_RULES: SecurityRule[] = [
         const line = lines[i];
         if (line.trimStart().startsWith("//")) continue;
         // Detect new RegExp(userInput) — user-controlled regex
-        if (/new\s+RegExp\s*\(\s*(?!['"`\/])/.test(line)) {
+        if (/new\s+RegExp\s*\(\s*(?!['"`/])/.test(line)) {
           results.push({
             line: i + 1,
             column: 1,

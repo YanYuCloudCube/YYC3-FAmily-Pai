@@ -8,15 +8,33 @@ export interface SequenceStep {
   delay?: number;
 }
 
+export function shouldReduceMotion(): boolean {
+  if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return false;
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
 export class AnimationEngine {
   private animations = new Map<string, Animation>();
   private observers = new Map<string, IntersectionObserver>();
+  private reducedMotion = false;
+
+  constructor() {
+    if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+      this.reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', (e) => {
+        this.reducedMotion = e.matches;
+      });
+    }
+  }
 
   animate(
     element: HTMLElement,
     keyframes: Keyframe[],
     options: KeyframeAnimationOptions = {},
   ): Animation {
+    if (this.reducedMotion) {
+      options = { ...options, duration: 0 };
+    }
     const animation = element.animate(keyframes, {
       duration: 300,
       easing: 'ease-out',

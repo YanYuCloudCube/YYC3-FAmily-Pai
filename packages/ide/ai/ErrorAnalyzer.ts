@@ -766,7 +766,7 @@ const RULES: AnalysisRule[] = [
         if (trimmed.startsWith("//") || trimmed.startsWith("*")) return;
         // Detect potential API keys / tokens
         if (
-          /(?:api[_-]?key|secret|token|password|auth)\s*[:=]\s*['"][A-Za-z0-9_\-]{20,}['"]/i.test(
+          /(?:api[_-]?key|secret|token|password|auth)\s*[:=]\s*['"][A-Za-z0-9_-]{20,}['"]/i.test(
             line,
           )
         ) {

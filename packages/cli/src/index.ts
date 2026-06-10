@@ -12,6 +12,7 @@ import { migrate } from "./commands/migrate"
 import { registry } from "./commands/registry"
 import { search } from "./commands/search"
 import { view } from "./commands/view"
+import { getSplashScreen } from "./utils/splash"
 
 import packageJson from "../package.json"
 
@@ -27,6 +28,11 @@ async function main() {
       "-v, --version",
       "display the version number"
     )
+    .action(() => {
+      // 无子命令时显示情感启动画面 + 帮助信息
+      console.log(getSplashScreen())
+      program.help()
+    })
 
   program
     .addCommand(init)

@@ -1,4 +1,4 @@
-import { createLogger } from "./utils/logger";
+import { createLogger } from "../utils/logger";
 const log = createLogger("TauriBridge");
 /**
  * @file adapters/TauriBridge.ts

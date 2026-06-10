@@ -321,7 +321,7 @@ const PERF_RULES: PerfRule[] = [
 
       for (let i = 0; i < lines.length; i++) {
         const line = lines[i];
-        if (/(?:function|const)\s+[A-Z]\w*\s*[\(=]/.test(line))
+        if (/(?:function|const)\s+[A-Z]\w*\s*[(=]/.test(line))
           inComponent = true;
         if (!inComponent) continue;
 
@@ -337,7 +337,7 @@ const PERF_RULES: PerfRule[] = [
           // Check if inside return statement or render body
           const prevLines = lines.slice(Math.max(0, i - 5), i).join("\n");
           if (
-            /return\s*[\(\{]/.test(prevLines) ||
+            /return\s*[({]/.test(prevLines) ||
             /(?:const|let)\s+\w+\s*=/.test(line)
           ) {
             // Exclude if already in useMemo
@@ -458,7 +458,7 @@ const PERF_RULES: PerfRule[] = [
         if (importMatch) {
           const lib = importMatch[1];
           for (const heavy of HEAVY_LIBS) {
-            if (lib === heavy || lib.startsWith(`${heavy  }/`)) {
+            if (lib === heavy || lib.startsWith(`${heavy}/`)) {
               results.push({
                 line: i + 1,
                 title: `顶层导入重量级库 \`${heavy}\``,

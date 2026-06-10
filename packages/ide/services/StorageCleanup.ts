@@ -11,7 +11,7 @@
  * @tags storage,cleanup,maintenance,utility
  */
 
-import { getDB } from "./adapters/IndexedDBAdapter";
+import { getDB } from "../adapters/IndexedDBAdapter";
 import { createLogger } from "../utils/logger";
 const log = createLogger("StorageCleanup");
 

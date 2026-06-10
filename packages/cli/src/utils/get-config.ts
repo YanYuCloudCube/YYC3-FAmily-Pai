@@ -140,7 +140,7 @@ export async function getRawConfig(
 // Since cwd is not necessarily the root of the project.
 // We'll instead check if ui aliases resolve to a different root.
 export async function getWorkspaceConfig(config: Config) {
-  let resolvedAliases: any = {}
+  const resolvedAliases: any = {}
 
   for (const key of Object.keys(config.aliases)) {
     if (!isAliasKey(key, config)) {

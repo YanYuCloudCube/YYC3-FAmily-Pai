@@ -2,7 +2,7 @@ import OpenAI from 'openai';
 import { ChildProcess } from 'child_process';
 export { FAMILY_PERSONAS, FamilyCompass, createFamilyCompass, getAllPersonas, getNextDutyMember, getPersona, getPersonaByHour } from './family-compass/index.js';
 export { C as CallMessage, a as CompassState, D as DutyRosterEntry, F as FamilyMemberId, b as FamilyPersona, G as GrowthMilestone, M as MemoryEntry, P as PhoneCallSession } from './types-CLG85-BK.js';
-export { A as ActivityFeedItem, a as Attachment, C as CollaborationMemberState, b as CollaborationMessage, c as CollaborationMode, d as CollaborationSession, e as Comment, F as FamilyMemberWorkProfile, f as FamilyWorkSystem, T as Task, g as TaskCategory, h as TaskPriority, i as TaskStatus, j as TrustEvent, k as TrustLevel, l as TrustRecord, W as WorkDashboardData, m as WorkLogEntry, n as WorkStatus, o as createFamilyWorkSystem } from './index-Dc3f7KbH.js';
+export { A as ActivityFeedItem, a as Attachment, C as CollaborationMemberState, b as CollaborationMessage, c as CollaborationMode, d as CollaborationSession, e as Comment, F as FamilyMemberWorkProfile, f as FamilyWorkSystem, T as Task, g as TaskCategory, h as TrustEvent, i as TrustLevel, j as TrustRecord, W as WorkDashboardData, k as WorkLogEntry, l as WorkStatus, m as createFamilyWorkSystem } from './index-BjCed8qU.js';
 
 /**
  * file types.ts
@@ -414,4 +414,314 @@ declare class ValidationError extends Error {
     }>);
 }
 
-export { type Agent, type AgentDefinition, type AgentExecutionResult, AgentManager, type AuthProvider, type AuthType, type ExecutionContext, type HubConfig, MCPManager, type MCPServer, type MCPServerConfig, type Skill, type SkillDefinition, SkillManager, type TaskContext, type TaskResult, ValidationError, YYC3AIHub, YYC3Auth, YYC3Error, YYC3ErrorCode, YYC3_ERROR_DOMAINS, YYC3_ERROR_DOMAINS_EN, getLocale, setLocale };
+/**
+ * file stream-types.ts
+ * description 流式输出类型定义
+ * module @yyc3/ai-hub
+ * author YanYuCloudCube Team <admin@0379.email>
+ * version 1.0.0
+ * created 2026-05-19
+ * updated 2026-05-19
+ * status active
+ * tags [streaming],[types]
+ *
+ * copyright YanYuCloudCube Team
+ * license MIT
+ *
+ * brief 流式输出类型定义
+ */
+type StreamChunkType = 'text' | 'tool_call' | 'thinking' | 'done' | 'error';
+interface StreamChunk {
+    type: StreamChunkType;
+    content: string;
+    agentId?: string;
+    timestamp: number;
+}
+interface StreamingOptions {
+    onChunk?: (chunk: StreamChunk) => void;
+    signal?: AbortSignal;
+}
+
+/**
+ * file stream-manager.ts
+ * description 流式输出管理器
+ * module @yyc3/ai-hub
+ * author YanYuCloudCube Team <admin@0379.email>
+ * version 1.0.0
+ * created 2026-05-19
+ * updated 2026-05-19
+ * status active
+ * tags [streaming]
+ *
+ * copyright YanYuCloudCube Team
+ * license MIT
+ *
+ * brief 流式输出管理器
+ */
+
+type ChunkListener = (chunk: StreamChunk) => void;
+declare class StreamManager {
+    private listeners;
+    private aborted;
+    onChunk(listener: ChunkListener): () => void;
+    emit(chunk: StreamChunk): void;
+    emitText(content: string, agentId?: string): void;
+    emitThinking(content: string, agentId?: string): void;
+    emitToolCall(content: string, agentId?: string): void;
+    emitDone(): void;
+    emitError(error: string): void;
+    abort(): void;
+    isAborted(): boolean;
+    reset(): void;
+    static createChunk(type: StreamChunk['type'], content: string, agentId?: string): StreamChunk;
+}
+declare function collectStream(chunks: StreamChunk[]): string;
+
+/**
+ * file middleware.ts
+ * description 中间件类型定义与链式执行器
+ * module @yyc3/ai-hub
+ * author YanYuCloudCube Team <admin@0379.email>
+ * version 1.0.0
+ * created 2026-05-19
+ * updated 2026-05-19
+ * status active
+ * tags [middleware]
+ *
+ * copyright YanYuCloudCube Team
+ * license MIT
+ *
+ * brief 中间件类型定义与链式执行器
+ */
+
+interface MiddlewareContext {
+    task: string;
+    agentId: string;
+    context?: TaskContext;
+    metadata: Record<string, unknown>;
+}
+interface AgentMiddleware {
+    name: string;
+    before?(ctx: MiddlewareContext): Promise<MiddlewareContext>;
+    after?(ctx: MiddlewareContext, result: AgentExecutionResult): Promise<AgentExecutionResult>;
+    onError?(ctx: MiddlewareContext, error: Error): Promise<Error>;
+}
+declare class MiddlewareChain {
+    private middlewares;
+    use(middleware: AgentMiddleware): this;
+    remove(name: string): this;
+    list(): string[];
+    executeBefore(ctx: MiddlewareContext): Promise<MiddlewareContext>;
+    executeAfter(ctx: MiddlewareContext, result: AgentExecutionResult): Promise<AgentExecutionResult>;
+    executeOnError(ctx: MiddlewareContext, error: Error): Promise<Error>;
+    has(name: string): boolean;
+    clear(): void;
+}
+declare function createLoggingMiddleware(): AgentMiddleware;
+declare function createRetryMiddleware(maxRetries?: number): AgentMiddleware;
+declare function createCacheMiddleware(ttl?: number): AgentMiddleware;
+declare function createRateLimitMiddleware(maxRps?: number): AgentMiddleware;
+
+interface AgentRouteRule {
+    agent: string;
+    keywords: string[];
+    patterns?: RegExp[];
+    priority: number;
+}
+declare class AgentRouter {
+    private static rules;
+    private static customRules;
+    static addRule(rule: AgentRouteRule): void;
+    static clearCustomRules(): void;
+    static route(task: string): string[];
+}
+
+/**
+ * file semantic-router.ts
+ * description 轻量级语义路由器 — 基于 TF-IDF 余弦相似度
+ * module @yyc3/ai-hub
+ * author YanYuCloudCube Team <admin@0379.email>
+ * version 1.0.0
+ * created 2026-05-19
+ * updated 2026-05-19
+ * status active
+ * tags [router],[semantic]
+ *
+ * copyright YanYuCloudCube Team
+ * license MIT
+ *
+ * brief 轻量级语义路由器
+ */
+
+interface SemanticRoute {
+    agent: string;
+    examples: string[];
+    threshold: number;
+}
+declare class SemanticRouter extends AgentRouter {
+    private semanticRoutes;
+    private routeVectors;
+    addSemanticRoute(route: SemanticRoute): void;
+    route(task: string): Promise<string[]>;
+    getSemanticRoutes(): SemanticRoute[];
+    clearSemanticRoutes(): void;
+}
+
+/**
+ * file task-inference.ts
+ * description 任务推理引擎 — 从对话/代码/描述中智能提取任务
+ * module @yyc3/ai-hub
+ * author YanYuCloudCube Team <admin@0379.email>
+ * version 1.0.0
+ * created 2026-05-20
+ * updated 2026-05-20
+ * status active
+ * tags [inference],[task],[nlp]
+ *
+ * copyright YanYuCloudCube Team
+ * license MIT
+ */
+type TaskType = 'feature' | 'bug' | 'refactor' | 'test' | 'documentation' | 'other';
+type TaskPriority$1 = 'critical' | 'high' | 'medium' | 'low';
+interface InferredTask {
+    title: string;
+    description: string;
+    priority: TaskPriority$1;
+    type: TaskType;
+}
+interface TaskInferenceResult {
+    task: InferredTask;
+    confidence: number;
+    reasoning: string;
+    context: string;
+}
+declare function inferTasksFromText(text: string): TaskInferenceResult[];
+declare function inferTasksFromCode(code: string, language: string): TaskInferenceResult[];
+declare function inferTasksFromConversation(messages: Array<{
+    role: string;
+    content: string;
+}>): TaskInferenceResult[];
+declare function inferTasksFromDescription(description: string): TaskInferenceResult[];
+declare function inferTaskDependencies(tasks: Array<{
+    id: string;
+    title: string;
+    description?: string;
+}>): Map<string, string[]>;
+
+/**
+ * file quick-actions.ts
+ * description 智能操作引擎 — 代码/文档/文本 AI 辅助操作的 prompt 生成与调度
+ * module @yyc3/ai-hub
+ * author YanYuCloudCube Team <admin@0379.email>
+ * version 1.0.0
+ * created 2026-05-20
+ * updated 2026-05-20
+ * status active
+ * tags [actions],[ai],[prompt],[code],[text]
+ *
+ * copyright YanYuCloudCube Team
+ * license MIT
+ */
+type QuickActionType = 'copy' | 'copy-markdown' | 'copy-html' | 'format' | 'refactor' | 'optimize' | 'explain' | 'comment' | 'find-issues' | 'test-generate' | 'document-generate' | 'translate' | 'rewrite' | 'expand' | 'correct' | 'summarize' | 'convert';
+interface ActionContext {
+    text: string;
+    language?: string;
+    filePath?: string;
+}
+interface PromptResult {
+    systemPrompt: string;
+    userPrompt: string;
+    actionType: QuickActionType;
+}
+declare function escapeHTML(text: string): string;
+declare function formatCodeLocal(code: string): string;
+declare function wrapAsMarkdown(code: string, language?: string): string;
+declare function wrapAsHTML(code: string, language?: string): string;
+declare function buildPrompt(actionType: QuickActionType, ctx: ActionContext, params?: Record<string, string>): PromptResult;
+declare function getAvailableActions(): QuickActionType[];
+declare function executeLocalAction(actionType: 'copy' | 'copy-markdown' | 'copy-html' | 'format', ctx: ActionContext): string;
+
+/**
+ * file reminder.ts
+ * description 提醒调度引擎 — 截止/依赖/阻塞/进度提醒的创建与巡检
+ * module @yyc3/ai-hub
+ * author YanYuCloudCube Team <admin@0379.email>
+ * version 1.0.0
+ * created 2026-05-20
+ * updated 2026-05-20
+ * status active
+ * tags [reminder],[scheduler],[timer]
+ *
+ * copyright YanYuCloudCube Team
+ * license MIT
+ */
+type ReminderType = 'deadline' | 'dependency' | 'blocking' | 'progress';
+interface Reminder {
+    id: string;
+    taskId: string;
+    type: ReminderType;
+    message: string;
+    remindAt: number;
+    triggered: boolean;
+}
+interface ReminderTask {
+    id: string;
+    title: string;
+    status: string;
+    dueDate?: number;
+}
+declare function createReminderId(): string;
+declare function createReminder(taskId: string, type: ReminderType, message: string, remindAt: number): Reminder;
+declare function createDeadlineReminder(taskId: string, dueDate: number, leadMs?: number): Reminder | null;
+declare function createDependencyReminder(taskId: string, depTask: ReminderTask): Reminder | null;
+declare function createBlockingReminder(taskId: string, blockingTask: ReminderTask): Reminder;
+declare function createProgressReminder(taskId: string, progress: number): Reminder;
+declare function checkDueReminders(reminders: Reminder[], now?: number): Reminder[];
+declare function markTriggered(reminders: Reminder[], ids: string[]): Reminder[];
+declare class ReminderEngine {
+    private reminders;
+    add(reminder: Reminder): void;
+    checkDue(now?: number): Reminder[];
+    markTriggered(ids: string[]): void;
+    getAll(): Reminder[];
+    clear(): void;
+}
+
+/**
+ * file task-formatter.ts
+ * description 任务格式化工具 — 将任务对象格式化为文本/Markdown/代码注释/JSON
+ * module @yyc3/ai-hub
+ * author YanYuCloudCube Team <admin@0379.email>
+ * version 1.0.0
+ * created 2026-05-20
+ * updated 2026-05-20
+ * status active
+ * tags [task],[formatter],[markdown],[export]
+ *
+ * copyright YanYuCloudCube Team
+ * license MIT
+ */
+type TaskStatus = 'todo' | 'in-progress' | 'review' | 'done' | 'blocked';
+type TaskPriority = 'critical' | 'high' | 'medium' | 'low';
+interface FormatTask {
+    title: string;
+    description?: string;
+    status: TaskStatus;
+    priority: TaskPriority;
+    type?: string;
+    dueDate?: number;
+    estimatedHours?: number;
+    tags?: string[];
+    subtasks?: Array<{
+        title: string;
+        isCompleted: boolean;
+    }>;
+}
+declare function formatTaskAsText(task: FormatTask): string;
+declare function formatTaskAsMarkdown(task: FormatTask): string;
+declare function formatTaskAsCodeComment(task: FormatTask, lang?: string): string;
+declare function getHighestPriority(priorities: TaskPriority[]): TaskPriority;
+declare function exportTasksAsJSON(tasks: FormatTask[]): string;
+declare function exportTasksAsMarkdown(tasks: FormatTask[], now?: Date): string;
+
+export { type ActionContext, type Agent, type AgentDefinition, type AgentExecutionResult, AgentManager, type AgentMiddleware, type AuthProvider, type AuthType, type ExecutionContext, type FormatTask, type TaskPriority as FormatterTaskPriority, type HubConfig, type InferredTask, MCPManager, type MCPServer, type MCPServerConfig, MiddlewareChain, type MiddlewareContext, type PromptResult, type QuickActionType, type Reminder, ReminderEngine, type ReminderTask, type ReminderType, type SemanticRoute, SemanticRouter, type Skill, type SkillDefinition, SkillManager, type StreamChunk, type StreamChunkType, StreamManager, type StreamingOptions, type TaskContext, type TaskInferenceResult, type TaskPriority$1 as TaskPriority, type TaskResult, type TaskStatus, type TaskType, ValidationError, YYC3AIHub, YYC3Auth, YYC3Error, YYC3ErrorCode, YYC3_ERROR_DOMAINS, YYC3_ERROR_DOMAINS_EN, buildPrompt, checkDueReminders, collectStream, createBlockingReminder, createCacheMiddleware, createDeadlineReminder, createDependencyReminder, createLoggingMiddleware, createProgressReminder, createRateLimitMiddleware, createReminder, createReminderId, createRetryMiddleware, escapeHTML, executeLocalAction, exportTasksAsJSON, exportTasksAsMarkdown, formatCodeLocal, formatTaskAsCodeComment, formatTaskAsMarkdown, formatTaskAsText, getAvailableActions, getHighestPriority, getLocale, inferTaskDependencies, inferTasksFromCode, inferTasksFromConversation, inferTasksFromDescription, inferTasksFromText, markTriggered, setLocale, wrapAsHTML, wrapAsMarkdown };

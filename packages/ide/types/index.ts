@@ -332,8 +332,10 @@ export interface WorkflowEvent {
 export interface PluginManifest {
   id: string;
   name: string;
+  nameEn?: string;
   version: string;
   description: string;
+  descriptionEn?: string;
   author: string;
   main?: string;
   entry?: string;
@@ -343,6 +345,10 @@ export interface PluginManifest {
   dependencies?: Record<string, string>;
   activationEvents?: string[];
   tags?: string[];
+  homepage?: string;
+  license?: string;
+  activate?: string | ((context: PluginContext) => () => void);
+  deactivate?: string | ((context: PluginContext) => void);
 }
 
 export type PluginStatus = "installed" | "active" | "disabled" | "error";
@@ -352,6 +358,17 @@ export interface PluginInstance {
   status: PluginStatus;
   exports?: Record<string, unknown>;
   error?: string;
+}
+
+export interface PluginContext {
+  pluginId: string;
+  commands: any;
+  panels: any;
+  storage: Map<string, unknown>;
+  ui: any;
+  editor: any;
+  ai: any;
+  events: any;
 }
 
 // ── 协作类型 ──

@@ -6,6 +6,7 @@ export const scaleIn: TargetAndTransition = { opacity: 0, scale: 0.9 };
 export const slideInFromLeft: TargetAndTransition = { opacity: 0, x: -50 };
 export const slideInFromRight: TargetAndTransition = { opacity: 0, x: 50 };
 export const staggerItem: TargetAndTransition = { opacity: 0, y: 20 };
+export const rotate3DIn: TargetAndTransition = { opacity: 0, rotateX: 90 };
 
 export const staggerContainer = {
   transition: { staggerChildren: 0.1 },

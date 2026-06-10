@@ -132,8 +132,8 @@ export async function resolveRegistryTree(
   }
 
   let payload: z.infer<typeof registryItemWithSourceSchema>[] = []
-  let allDependencyItems: z.infer<typeof registryItemWithSourceSchema>[] = []
-  let allDependencyRegistryNames: string[] = []
+  const allDependencyItems: z.infer<typeof registryItemWithSourceSchema>[] = []
+  const allDependencyRegistryNames: string[] = []
 
   const uniqueNames = Array.from(new Set(names))
 
@@ -246,7 +246,7 @@ export async function resolveRegistryTree(
 
         // Deduplicate URLs
         const uniqueUrls = Array.from(new Set(registryUrls))
-        let result = await fetchRegistry(uniqueUrls, options)
+        const result = await fetchRegistry(uniqueUrls, options)
         const registryPayload = z.array(registryItemSchema).parse(result)
         payload.push(...registryPayload)
       }

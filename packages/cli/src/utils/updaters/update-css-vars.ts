@@ -48,7 +48,7 @@ export async function updateCssVars(
     }
   ).start()
   const raw = await fs.readFile(cssFilepath, "utf8")
-  let output = await transformCssVars(raw, cssVars ?? {}, config, {
+  const output = await transformCssVars(raw, cssVars ?? {}, config, {
     cleanupDefaultNextStyles: options.cleanupDefaultNextStyles,
     tailwindVersion: options.tailwindVersion,
     tailwindConfig: options.tailwindConfig,

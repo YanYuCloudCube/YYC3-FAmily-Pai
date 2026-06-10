@@ -160,7 +160,7 @@ export function applyColorMapping(
   const classNames = input.split(" ")
   const lightMode = new Set<string>()
   const darkMode = new Set<string>()
-  for (let className of classNames) {
+  for (const className of classNames) {
     const [variant, value, modifier] = splitClassName(className)
     const prefix = PREFIXES.find((prefix) => value?.startsWith(prefix))
     if (!prefix) {

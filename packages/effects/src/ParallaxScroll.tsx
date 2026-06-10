@@ -184,6 +184,24 @@ interface ParallaxStackProps {
   className?: string;
 }
 
+interface ParallaxStackCardProps {
+  children: React.ReactNode
+  index: number
+  scrollYProgress: MotionValue<number>
+}
+
+function ParallaxStackCard({ children, index, scrollYProgress }: ParallaxStackCardProps) {
+  const y = useTransform(scrollYProgress, [0, 1], [0, -50 * (index + 1)])
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.95, 1, 0.95])
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
+
+  return (
+    <motion.div style={{ y, scale, opacity }} className="glass-card rounded-2xl p-6">
+      {children}
+    </motion.div>
+  )
+}
+
 export function ParallaxStack({ cards, className = '' }: ParallaxStackProps) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -193,33 +211,11 @@ export function ParallaxStack({ cards, className = '' }: ParallaxStackProps) {
 
   return (
     <div ref={ref} className={`space-y-8 ${className}`}>
-      {cards.map((card, index) => {
-        const y = useTransform(
-          scrollYProgress,
-          [0, 1],
-          [0, -50 * (index + 1)]
-        );
-        const scale = useTransform(
-          scrollYProgress,
-          [0, 0.5, 1],
-          [0.95, 1, 0.95]
-        );
-        const opacity = useTransform(
-          scrollYProgress,
-          [0, 0.2, 0.8, 1],
-          [0, 1, 1, 0]
-        );
-
-        return (
-          <motion.div
-            key={index}
-            style={{ y, scale, opacity }}
-            className="glass-card rounded-2xl p-6"
-          >
-            {card}
-          </motion.div>
-        );
-      })}
+      {cards.map((card, index) => (
+        <ParallaxStackCard key={index} index={index} scrollYProgress={scrollYProgress}>
+          {card}
+        </ParallaxStackCard>
+      ))}
     </div>
   );
 }

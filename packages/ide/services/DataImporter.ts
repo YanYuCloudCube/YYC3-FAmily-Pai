@@ -13,7 +13,7 @@
 
 import { createLogger } from "../utils/logger";
 const log = createLogger("DataImporter");
-import { getDB } from "./adapters/IndexedDBAdapter";
+import { getDB } from "../adapters/IndexedDBAdapter";
 import type { ExportData } from "./DataExporter";
 
 export interface ImportResult {

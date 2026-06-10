@@ -38,10 +38,13 @@ export class MCPServer {
   private transport: MCPTransport;
   private toolRegistrations = new Map<string, MCPToolRegistration>();
   private resources: MCPResource[] = [];
+  private isRunning = false;
+  private onDisconnect?: () => void;
 
   constructor(config: MCPServerConfig) {
     this.config = config;
     this.transport = config.transport;
+    this.onDisconnect = (config as MCPServerConfig & { onDisconnect?: () => void }).onDisconnect;
   }
 
   registerTool(tool: MCPTool, handler: ToolHandler): void {
@@ -69,7 +72,37 @@ export class MCPServer {
     });
 
     await this.transport.connect();
+    this.isRunning = true;
     logger.info(`MCP Server "${this.config.name}" v${this.config.version} started`);
+  }
+
+  async stop(): Promise<void> {
+    this.isRunning = false;
+    await this.transport.close();
+    logger.info(`MCP Server "${this.config.name}" stopped`);
+  }
+
+  /** Check if server is running and transport is connected */
+  get connected(): boolean {
+    return this.isRunning && this.transport.connected;
+  }
+
+  /** Attempt to reconnect the transport */
+  async reconnect(): Promise<void> {
+    if (this.isRunning) {
+      logger.warn(`MCP Server "${this.config.name}" already running, stopping first...`);
+      await this.stop();
+    }
+    await this.start();
+  }
+
+  /** Handle transport disconnect detected externally */
+  handleDisconnect(): void {
+    this.isRunning = false;
+    logger.warn(`MCP Server "${this.config.name}" transport disconnected`);
+    if (this.onDisconnect) {
+      this.onDisconnect();
+    }
   }
 
   private async handleMessage(message: MCPMessage): Promise<void> {
@@ -179,10 +212,5 @@ export class MCPServer {
       error: { code, message },
     };
     await this.transport.send(response);
-  }
-
-  async stop(): Promise<void> {
-    await this.transport.close();
-    logger.info(`MCP Server "${this.config.name}" stopped`);
   }
 }

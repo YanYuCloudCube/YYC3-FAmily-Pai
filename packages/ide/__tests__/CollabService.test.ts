@@ -215,6 +215,7 @@ describe("CollabService - 实时协作服务", () => {
 
   describe.skip("感知光标", () => {
     it("设置和获取用户状态", () => {
+      // @ts-expect-error yjs Awareness is in y-protocols, not yjs
       const awareness = new Y.Awareness(doc);
       
       const userState = {
@@ -231,7 +232,9 @@ describe("CollabService - 实时协作服务", () => {
     });
 
     it("多个用户状态", () => {
+      // @ts-expect-error yjs Awareness is in y-protocols, not yjs
       const awareness1 = new Y.Awareness(new Y.Doc());
+      // @ts-expect-error yjs Awareness is in y-protocols, not yjs
       const awareness2 = new Y.Awareness(new Y.Doc());
 
       awareness1.setLocalState({ user: { name: "User1" }, cursor: { line: 1 } });

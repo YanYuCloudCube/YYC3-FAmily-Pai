@@ -38,7 +38,7 @@ import {
   chatCompletionStream,
   type ProviderConfig,
   type ChatMessage as LLMMessage,
-} from "../LLMService";
+} from "../services/LLMService";
 
 // ── Pipeline Types ──
 

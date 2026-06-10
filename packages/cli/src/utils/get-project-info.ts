@@ -1,15 +1,14 @@
+import fg from "fast-glob"
 import { promises as fsPromises } from "fs"
+import fs from "fs-extra"
 import path from "path"
+import { loadConfig } from "tsconfig-paths"
+import { z } from "zod"
 import { getShadcnRegistryIndex } from "../registry/api"
-import { SHADCN_URL } from "../registry/constants"
 import { rawConfigSchema } from "../schema"
 import { Framework, FRAMEWORKS } from "../utils/frameworks"
 import { Config, getConfig, resolveConfigPaths } from "../utils/get-config"
 import { getPackageInfo } from "../utils/get-package-info"
-import fg from "fast-glob"
-import fs from "fs-extra"
-import { loadConfig } from "tsconfig-paths"
-import { z } from "zod"
 
 export type TailwindVersion = "v3" | "v4" | null
 
@@ -236,8 +235,8 @@ export async function getTailwindVersion(
   if (
     /^(?:\^|~)?3(?:\.\d+)*(?:-.*)?$/.test(
       packageInfo?.dependencies?.tailwindcss ||
-        packageInfo?.devDependencies?.tailwindcss ||
-        ""
+      packageInfo?.devDependencies?.tailwindcss ||
+      ""
     )
   ) {
     return "v3"
@@ -299,17 +298,24 @@ export async function getTailwindConfigFile(cwd: string) {
 }
 
 export async function getTsConfigAliasPrefix(cwd: string) {
-  const tsConfig = await loadConfig(cwd)
+  let tsConfig
+  try {
+    tsConfig = await loadConfig(cwd)
+  } catch {
+    return null
+  }
+
+  const tsPaths = (tsConfig as unknown as Record<string, unknown>)?.paths as Record<string, string[]> | undefined
 
   if (
     tsConfig?.resultType === "failed" ||
-    !Object.entries(tsConfig?.paths).length
+    !tsPaths ||
+    !Object.entries(tsPaths).length
   ) {
     return null
   }
 
-  // This assume that the first alias is the prefix.
-  for (const [alias, paths] of Object.entries(tsConfig.paths)) {
+  for (const [alias, paths] of Object.entries(tsPaths)) {
     if (
       paths.includes("./*") ||
       paths.includes("./src/*") ||
@@ -321,7 +327,7 @@ export async function getTsConfigAliasPrefix(cwd: string) {
   }
 
   // Use the first alias as the prefix.
-  return Object.keys(tsConfig?.paths)?.[0].replace(/\/\*$/, "") ?? null
+  return Object.keys(tsPaths)?.[0].replace(/\/\*$/, "") ?? null
 }
 
 export async function isTypeScriptProject(cwd: string) {

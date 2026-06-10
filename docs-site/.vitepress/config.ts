@@ -12,6 +12,19 @@ export default defineConfig({
     ['meta', { name: 'og:site_name', content: 'YYC³ AI Family' }],
   ],
 
+  locales: {
+    root: { label: '简体中文', lang: 'zh-CN' },
+    'zh-TW': { label: '繁體中文', lang: 'zh-TW', link: '/zh-TW/' },
+    en: { label: 'English', lang: 'en', link: '/en/' },
+    ja: { label: '日本語', lang: 'ja', link: '/ja/' },
+    ko: { label: '한국어', lang: 'ko', link: '/ko/' },
+    fr: { label: 'Français', lang: 'fr', link: '/fr/' },
+    de: { label: 'Deutsch', lang: 'de', link: '/de/' },
+    es: { label: 'Español', lang: 'es', link: '/es/' },
+    pt: { label: 'Português', lang: 'pt-BR', link: '/pt/' },
+    ar: { label: 'العربية', lang: 'ar', link: '/ar/', dir: 'rtl' },
+  },
+
   themeConfig: {
     logo: '/logo.png',
     siteTitle: 'YYC³',

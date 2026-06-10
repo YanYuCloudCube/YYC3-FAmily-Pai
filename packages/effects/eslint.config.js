@@ -12,7 +12,7 @@ export default tseslint.config(
         ...globals.es2021,
       },
       parserOptions: {
-        project: './tsconfig.json',
+        project: './tsconfig.eslint.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -31,6 +31,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs', '*.cjs', 'src/**/*.stories.tsx'],
+    ignores: ['dist/**', 'node_modules/**', '*.js', '*.mjs', '*.cjs', 'src/**/*.stories.tsx', 'src/**/*.test.tsx'],
   }
 )

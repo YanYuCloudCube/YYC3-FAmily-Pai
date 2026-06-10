@@ -17,7 +17,7 @@ import {
   buildSkillsPromptInjection,
   buildMCPToolsDescription,
   getActiveAgentPrompt,
-} from "../SettingsBridge";
+} from "../services/SettingsBridge";
 
 // ── 意图类型 ──
 

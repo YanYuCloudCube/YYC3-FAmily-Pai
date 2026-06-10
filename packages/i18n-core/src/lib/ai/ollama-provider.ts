@@ -23,6 +23,20 @@ import type {
   TranslationResponse,
 } from "./provider.js";
 
+/**
+ * Create an AbortSignal that times out after `ms` milliseconds.
+ * Uses AbortSignal.timeout() when available (Node 20+), falls back to
+ * manual AbortController for Node 18 compatibility.
+ */
+function createTimeoutSignal(ms: number): AbortSignal {
+  if (typeof AbortSignal.timeout === "function") {
+    return AbortSignal.timeout(ms);
+  }
+  const controller = new AbortController();
+  setTimeout(() => controller.abort(new DOMException("Timeout", "TimeoutError")), ms);
+  return controller.signal;
+}
+
 export class OllamaProvider implements AIProvider {
   readonly type = "ollama" as const;
   private baseUrl: string;
@@ -51,7 +65,7 @@ export class OllamaProvider implements AIProvider {
     try {
       const response = await fetch(`${this.baseUrl}/api/tags`, {
         method: "GET",
-        signal: AbortSignal.timeout(5000),
+        signal: createTimeoutSignal(5000),
       });
       return response.ok;
     } catch {

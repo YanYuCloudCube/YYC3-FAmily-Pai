@@ -18,7 +18,7 @@ import {
   installGlobalKeybindings,
   registerKeybindingAction,
   syncLLMServiceToSettings,
-} from "../SettingsBridge";
+} from "../services/SettingsBridge";
 
 /**
  * 设置同步 Hook — 在组件挂载时启动全局同步系统

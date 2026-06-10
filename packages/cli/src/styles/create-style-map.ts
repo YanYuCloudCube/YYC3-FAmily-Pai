@@ -34,26 +34,25 @@ export function createStyleMap(input: string) {
 
     for (const selector of selectors) {
       const normalizedSelector = normalizeSelector(selector)
+        ; (selectorParser as any)((selectorsRoot: any) => {
+          selectorsRoot.each((sel: any) => {
+            const targetClass = findSubjectClass(sel)
 
-      selectorParser((selectorsRoot) => {
-        selectorsRoot.each((sel) => {
-          const targetClass = findSubjectClass(sel)
+            if (!targetClass) {
+              return
+            }
 
-          if (!targetClass) {
-            return
-          }
+            const className = targetClass.value
 
-          const className = targetClass.value
+            if (!className.startsWith(CN_PREFIX)) {
+              return
+            }
 
-          if (!className.startsWith(CN_PREFIX)) {
-            return
-          }
-
-          result[className] = result[className]
-            ? `${tailwindClasses} ${result[className]}`
-            : tailwindClasses
-        })
-      }).processSync(normalizedSelector)
+            result[className] = result[className]
+              ? `${tailwindClasses} ${result[className]}`
+              : tailwindClasses
+          })
+        }).processSync(normalizedSelector)
     }
   })
 
@@ -86,7 +85,7 @@ function extractTailwindClasses(rule: postcss.Rule) {
 function findSubjectClass(selector: SelectorNodeRoot) {
   const classNodes: ClassName[] = []
 
-  selector.walkClasses((classNode) => {
+  selector.walkClasses((classNode: any) => {
     if (classNode.value.startsWith(CN_PREFIX)) {
       classNodes.push(classNode)
     }

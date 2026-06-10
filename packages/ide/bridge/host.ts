@@ -1,4 +1,4 @@
-import { createLogger } from "./utils/logger";
+import { createLogger } from "../utils/logger";
 const log = createLogger("host");
 /**
  * @file host.ts
@@ -28,10 +28,9 @@ try {
 
 // IndexedDB Adapter
 import {
-  saveFile as saveFileToIndexedDB,
-  readFile as readFileFromIndexedDB,
   deleteFile as deleteFileFromIndexedDB,
-} from "./adapters/IndexedDBAdapter";
+  loadFile as loadFileFromIndexedDB
+} from "../adapters/IndexedDBAdapter";
 
 export interface FileMetadata {
   path: string;
@@ -138,7 +137,7 @@ export const HostBridge = {
     } else {
       // 使用 IndexedDB
       const projectId = "default";
-      return await readFileFromIndexedDB(projectId, path);
+      return await loadFileFromIndexedDB(projectId, path);
     }
   },
 
@@ -170,7 +169,7 @@ export const HostBridge = {
       const blob =
         typeof data === "string"
           ? new Blob([data], { type: "text/plain" })
-          : new Blob([data], { type: "application/octet-stream" });
+          : new Blob([data as BlobPart], { type: "application/octet-stream" });
 
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");

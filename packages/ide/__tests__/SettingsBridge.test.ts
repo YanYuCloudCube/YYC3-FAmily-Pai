@@ -27,7 +27,7 @@ import {
   syncGeneralSettingsToCSS,
   type APIKeyValidationResult,
   type MCPConnectionTestResult,
-} from "../SettingsBridge";
+} from "../services/SettingsBridge";
 
 describe("SettingsBridge", () => {
   beforeEach(() => {

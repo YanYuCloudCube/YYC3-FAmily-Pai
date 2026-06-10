@@ -15,6 +15,7 @@
  * brief AI 翻译提供者管理
  */
 import { logger } from "../infra/logger.js";
+import { LRUCache } from "../cache.js";
 
 export type AIProviderType = "openai" | "ollama" | "anthropic" | "azure" | "custom";
 
@@ -62,12 +63,26 @@ export interface AIProviderInfo {
   defaultModel?: string;
 }
 
+export interface AIProviderManagerConfig {
+  preferLocal?: boolean;
+  autoDetect?: boolean;
+  /** 缓存最大条目数，默认 500 */
+  maxCacheSize?: number;
+  /** 缓存 TTL（毫秒），默认 30 分钟 */
+  cacheTTL?: number;
+}
+
 export class AIProviderManager {
   private providers = new Map<AIProviderType, AIProvider>();
   private activeProvider: AIProviderType | null = null;
-  private cache = new Map<string, TranslationResponse>();
+  private cache: LRUCache<TranslationResponse>;
 
-  constructor(private config?: { preferLocal?: boolean; autoDetect?: boolean }) {}
+  constructor(private config?: AIProviderManagerConfig) {
+    this.cache = new LRUCache<TranslationResponse>({
+      maxSize: config?.maxCacheSize ?? 500,
+      defaultTTL: config?.cacheTTL ?? 30 * 60 * 1000,
+    });
+  }
 
   register(provider: AIProvider): void {
     this.providers.set(provider.type, provider);

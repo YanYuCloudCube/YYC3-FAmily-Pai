@@ -2,14 +2,14 @@ name: Packages CI
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [main, develop]
     paths:
       - "packages/**"
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
       - "tsconfig.base.json"
   pull_request:
-    branches: [ main ]
+    branches: [main]
     paths:
       - "packages/**"
       - "pnpm-lock.yaml"
@@ -34,7 +34,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node-version: [ 22 ]
+        node-version: [22]
 
     steps:
       - name: Checkout repository
@@ -62,17 +62,20 @@ jobs:
 
       - name: Lint all packages
         run: pnpm -r lint
-        continue-on-error: true
 
       - name: Test all packages
         run: |
           FAILED=0
-          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli effects; do
             echo "▶️ Testing @yyc3/$pkg ..."
             pnpm --filter @yyc3/$pkg test || FAILED=$((FAILED+1))
             echo "✅ @yyc3/$pkg done"
           done
           echo "Failed packages: $FAILED"
+          if [ "$FAILED" -ne 0 ]; then
+            echo "::error::$FAILED package(s) failed tests"
+            exit 1
+          fi
 
   coverage:
     name: Coverage Report
@@ -115,11 +118,23 @@ jobs:
       - name: Generate coverage for @yyc3/i18n-core
         run: pnpm -C packages/i18n-core test -- --coverage
 
+      - name: Generate coverage for @yyc3/effects
+        run: pnpm -C packages/effects test -- --coverage
+
+      - name: Generate coverage for @yyc3/motion
+        run: pnpm -C packages/motion test -- --coverage
+
+      - name: Generate coverage for @yyc3/mcp-servers
+        run: pnpm -C packages/mcp-servers test -- --coverage
+
+      - name: Generate coverage for @yyc3/cli
+        run: pnpm -C packages/cli test -- --coverage
+
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: packages/core/coverage/lcov.info,packages/ai-hub/coverage/lcov.info,packages/ui/coverage/lcov.info,packages/plugins/coverage/lcov.info,packages/i18n-core/coverage/lcov.info
+          files: packages/core/coverage/lcov.info,packages/ai-hub/coverage/lcov.info,packages/ui/coverage/lcov.info,packages/plugins/coverage/lcov.info,packages/i18n-core/coverage/lcov.info,packages/effects/coverage/lcov.info,packages/motion/coverage/lcov.info,packages/mcp-servers/coverage/lcov.info,packages/cli/coverage/lcov.info
           fail_ci_if_error: false
 
   audit:

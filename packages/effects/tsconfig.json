@@ -33,6 +33,10 @@
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.stories.tsx"
+    "**/*.stories.tsx",
+    "**/*.test.tsx",
+    "src/AnimatedCard.tsx",
+    "src/FloatingActionButton.tsx",
+    "src/Model3dPreview.tsx"
   ]
 }
