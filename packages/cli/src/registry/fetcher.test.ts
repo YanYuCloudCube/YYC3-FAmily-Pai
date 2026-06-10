@@ -1,14 +1,13 @@
+import { HttpResponse, http } from "msw"
+import { setupServer } from "msw/node"
+import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
 import { REGISTRY_URL } from "../registry/constants"
 import {
-  RegistryFetchError,
   RegistryForbiddenError,
   RegistryGoneError,
   RegistryNotFoundError,
-  RegistryUnauthorizedError,
+  RegistryUnauthorizedError
 } from "../registry/errors"
-import { http, HttpResponse } from "msw"
-import { setupServer } from "msw/node"
-import { afterAll, afterEach, beforeAll, describe, expect, it } from "vitest"
 
 import { clearRegistryContext, setRegistryHeaders } from "./context"
 import { clearRegistryCache, fetchRegistry } from "./fetcher"
@@ -198,6 +197,14 @@ describe("fetchRegistry", () => {
   })
 
   it("should handle multiple paths", async () => {
+    server.use(
+      http.get(`${REGISTRY_URL}/styles/new-york/button.json`, () => {
+        return HttpResponse.json({ name: "button", type: "registry:ui" })
+      }),
+      http.get(`${REGISTRY_URL}/styles/new-york/card.json`, () => {
+        return HttpResponse.json({ name: "card", type: "registry:ui" })
+      })
+    )
     const paths = ["styles/new-york/button.json", "styles/new-york/card.json"]
     const result = await fetchRegistry(paths)
 
