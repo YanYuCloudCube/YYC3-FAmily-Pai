@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YYC³ FAmily π³ 生产终极测试报告</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0f172a;color:#e2e8f0;padding:24px}
+.header{text-align:center;margin-bottom:32px}
+.header h1{font-size:28px;background:linear-gradient(135deg,#60a5fa,#a78bfa,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
+.header .subtitle{color:#94a3b8;font-size:14px}
+.badge{display:inline-block;padding:4px 12px;border-radius:9999px;font-size:13px;font-weight:600;margin:0 4px}
+.badge-pass{background:#065f46;color:#6ee7b7}
+.badge-fail{background:#7f1d1d;color:#fca5a5}
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:32px}
+.card{background:#1e293b;border-radius:12px;padding:20px;text-align:center;border:1px solid #334155}
+.card .value{font-size:32px;font-weight:700;margin-bottom:4px}
+.card .label{color:#94a3b8;font-size:13px}
+.card .value.green{color:#34d399}
+.card .value.blue{color:#60a5fa}
+.card .value.purple{color:#a78bfa}
+.card .value.amber{color:#fbbf24}
+.card .value.red{color:#f87171}
+table{width:100%;border-collapse:separate;border-spacing:0;background:#1e293b;border-radius:12px;overflow:hidden;border:1px solid #334155;margin-bottom:32px}
+th{background:#0f172a;padding:12px 16px;text-align:left;font-size:13px;color:#94a3b8;text-transform:uppercase;letter-spacing:0.5px}
+td{padding:12px 16px;border-top:1px solid #334155;font-size:14px}
+tr:hover td{background:#1e293b80}
+.pkg-name{font-weight:600;color:#60a5fa}
+.status-icon{font-size:16px}
+.bar{height:6px;border-radius:3px;background:#334155;overflow:hidden;margin-top:4px}
+.bar-fill{height:100%;border-radius:3px}
+.bar-fill.green{background:linear-gradient(90deg,#059669,#34d399)}
+.bar-fill.red{background:linear-gradient(90deg,#dc2626,#f87171)}
+.dim{color:#64748b;font-size:12px}
+.error-box{background:#1c1917;border:1px solid #7f1d1d;border-radius:8px;padding:12px;margin-top:8px;font-family:monospace;font-size:12px;color:#fca5a5;max-height:100px;overflow:auto}
+.footer{text-align:center;color:#475569;font-size:12px;margin-top:24px;padding-top:24px;border-top:1px solid #334155}
+.chart-container{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;margin-bottom:32px}
+.chart-card{background:#1e293b;border-radius:12px;padding:20px;border:1px solid #334155}
+.chart-card h3{font-size:14px;color:#94a3b8;margin-bottom:16px}
+.ring-chart{display:flex;align-items:center;gap:16px}
+.ring{width:80px;height:80px;border-radius:50%;position:relative;display:flex;align-items:center;justify-content:center}
+.ring-value{font-size:20px;font-weight:700}
+.ring-label{font-size:12px;color:#94a3b8}
+.list-chart .item{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.list-chart .item .dot{width:8px;height:8px;border-radius:50%}
+.list-chart .item .name{flex:1;font-size:13px}
+.list-chart .item .count{font-weight:600;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧪 YYC³ FAmily π³ 生产终极测试报告</h1>
+  <div class="subtitle">
+    2026/5/19 22:49:47 &nbsp;|&nbsp; Node v22.22.2 &nbsp;|&nbsp; 10 Packages
+    &nbsp;&nbsp;
+    <span class="badge badge-fail">⚠️ HAS FAILURES</span>
+  </div>
+</div>
+
+<div class="summary">
+  <div class="card">
+    <div class="value green">2103</div>
+    <div class="label">总测试数</div>
+  </div>
+  <div class="card">
+    <div class="value blue">122</div>
+    <div class="label">测试文件</div>
+  </div>
+  <div class="card">
+    <div class="value purple">10/10</div>
+    <div class="label">构建通过</div>
+  </div>
+  <div class="card">
+    <div class="value amber">8/10</div>
+    <div class="label">类型检查通过</div>
+  </div>
+  <div class="card">
+    <div class="value red">10/10</div>
+    <div class="label">测试通过</div>
+  </div>
+</div>
+
+<div class="chart-container">
+  <div class="chart-card">
+    <h3>📊 测试分布</h3>
+    <div class="list-chart">
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">core</div><div class="count" style="color:#34d399">224</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">ai-hub</div><div class="count" style="color:#34d399">338</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">cli</div><div class="count" style="color:#34d399">819</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">effects</div><div class="count" style="color:#34d399">18</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">emotion</div><div class="count" style="color:#34d399">64</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">i18n-core</div><div class="count" style="color:#34d399">443</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">mcp-servers</div><div class="count" style="color:#34d399">20</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">motion</div><div class="count" style="color:#34d399">25</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">plugins</div><div class="count" style="color:#34d399">44</div></div>
+      <div class="item"><div class="dot" style="background:#34d399"></div><div class="name">ui</div><div class="count" style="color:#34d399">108</div></div>
+    </div>
+  </div>
+  <div class="chart-card">
+    <h3>📦 包体积 (KB)</h3>
+    <div class="list-chart">
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">core</div><div class="count" style="color:#60a5fa">98 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">ai-hub</div><div class="count" style="color:#60a5fa">34.4 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">cli</div><div class="count" style="color:#60a5fa">0.4 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">effects</div><div class="count" style="color:#60a5fa">60.8 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">emotion</div><div class="count" style="color:#60a5fa">14.4 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">i18n-core</div><div class="count" style="color:#60a5fa">87 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">mcp-servers</div><div class="count" style="color:#60a5fa">10.6 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">motion</div><div class="count" style="color:#60a5fa">9.2 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">plugins</div><div class="count" style="color:#60a5fa">8.9 KB</div></div>
+      <div class="item"><div class="dot" style="background:#60a5fa"></div><div class="name">ui</div><div class="count" style="color:#60a5fa">20.1 KB</div></div>
+    </div>
+  </div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>包名</th>
+      <th>构建</th>
+      <th>类型检查</th>
+      <th>测试</th>
+      <th>测试数</th>
+      <th>耗时</th>
+      <th>体积</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr>
+      <td class="pkg-name">core</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">2396ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">939ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">10 files</span></td>
+      <td><strong>224</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:74.66666666666667%"></div></div></td>
+      <td><span class="dim">804ms</span></td>
+      <td>98 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">ai-hub</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">1858ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">1087ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">18 files</span></td>
+      <td><strong>338</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:100%"></div></div></td>
+      <td><span class="dim">880ms</span></td>
+      <td>34.4 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">cli</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">3621ms</span></td>
+      <td><span class="status-icon">❌</span><br><span class="dim">1660ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">39 files</span></td>
+      <td><strong>819</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:100%"></div></div></td>
+      <td><span class="dim">2907ms</span></td>
+      <td>0.4 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">effects</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">1094ms</span></td>
+      <td><span class="status-icon">❌</span><br><span class="dim">977ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">4 files</span></td>
+      <td><strong>18</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:6%"></div></div></td>
+      <td><span class="dim">999ms</span></td>
+      <td>60.8 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">emotion</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">1099ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">534ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">4 files</span></td>
+      <td><strong>64</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:21.333333333333332%"></div></div></td>
+      <td><span class="dim">628ms</span></td>
+      <td>14.4 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">i18n-core</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">1780ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">737ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">28 files</span></td>
+      <td><strong>443</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:100%"></div></div></td>
+      <td><span class="dim">8250ms</span></td>
+      <td>87 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">mcp-servers</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">1170ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">518ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">2 files</span></td>
+      <td><strong>20</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:6.666666666666667%"></div></div></td>
+      <td><span class="dim">597ms</span></td>
+      <td>10.6 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">motion</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">2071ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">720ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">5 files</span></td>
+      <td><strong>25</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:8.333333333333334%"></div></div></td>
+      <td><span class="dim">1217ms</span></td>
+      <td>9.2 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">plugins</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">1057ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">747ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">4 files</span></td>
+      <td><strong>44</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:14.666666666666666%"></div></div></td>
+      <td><span class="dim">634ms</span></td>
+      <td>8.9 KB</td>
+    </tr>
+    <tr>
+      <td class="pkg-name">ui</td>
+      <td><span class="status-icon">✅</span><br><span class="dim">4552ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">2338ms</span></td>
+      <td><span class="status-icon">✅</span><br><span class="dim">8 files</span></td>
+      <td><strong>108</strong><br><div class="bar" style="width:80px"><div class="bar-fill green" style="width:36%"></div></div></td>
+      <td><span class="dim">1411ms</span></td>
+      <td>20.1 KB</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="footer">
+  YYC³ FAmily π³ &nbsp;|&nbsp; 五维驱动·五高五标五化 &nbsp;|&nbsp; 2026 YanYuCloudCube Team
+  <br>言启千行代码，语枢万物智能
+</div>
+
+</body>
+</html>

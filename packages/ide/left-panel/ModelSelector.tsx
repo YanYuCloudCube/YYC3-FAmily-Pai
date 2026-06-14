@@ -19,7 +19,7 @@ import {
   Sparkles,
   Settings2,
 } from "lucide-react";
-import type { ProviderId } from "../LLMService";
+import type { ProviderId } from "../services/LLMService";
 
 // ── Provider visual config ──
 

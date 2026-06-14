@@ -19,7 +19,7 @@ import {
   WifiOff,
   AlertCircle,
 } from "lucide-react";
-import { testModelConnectivity, type ProviderConfig } from "../LLMService";
+import { testModelConnectivity, type ProviderConfig } from "../services/LLMService";
 
 // ── Types ──
 

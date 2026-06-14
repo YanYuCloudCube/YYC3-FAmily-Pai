@@ -1,0 +1,19 @@
+import { useState, useEffect } from 'react'
+
+/**
+ * useIsMobile - responsive breakpoint hook
+ * Detect viewport below 768px for mobile-adaptive layouts
+ */
+export function useIsMobile(): boolean {
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    const handler = (e: MediaQueryListEvent | MediaQueryList) => setIsMobile(e.matches)
+    handler(mq)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  return isMobile
+}

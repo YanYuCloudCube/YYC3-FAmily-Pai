@@ -19,7 +19,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
-import { DEFAULT_PROXY_CONFIG, type ProxyConfig } from "../ProxyService";
+import { DEFAULT_PROXY_CONFIG, type ProxyConfig } from "../services/ProxyService";
 
 interface ProxyStoreState {
   config: ProxyConfig;

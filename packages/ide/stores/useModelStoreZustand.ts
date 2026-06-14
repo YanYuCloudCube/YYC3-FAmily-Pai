@@ -15,7 +15,7 @@
 import { create } from "zustand";
 import { immer } from "zustand/middleware/immer";
 import { persist } from "zustand/middleware";
-import type { ProviderId, ProviderConfig, ProviderModel } from "../LLMService";
+import type { ProviderId, ProviderConfig, ProviderModel } from "../services/LLMService";
 
 // ===== Types =====
 export type ModelType =
