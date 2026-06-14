@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from 'vitest'
 import { applyPlan, runPipeline, type PipelineInput } from '../ai/AIPipeline'
 
-vi.mock('../LLMService', () => ({
+vi.mock('../services/LLMService', () => ({
   chatCompletionStream: vi.fn((_provider: any, _modelId: any, _messages: any, callbacks: any) => {
     callbacks.onToken('```tsx\n')
     callbacks.onToken('// filepath: src/App.tsx\n')

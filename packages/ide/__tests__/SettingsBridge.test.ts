@@ -12,22 +12,20 @@
  * @tags test,vitest,settings,bridge,integration
  */
 
-import { describe, it, expect, beforeEach, vi } from "vitest";
-import { useSettingsStore } from "../stores/useSettingsStore";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  buildMCPToolsDescription,
   buildRulesPromptInjection,
   buildSkillsPromptInjection,
-  buildMCPToolsDescription,
   getActiveAgentPrompt,
-  getSettingsEnhancedInstructions,
   getActiveMCPEndpoints,
   getEffectiveKeybindings,
+  getSettingsEnhancedInstructions,
   normalizeKeyEvent,
   registerKeybindingAction,
-  syncGeneralSettingsToCSS,
-  type APIKeyValidationResult,
-  type MCPConnectionTestResult,
+  syncGeneralSettingsToCSS
 } from "../services/SettingsBridge";
+import { useSettingsStore } from "../stores/useSettingsStore";
 
 describe("SettingsBridge", () => {
   beforeEach(() => {

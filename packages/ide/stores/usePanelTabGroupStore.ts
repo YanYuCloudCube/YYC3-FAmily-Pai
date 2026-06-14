@@ -15,7 +15,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
-import type { PanelId } from "../PanelManager";
+import type { PanelId } from "../panels/PanelManager";
 
 // ── Types ──
 

@@ -523,52 +523,52 @@ export const useSettingsStore = create<SettingsState & SettingsActions>()(
           title: string;
           aliases: string[];
         }> = [
-          {
-            path: "general.theme",
-            title: "主题",
-            aliases: ["theme", "外观", "暗色", "亮色", "dark", "light"],
-          },
-          {
-            path: "general.language",
-            title: "语言",
-            aliases: ["language", "界面语言", "多语言", "i18n"],
-          },
-          {
-            path: "general.editorFont",
-            title: "编辑器字体",
-            aliases: ["font", "字体", "monaco", "fira"],
-          },
-          {
-            path: "general.editorFontSize",
-            title: "编辑器字体大小",
-            aliases: ["fontsize", "字号", "字体大小"],
-          },
-          {
-            path: "general.wordWrap",
-            title: "自动换行",
-            aliases: ["wordwrap", "换行", "折行"],
-          },
-          {
-            path: "general.keybindingScheme",
-            title: "快捷键方案",
-            aliases: ["keybinding", "快捷键", "shortcut", "vscode"],
-          },
-          {
-            path: "general.localLinkOpenMode",
-            title: "本地链接打开方式",
-            aliases: ["link", "链接"],
-          },
-          {
-            path: "general.markdownOpenMode",
-            title: "Markdown 打开方式",
-            aliases: ["markdown", "md", "预览"],
-          },
-          {
-            path: "general.nodeVersion",
-            title: "Node.js 版本",
-            aliases: ["node", "nodejs", "版本"],
-          },
-        ];
+            {
+              path: "general.theme",
+              title: "主题",
+              aliases: ["theme", "外观", "暗色", "亮色", "dark", "light"],
+            },
+            {
+              path: "general.language",
+              title: "语言",
+              aliases: ["language", "界面语言", "多语言", "i18n"],
+            },
+            {
+              path: "general.editorFont",
+              title: "编辑器字体",
+              aliases: ["font", "字体", "monaco", "fira"],
+            },
+            {
+              path: "general.editorFontSize",
+              title: "编辑器字体大小",
+              aliases: ["fontsize", "字号", "字体大小"],
+            },
+            {
+              path: "general.wordWrap",
+              title: "自动换行",
+              aliases: ["wordwrap", "换行", "折行"],
+            },
+            {
+              path: "general.keybindingScheme",
+              title: "快捷键方案",
+              aliases: ["keybinding", "快捷键", "shortcut", "vscode"],
+            },
+            {
+              path: "general.localLinkOpenMode",
+              title: "本地链接打开方式",
+              aliases: ["link", "链接"],
+            },
+            {
+              path: "general.markdownOpenMode",
+              title: "Markdown 打开方式",
+              aliases: ["markdown", "md", "预览"],
+            },
+            {
+              path: "general.nodeVersion",
+              title: "Node.js 版本",
+              aliases: ["node", "nodejs", "版本"],
+            },
+          ];
         for (const field of generalFields) {
           if (
             field.title.toLowerCase().includes(q) ||
@@ -650,57 +650,57 @@ export const useSettingsStore = create<SettingsState & SettingsActions>()(
           title: string;
           aliases: string[];
         }> = [
-          {
-            path: "conversation.useTodoList",
-            title: "待办清单",
-            aliases: ["todo", "清单", "任务"],
-          },
-          {
-            path: "conversation.autoCollapseNodes",
-            title: "自动折叠对话",
-            aliases: ["折叠", "收起", "collapse"],
-          },
-          {
-            path: "conversation.autoFixCodeIssues",
-            title: "自动修复代码",
-            aliases: ["修复", "fix", "代码规范", "lint"],
-          },
-          {
-            path: "conversation.agentProactiveQuestion",
-            title: "智能体主动提问",
-            aliases: ["提问", "主动", "proactive"],
-          },
-          {
-            path: "conversation.codeReviewScope",
-            title: "代码审查",
-            aliases: ["审查", "review", "检查"],
-          },
-          {
-            path: "conversation.jumpAfterReview",
-            title: "审查后跳转",
-            aliases: ["跳转", "jump"],
-          },
-          {
-            path: "conversation.autoRunMCP",
-            title: "自动运行 MCP",
-            aliases: ["自动mcp", "auto mcp", "自动工具"],
-          },
-          {
-            path: "conversation.commandRunMode",
-            title: "命令运行方式",
-            aliases: ["命令", "command", "沙箱", "sandbox", "终端"],
-          },
-          {
-            path: "conversation.volume",
-            title: "提示音量",
-            aliases: ["音量", "volume", "声音"],
-          },
-          {
-            path: "conversation.notificationTypes",
-            title: "通知方式",
-            aliases: ["通知", "notification", "提醒"],
-          },
-        ];
+            {
+              path: "conversation.useTodoList",
+              title: "待办清单",
+              aliases: ["todo", "清单", "任务"],
+            },
+            {
+              path: "conversation.autoCollapseNodes",
+              title: "自动折叠对话",
+              aliases: ["折叠", "收起", "collapse"],
+            },
+            {
+              path: "conversation.autoFixCodeIssues",
+              title: "自动修复代码",
+              aliases: ["修复", "fix", "代码规范", "lint"],
+            },
+            {
+              path: "conversation.agentProactiveQuestion",
+              title: "智能体主动提问",
+              aliases: ["提问", "主动", "proactive"],
+            },
+            {
+              path: "conversation.codeReviewScope",
+              title: "代码审查",
+              aliases: ["审查", "review", "检查"],
+            },
+            {
+              path: "conversation.jumpAfterReview",
+              title: "审查后跳转",
+              aliases: ["跳转", "jump"],
+            },
+            {
+              path: "conversation.autoRunMCP",
+              title: "自动运行 MCP",
+              aliases: ["自动mcp", "auto mcp", "自动工具"],
+            },
+            {
+              path: "conversation.commandRunMode",
+              title: "命令运行方式",
+              aliases: ["命令", "command", "沙箱", "sandbox", "终端"],
+            },
+            {
+              path: "conversation.volume",
+              title: "提示音量",
+              aliases: ["音量", "volume", "声音"],
+            },
+            {
+              path: "conversation.notificationTypes",
+              title: "通知方式",
+              aliases: ["通知", "notification", "提醒"],
+            },
+          ];
         for (const field of convFields) {
           if (
             field.title.toLowerCase().includes(q) ||

@@ -1,0 +1,190 @@
+{
+  "timestamp": "2026-05-19T14:49:47.234Z",
+  "allPass": false,
+  "totalTests": 2103,
+  "totalFiles": 122,
+  "packages": [
+    {
+      "name": "@yyc3/core",
+      "build": {
+        "status": "pass",
+        "duration": 2396
+      },
+      "typecheck": {
+        "status": "pass",
+        "duration": 939
+      },
+      "test": {
+        "status": "pass",
+        "files": 10,
+        "tests": 224,
+        "duration": 804
+      },
+      "sizeKB": 98
+    },
+    {
+      "name": "@yyc3/ai-hub",
+      "build": {
+        "status": "pass",
+        "duration": 1858
+      },
+      "typecheck": {
+        "status": "pass",
+        "duration": 1087
+      },
+      "test": {
+        "status": "pass",
+        "files": 18,
+        "tests": 338,
+        "duration": 880
+      },
+      "sizeKB": 34.4
+    },
+    {
+      "name": "@yyc3/cli",
+      "build": {
+        "status": "pass",
+        "duration": 3621
+      },
+      "typecheck": {
+        "status": "fail",
+        "duration": 1660,
+        "error": ""
+      },
+      "test": {
+        "status": "pass",
+        "files": 39,
+        "tests": 819,
+        "duration": 2907
+      },
+      "sizeKB": 0.4
+    },
+    {
+      "name": "@yyc3/effects",
+      "build": {
+        "status": "pass",
+        "duration": 1094
+      },
+      "typecheck": {
+        "status": "fail",
+        "duration": 977,
+        "error": ""
+      },
+      "test": {
+        "status": "pass",
+        "files": 4,
+        "tests": 18,
+        "duration": 999
+      },
+      "sizeKB": 60.8
+    },
+    {
+      "name": "@yyc3/emotion",
+      "build": {
+        "status": "pass",
+        "duration": 1099
+      },
+      "typecheck": {
+        "status": "pass",
+        "duration": 534
+      },
+      "test": {
+        "status": "pass",
+        "files": 4,
+        "tests": 64,
+        "duration": 628
+      },
+      "sizeKB": 14.4
+    },
+    {
+      "name": "@yyc3/i18n-core",
+      "build": {
+        "status": "pass",
+        "duration": 1780
+      },
+      "typecheck": {
+        "status": "pass",
+        "duration": 737
+      },
+      "test": {
+        "status": "pass",
+        "files": 28,
+        "tests": 443,
+        "duration": 8250
+      },
+      "sizeKB": 87
+    },
+    {
+      "name": "@yyc3/mcp-servers",
+      "build": {
+        "status": "pass",
+        "duration": 1170
+      },
+      "typecheck": {
+        "status": "pass",
+        "duration": 518
+      },
+      "test": {
+        "status": "pass",
+        "files": 2,
+        "tests": 20,
+        "duration": 597
+      },
+      "sizeKB": 10.6
+    },
+    {
+      "name": "@yyc3/motion",
+      "build": {
+        "status": "pass",
+        "duration": 2071
+      },
+      "typecheck": {
+        "status": "pass",
+        "duration": 720
+      },
+      "test": {
+        "status": "pass",
+        "files": 5,
+        "tests": 25,
+        "duration": 1217
+      },
+      "sizeKB": 9.2
+    },
+    {
+      "name": "@yyc3/plugins",
+      "build": {
+        "status": "pass",
+        "duration": 1057
+      },
+      "typecheck": {
+        "status": "pass",
+        "duration": 747
+      },
+      "test": {
+        "status": "pass",
+        "files": 4,
+        "tests": 44,
+        "duration": 634
+      },
+      "sizeKB": 8.9
+    },
+    {
+      "name": "@yyc3/ui",
+      "build": {
+        "status": "pass",
+        "duration": 4552
+      },
+      "typecheck": {
+        "status": "pass",
+        "duration": 2338
+      },
+      "test": {
+        "status": "pass",
+        "files": 8,
+        "tests": 108,
+        "duration": 1411
+      },
+      "sizeKB": 20.1
+    }
+  ]
+}

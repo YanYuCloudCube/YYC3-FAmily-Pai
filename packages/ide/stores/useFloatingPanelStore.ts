@@ -13,7 +13,7 @@
  */
 
 import { create } from "zustand";
-import type { PanelId } from "../PanelManager";
+import type { PanelId } from "../panels/PanelManager";
 
 // ── Types ──
 
