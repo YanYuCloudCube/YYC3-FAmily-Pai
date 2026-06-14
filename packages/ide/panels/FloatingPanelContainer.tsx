@@ -58,6 +58,7 @@ const PANEL_TITLES: Record<PanelId, string> = {
 interface FloatingWindowProps {
   config: FloatingPanelConfig;
   renderPanel: (panelId: PanelId, nodeId: string) => React.ReactNode;
+  key?: React.Key;
 }
 
 function FloatingWindow({ config, renderPanel }: FloatingWindowProps) {
