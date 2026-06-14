@@ -129,7 +129,7 @@ export class PluginManager {
       if (plugin?.afterTranslate) {
         const modified = plugin.afterTranslate(currentResult, key, params);
         if (modified !== undefined) {
-          currentResult = modified;
+          currentResult = modified as string;
         }
       }
     }
@@ -163,7 +163,7 @@ export class PluginManager {
       if (handler) {
         const result = handler(key, locale);
         if (result !== undefined) {
-          fallback = result;
+          fallback = result as string | undefined;
         }
       }
     }

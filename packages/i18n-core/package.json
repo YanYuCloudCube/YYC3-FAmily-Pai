@@ -46,17 +46,17 @@
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
-      "require": "./dist/index.js"
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
     },
     "./cache": {
       "import": "./dist/lib/cache.js",
       "types": "./dist/lib/cache.d.ts"
     },
     "./plugins": {
-      "import": "./dist/lib/plugins/index.js",
-      "types": "./dist/lib/plugins/index.d.ts"
+      "import": "./dist/plugins/index.js",
+      "types": "./dist/plugins/index.d.ts"
     },
     "./icu": {
       "import": "./dist/lib/icu/parser.js",
@@ -88,7 +88,7 @@
     "lint:fix": "eslint 'src/**/*.ts' --fix",
     "format": "prettier --write \"src/**/*.ts\"",
     "clean": "rm -rf dist coverage",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test",
+    "prepublishOnly": "npm run clean && npm run build && npm test",
     "version": "conventional-changelog -p angular -i CHANGELOG.md -s && git add CHANGELOG.md"
   },
   "engines": {
@@ -105,13 +105,16 @@
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^20.11.0",
+    "@typescript-eslint/utils": "^8.58.0",
     "@vitest/coverage-v8": "^1.6.1",
     "eslint": "^10.1.0",
     "globals": "^17.4.0",
     "prettier": "^3.2.0",
+    "rollup": "^4.20.0",
     "tsup": "^8.0.0",
     "typescript": "^5.3.0",
     "typescript-eslint": "^8.58.0",
+    "vite": "^5.4.0",
     "vitest": "^1.2.0"
   },
   "publishConfig": {

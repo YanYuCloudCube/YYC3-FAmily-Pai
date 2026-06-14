@@ -14,10 +14,10 @@
  *
  * brief @yyc3/i18n-core stdio-transport.ts 单元测试
  */
-import { describe, expect, it, beforeEach } from "vitest";
+import { Readable, Writable } from "node:stream";
+import { beforeEach, describe, expect, it } from "vitest";
 import { StdioTransport } from "../../lib/mcp/stdio-transport.js";
 import type { MCPMessage } from "../../lib/mcp/types.js";
-import { Readable, Writable } from "node:stream";
 
 describe("StdioTransport", () => {
   let transport: StdioTransport;
@@ -29,7 +29,7 @@ describe("StdioTransport", () => {
     transport = new StdioTransport();
     writtenData = [];
 
-    mockStdin = new Readable({ read() {} });
+    mockStdin = new Readable({ read() { } });
     mockStdout = new Writable({
       write(chunk: Buffer, _encoding: string, callback: () => void) {
         writtenData.push(chunk.toString());
@@ -160,5 +160,93 @@ describe("StdioTransport", () => {
     mockStdin.push(null);
     await new Promise((resolve) => setTimeout(resolve, 50));
     expect(customTransport.connected).toBe(false);
+  });
+
+  it("should skip messages without Content-Length header", async () => {
+    const received: MCPMessage[] = [];
+    const customTransport = new StdioTransport({
+      stdin: mockStdin,
+      stdout: mockStdout,
+    });
+    await customTransport.connect();
+    customTransport.onMessage((msg) => received.push(msg));
+
+    // Push data without Content-Length header
+    mockStdin.push("garbage-data\r\n\r\n");
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(received.length).toBe(0);
+
+    await customTransport.close();
+  });
+
+  it("should wait for complete message (partial buffer)", async () => {
+    const received: MCPMessage[] = [];
+    const customTransport = new StdioTransport({
+      stdin: mockStdin,
+      stdout: mockStdout,
+    });
+    await customTransport.connect();
+    customTransport.onMessage((msg) => received.push(msg));
+
+    const message = { jsonrpc: "2.0", id: 1, method: "test" };
+    const json = JSON.stringify(message);
+    const fullLength = Buffer.byteLength(json);
+
+    // Push only header + partial body
+    mockStdin.push(`Content-Length: ${fullLength}\r\n\r\n${json.substring(0, 5)}`);
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    // Should not have received incomplete message
+    expect(received.length).toBe(0);
+
+    // Push the rest
+    mockStdin.push(json.substring(5));
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(received.length).toBe(1);
+
+    await customTransport.close();
+  });
+
+  it("should buffer when only partial header received", async () => {
+    const received: MCPMessage[] = [];
+    const customTransport = new StdioTransport({
+      stdin: mockStdin,
+      stdout: mockStdout,
+    });
+    await customTransport.connect();
+    customTransport.onMessage((msg) => received.push(msg));
+
+    const message = { jsonrpc: "2.0", id: 1, method: "test" };
+    const json = JSON.stringify(message);
+    const fullLength = Buffer.byteLength(json);
+
+    // Push complete header + body in one chunk to ensure parsing works
+    mockStdin.push(`Content-Length: ${fullLength}\r\n\r\n${json}`);
+
+    await new Promise((resolve) => setTimeout(resolve, 50));
+    expect(received.length).toBe(1);
+
+    await customTransport.close();
+  });
+
+  it("should handle onMessage not set when receiving", async () => {
+    const customTransport = new StdioTransport({
+      stdin: mockStdin,
+      stdout: mockStdout,
+    });
+    await customTransport.connect();
+    // Do NOT call onMessage — handler is null
+
+    const message = { jsonrpc: "2.0", id: 1, method: "test" };
+    const json = JSON.stringify(message);
+    const framed = `Content-Length: ${Buffer.byteLength(json)}\r\n\r\n${json}`;
+    mockStdin.push(framed);
+
+    // Should not throw
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    await customTransport.close();
   });
 });

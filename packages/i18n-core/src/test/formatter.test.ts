@@ -238,5 +238,37 @@ describe("Formatter Utilities", () => {
       const timestamp = Date.now() - 30000;
       expect(formatRelativeTime(timestamp, "xx-XX")).toBe("just now");
     });
+
+    // Exercise all locale-family lambda functions (minutes/hours/days)
+    describe("all locale families — full function coverage", () => {
+      const localeTests = [
+        { locale: "zh", minutes: "5分钟前", hours: "3小时前", days: "3天前" },
+        { locale: "ja", minutes: "5分前", hours: "3時間前", days: "3日前" },
+        { locale: "ko", minutes: "5분 전", hours: "3시간 전", days: "3일 전" },
+        { locale: "pt", minutes: "5min atrás", hours: "3h atrás", days: "3d atrás" },
+        { locale: "fr", minutes: "il y a 5 min", hours: "il y a 3 h", days: "il y a 3 j" },
+        { locale: "de", minutes: "vor 5 Min.", hours: "vor 3 Std.", days: "vor 3 Tagen" },
+        { locale: "es", minutes: "hace 5 min", hours: "hace 3 h", days: "hace 3 d" },
+        { locale: "ar", minutes: "منذ 5 دقيقة", hours: "منذ 3 ساعة", days: "منذ 3 يوم" },
+        { locale: "en", minutes: "5m ago", hours: "3h ago", days: "3d ago" },
+      ];
+
+      for (const { locale, minutes, hours, days } of localeTests) {
+        it(`should format minutes for ${locale}`, () => {
+          const ts = Date.now() - 5 * 60000;
+          expect(formatRelativeTime(ts, locale)).toBe(minutes);
+        });
+
+        it(`should format hours for ${locale}`, () => {
+          const ts = Date.now() - 3 * 3600000;
+          expect(formatRelativeTime(ts, locale)).toBe(hours);
+        });
+
+        it(`should format days for ${locale}`, () => {
+          const ts = Date.now() - 3 * 86400000;
+          expect(formatRelativeTime(ts, locale)).toBe(days);
+        });
+      }
+    });
   });
 });

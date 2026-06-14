@@ -1,22 +1,22 @@
 /**
  * file es.ts
- * description @yyc3/i18n-core locales/es.ts Traducción al español
+ * description @yyc3/i18n-core locales/es.ts 模块 — Español
  * module @yyc3/i18n-core
  * author YanYuCloudCube Team <admin@0379.email>
  * version 2.4.0
  * created 2026-04-24
- * updated 2026-06-09
+ * updated 2026-06-14
  * status active
- * tags [module],[i18n],[locale-es]
+ * tags [module],[i18n]
  *
  * copyright YanYuCloudCube Team
  * license MIT
  *
- * brief @yyc3/i18n-core locales/es.ts Traducción al español
+ * brief @yyc3/i18n-core locales/es.ts 模块
  */
 export const es = {
   common: {
-    health: "Estado",
+    health: "Salud",
     online: "En línea",
     offline: "Fuera de línea",
     welcome: "Bienvenido",

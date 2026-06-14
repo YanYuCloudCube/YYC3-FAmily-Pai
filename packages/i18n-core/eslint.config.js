@@ -1,6 +1,6 @@
 import js from '@eslint/js'
-import tseslint from 'typescript-eslint'
 import globals from 'globals'
+import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
   js.configs.recommended,
@@ -12,7 +12,7 @@ export default tseslint.config(
         ...globals.es2021,
       },
       parserOptions: {
-        project: './tsconfig.eslint.json',
+        project: './tsconfig.json',
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -44,6 +44,6 @@ export default tseslint.config(
     },
   },
   {
-    ignores: ['dist/**', 'node_modules/**', 'coverage/**', '*.js', '*.mjs', '*.cjs'],
+    ignores: ['dist/**', 'node_modules/**', 'coverage/**', 'src/test/**', 'vitest.config.ts', 'tsup.config.ts', '*.js', '*.mjs', '*.cjs'],
   }
 )

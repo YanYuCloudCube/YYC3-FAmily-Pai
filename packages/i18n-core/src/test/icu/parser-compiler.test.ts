@@ -151,4 +151,185 @@ describe("ICU Parser + Compiler", () => {
       expect(compile("It's a test", {})).toBe("It's a test");
     });
   });
+
+  describe("offset in plural", () => {
+    it("should handle offset in plural rules", () => {
+      const template = "{count, plural, offset:1 =0 {none} one {# item} other {# items}}";
+      // With offset=1 and count=1, displayCount = 0, matches =0
+      expect(compile(template, { count: 1 })).toBe("none");
+      // With offset=1 and count=2, displayCount = 1, matches 'one'
+      expect(compile(template, { count: 2 })).toBe("1 item");
+      // With offset=1 and count=5, displayCount = 4, matches 'other'
+      expect(compile(template, { count: 5 })).toBe("4 items");
+    });
+
+    it("should handle offset with no exact match", () => {
+      // offset is parsed but no =N or category matches — should fallback to other
+      const template = "{n, plural, offset:2 other {# left}}";
+      expect(compile(template, { n: 5 })).toBe("3 left");
+    });
+  });
+
+  describe("custom formatters", () => {
+    it("should use custom formatNumber", () => {
+      const parser = new ICUParser();
+      const { nodes, errors } = parser.parse("{val, number, percent}");
+      expect(errors).toHaveLength(0);
+      const compiler = new ICUCompiler();
+      const result = compiler.compile(nodes, {
+        locale: "en",
+        params: { val: 0.5 },
+        formatNumber: (_locale, value, fmt) => `custom:${fmt}:${value}`,
+      });
+      expect(result).toBe("custom:percent:0.5");
+    });
+
+    it("should use custom formatDate", () => {
+      const parser = new ICUParser();
+      const { nodes, errors } = parser.parse("{d, date, long}");
+      expect(errors).toHaveLength(0);
+      const compiler = new ICUCompiler();
+      const result = compiler.compile(nodes, {
+        locale: "en",
+        params: { d: new Date(2026, 0, 15) },
+        formatDate: (_locale, _value, fmt) => `custom-date:${fmt}`,
+      });
+      expect(result).toBe("custom-date:long");
+    });
+
+    it("should use custom formatTime", () => {
+      const parser = new ICUParser();
+      const { nodes, errors } = parser.parse("{t, time, short}");
+      expect(errors).toHaveLength(0);
+      const compiler = new ICUCompiler();
+      const result = compiler.compile(nodes, {
+        locale: "en",
+        params: { t: new Date(2026, 0, 15, 10, 30) },
+        formatTime: (_locale, _value, fmt) => `custom-time:${fmt}`,
+      });
+      expect(result).toBe("custom-time:short");
+    });
+  });
+
+  describe("number edge cases", () => {
+    it("should handle non-numeric number argument", () => {
+      const result = compile("{val, number}", { val: "abc" });
+      expect(result).toBe("abc");
+    });
+
+    it("should handle undefined number argument", () => {
+      const result = compile("{val, number}", {});
+      expect(result).toBe("");
+    });
+  });
+
+  describe("date edge cases", () => {
+    it("should handle invalid date value", () => {
+      const result = compile("{d, date, short}", { d: "not-a-date" });
+      expect(result).toBe("not-a-date");
+    });
+
+    it("should handle Date object directly", () => {
+      const date = new Date(2026, 0, 15);
+      const result = compile("{d, date, short}", { d: date });
+      expect(result.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe("time edge cases", () => {
+    it("should handle invalid time value", () => {
+      const result = compile("{t, time, short}", { t: "invalid" });
+      expect(result).toBe("invalid");
+    });
+
+    it("should handle Date object for time", () => {
+      const date = new Date(2026, 0, 15, 14, 30);
+      const result = compile("{t, time, short}", { t: date });
+      expect(result.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe("selectOrdinal fallback", () => {
+    it("should fallback to other when no category matches", () => {
+      const template = "{rank, selectOrdinal, one {#st} other {#th}}";
+      // count=4 in English plural → "other" → "#th"
+      const result = compile(template, { rank: 4 }, "en");
+      expect(result).toBe("4th");
+    });
+
+    it("should match category before exact selector in selectOrdinal", () => {
+      // In English, 1 → pluralRule "one" category matches first before =1
+      const template = "{rank, selectOrdinal, =1 {first} one {#st} other {#th}}";
+      const result = compile(template, { rank: 1 }, "en");
+      // Category "one" is checked before exact match =1
+      expect(result).toBe("1st");
+    });
+  });
+
+  describe("select with no other clause", () => {
+    it("should return the raw value when no match and no other", () => {
+      const template = "{gender, select, male {He}}";
+      const result = compile(template, { gender: "female" });
+      expect(result).toBe("female");
+    });
+  });
+
+  describe("plural with no other clause", () => {
+    it("should return displayCount when no other clause", () => {
+      const template = "{n, plural, one {# item}}";
+      // count=5 in English → "other" category, no clause → returns displayCount
+      const result = compile(template, { n: 5 }, "en");
+      expect(result).toBe("5");
+    });
+  });
+
+  describe("French plural rules", () => {
+    it("should use one for 0 and 1 in French", () => {
+      const template = "{n, plural, one {# élément} other {# éléments}}";
+      expect(compile(template, { n: 0 }, "fr")).toBe("0 élément");
+      expect(compile(template, { n: 1 }, "fr")).toBe("1 élément");
+      expect(compile(template, { n: 5 }, "fr")).toBe("5 éléments");
+    });
+  });
+
+  describe("German plural rules", () => {
+    it("should use one for 1 in German", () => {
+      const template = "{n, plural, one {# Tag} other {# Tage}}";
+      expect(compile(template, { n: 1 }, "de")).toBe("1 Tag");
+      expect(compile(template, { n: 5 }, "de")).toBe("5 Tage");
+    });
+  });
+
+  describe("Portuguese plural rules", () => {
+    it("should handle Portuguese plural categories", () => {
+      const template = "{n, plural, one {# item} two {# itens-duplos} other {# itens}}";
+      expect(compile(template, { n: 1 }, "pt")).toBe("1 item");
+      expect(compile(template, { n: 2 }, "pt")).toBe("2 itens-duplos");
+      expect(compile(template, { n: 5 }, "pt")).toBe("5 itens");
+    });
+  });
+
+  describe("unknown locale plural fallback", () => {
+    it("should fallback to English rules for unknown locale", () => {
+      const template = "{n, plural, one {# x} other {# xs}}";
+      const result = compile(template, { n: 1 }, "xx-YY");
+      expect(result).toBe("1 x");
+    });
+  });
+
+  describe("plural with non-numeric count", () => {
+    it("should default count to 0 when param is non-numeric", () => {
+      const template = "{n, plural, =0 {zero} one {# item} other {# items}}";
+      const result = compile(template, { n: "abc" });
+      // Number("abc") || 0 → 0, matches =0
+      expect(result).toBe("zero");
+    });
+
+    it("should handle undefined count", () => {
+      const template = "{n, plural, =0 {zero} other {# items}}";
+      const result = compile(template, {});
+      // Number(undefined) || 0 → 0
+      expect(result).toBe("zero");
+    });
+  });
 });
