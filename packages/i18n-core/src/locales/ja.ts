@@ -1,22 +1,22 @@
 /**
  * file ja.ts
- * description @yyc3/i18n-core locales/ja.ts 日本語翻訳
+ * description @yyc3/i18n-core locales/ja.ts 模块 — 日本語
  * module @yyc3/i18n-core
  * author YanYuCloudCube Team <admin@0379.email>
  * version 2.4.0
  * created 2026-04-24
- * updated 2026-06-09
+ * updated 2026-06-14
  * status active
- * tags [module],[i18n],[locale-ja]
+ * tags [module],[i18n]
  *
  * copyright YanYuCloudCube Team
  * license MIT
  *
- * brief @yyc3/i18n-core locales/ja.ts 日本語翻訳
+ * brief @yyc3/i18n-core locales/ja.ts 模块
  */
 export const ja = {
   common: {
-    health: "稼働状態",
+    health: "ヘルス",
     online: "オンライン",
     offline: "オフライン",
     welcome: "ようこそ",

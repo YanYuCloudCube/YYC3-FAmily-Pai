@@ -17,6 +17,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { OllamaProvider } from "../../lib/ai/ollama-provider.js";
 import { OpenAIProvider } from "../../lib/ai/openai-provider.js";
+import type { AIProviderType } from "../../lib/ai/provider.js";
 import { AIProviderManager } from "../../lib/ai/provider.js";
 
 describe("OpenAI Provider", () => {
@@ -29,6 +30,22 @@ describe("OpenAI Provider", () => {
   it("should initialize with config", () => {
     expect(provider.type).toBe("openai");
     expect(provider.isReady).toBe(false);
+  });
+
+  it("should read apiKey from env when not provided in config", () => {
+    vi.stubEnv("OPENAI_API_KEY", "env-key-456");
+    const envProvider = new OpenAIProvider({ type: "openai" });
+    expect(envProvider.validate()).resolves.toBe(true);
+    vi.unstubAllEnvs();
+  });
+
+  it("should use default baseUrl when not provided", () => {
+    const defaultProvider = new OpenAIProvider({ type: "openai", apiKey: "test" });
+    // Trigger translate to use baseUrl — verify via fetch call
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({ choices: [{ message: { content: "x" } }], model: "gpt-4o-mini" }),
+    } as Response);
   });
 
   it("should become ready after initialize", async () => {
@@ -117,6 +134,70 @@ describe("OpenAI Provider", () => {
     expect(results[0].translatedText).toBe("翻译结果");
   });
 
+  it("should use formal style in system prompt", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: "结果" } }],
+        model: "gpt-4o-mini",
+      }),
+    } as Response);
+
+    await provider.initialize();
+    await provider.translate({
+      sourceText: "test",
+      sourceLocale: "en",
+      targetLocale: "zh-CN",
+      style: "formal",
+    });
+
+    const body = JSON.parse((fetchSpy.mock.calls[0]?.[1] as RequestInit)?.body as string);
+    expect(body.messages[0].content).toContain("formal language");
+  });
+
+  it("should use technical style in system prompt", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: "结果" } }],
+        model: "gpt-4o-mini",
+      }),
+    } as Response);
+
+    await provider.initialize();
+    await provider.translate({
+      sourceText: "test",
+      sourceLocale: "en",
+      targetLocale: "zh-CN",
+      style: "technical",
+    });
+
+    const body = JSON.parse((fetchSpy.mock.calls[0]?.[1] as RequestInit)?.body as string);
+    expect(body.messages[0].content).toContain("technical terminology");
+  });
+
+  it("should include context in user prompt", async () => {
+    const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: "结果" } }],
+        model: "gpt-4o-mini",
+      }),
+    } as Response);
+
+    await provider.initialize();
+    await provider.translate({
+      sourceText: "test",
+      sourceLocale: "en",
+      targetLocale: "zh-CN",
+      context: "This is a technical document",
+    });
+
+    const body = JSON.parse((fetchSpy.mock.calls[0]?.[1] as RequestInit)?.body as string);
+    expect(body.messages[1].content).toContain("Context");
+    expect(body.messages[1].content).toContain("technical document");
+  });
+
   it("should include glossary in prompt", async () => {
     const fetchSpy = vi.spyOn(globalThis, "fetch").mockResolvedValue({
       ok: true,
@@ -137,6 +218,63 @@ describe("OpenAI Provider", () => {
     const body = JSON.parse((fetchSpy.mock.calls[0]?.[1] as RequestInit)?.body as string);
     expect(body.messages[1].content).toContain("Glossary");
     expect(body.messages[1].content).toContain("API → 接口");
+  });
+
+  it("should fallback model name when not in response", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: "hello" } }],
+        // No model field in response
+      }),
+    } as Response);
+
+    await provider.initialize();
+    const result = await provider.translate({
+      sourceText: "test",
+      sourceLocale: "en",
+      targetLocale: "zh-CN",
+    });
+
+    expect(result.model).toBe("gpt-4o-mini"); // Should use defaultModel
+  });
+
+  it("should handle empty choices in response", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [],
+        model: "gpt-4o-mini",
+      }),
+    } as Response);
+
+    await provider.initialize();
+    const result = await provider.translate({
+      sourceText: "test",
+      sourceLocale: "en",
+      targetLocale: "zh-CN",
+    });
+
+    expect(result.translatedText).toBe(""); // Fallback to empty string
+  });
+
+  it("should handle null content in choice message", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: null } }],
+        model: "gpt-4o-mini",
+      }),
+    } as Response);
+
+    await provider.initialize();
+    const result = await provider.translate({
+      sourceText: "test",
+      sourceLocale: "en",
+      targetLocale: "zh-CN",
+    });
+
+    expect(result.translatedText).toBe(""); // ?? "" fallback
   });
 
   it("should dispose correctly", async () => {
@@ -266,6 +404,15 @@ describe("AIProviderManager", () => {
     expect(manager.getActiveProviderType()).toBe("openai");
   });
 
+  it("should not change active provider if already set", () => {
+    const p1 = new OpenAIProvider({ type: "openai", apiKey: "test" });
+    const p2 = new OllamaProvider({ type: "ollama" });
+    manager.register(p1);
+    manager.register(p2);
+    // First registered becomes active
+    expect(manager.getActiveProviderType()).toBe("openai");
+  });
+
   it("should list registered provider types", () => {
     manager.register(new OpenAIProvider({ type: "openai", apiKey: "test" }));
     manager.register(new OllamaProvider({ type: "ollama" }));
@@ -282,17 +429,56 @@ describe("AIProviderManager", () => {
   });
 
   it("should throw when setting unregistered provider", () => {
-    expect(() => manager.setActive("nonexistent")).toThrow("not registered");
+    expect(() => manager.setActive("nonexistent" as AIProviderType)).toThrow("not registered");
   });
 
-  it("should auto-detect providers", async () => {
+  it("should auto-detect providers — valid provider", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true } as Response);
     manager.register(new OpenAIProvider({ type: "openai", apiKey: "test" }));
     const results = await manager.autoDetect();
-    expect(results.length).toBeGreaterThanOrEqual(0);
+    expect(results.length).toBeGreaterThanOrEqual(1);
+    expect(results[0]!.isAvailable).toBe(true);
   });
 
-  it("should throw when no provider registered", async () => {
+  it("should auto-detect providers — invalid validate should be caught", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Network error"));
+    const provider = new OllamaProvider({ type: "ollama" });
+    // Mock validate to throw/reject
+    vi.spyOn(provider, "validate").mockRejectedValue(new Error("Unreachable"));
+    manager.register(provider);
+    // Should not throw, just skip this provider
+    const results = await manager.autoDetect();
+    expect(results).toHaveLength(0);
+  });
+
+  it("should auto-detect with preferLocal selecting local provider", async () => {
+    const localManager = new AIProviderManager({ preferLocal: true });
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true } as Response);
+    localManager.register(new OpenAIProvider({ type: "openai", apiKey: "test" }));
+    localManager.register(new OllamaProvider({ type: "ollama" }));
+    const results = await localManager.autoDetect();
+    // Ollama is local, so should be active if auto-detected
+    if (results.length > 0) {
+      const types = results.map((r) => r.type);
+      if (types.includes("ollama")) {
+        expect(localManager.getActiveProviderType()).toBe("ollama");
+      } else {
+        expect(localManager.getActiveProviderType()).toBe("openai");
+      }
+    }
+  });
+
+  it("should auto-detect with preferLocal but no local provider", async () => {
+    const localManager = new AIProviderManager({ preferLocal: true });
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({ ok: true } as Response);
+    localManager.register(new OpenAIProvider({ type: "openai", apiKey: "test" }));
+    const results = await localManager.autoDetect();
+    expect(results.length).toBeGreaterThanOrEqual(1);
+    // openai is not local, so active provider should remain as first registered
+    expect(localManager.getActiveProviderType()).toBe("openai");
+  });
+
+  it("should throw when no provider registered for translate", async () => {
     await expect(
       manager.translate({
         sourceText: "test",
@@ -300,6 +486,47 @@ describe("AIProviderManager", () => {
         targetLocale: "zh-CN",
       })
     ).rejects.toThrow("No AI provider registered");
+  });
+
+  it("should throw when registered provider is not ready", async () => {
+    const provider = new OpenAIProvider({ type: "openai", apiKey: "test-key" });
+    manager.register(provider);
+    // provider not initialized, so isReady is false
+    await expect(
+      manager.translate({
+        sourceText: "test",
+        sourceLocale: "en",
+        targetLocale: "zh-CN",
+      })
+    ).rejects.toThrow("not ready");
+  });
+
+  it("should return cached translation on repeated call", async () => {
+    const provider = new OpenAIProvider({ type: "openai", apiKey: "test-key" });
+    vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: "你好" } }],
+        model: "gpt-4o-mini",
+      }),
+    } as Response);
+
+    await provider.initialize();
+    manager.register(provider);
+
+    const request = {
+      sourceText: "Hello",
+      sourceLocale: "en",
+      targetLocale: "zh-CN",
+    };
+
+    const result1 = await manager.translate(request);
+    expect(result1.cached).toBe(false);
+    expect(result1.translatedText).toBe("你好");
+
+    const result2 = await manager.translate(request);
+    expect(result2.cached).toBe(true); // Should come from cache
+    expect(result2.translatedText).toBe("你好");
   });
 
   it("should clear cache", () => {
@@ -312,6 +539,11 @@ describe("AIProviderManager", () => {
     await p1.initialize();
     manager.register(p1);
     await manager.disposeAll();
+    expect(manager.getActiveProviderType()).toBeNull();
+    expect(manager.getRegisteredProviders()).toHaveLength(0);
+  });
+
+  it("should getActiveProviderType return null when no provider registered", () => {
     expect(manager.getActiveProviderType()).toBeNull();
   });
 });

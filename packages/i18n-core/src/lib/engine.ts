@@ -173,17 +173,11 @@ export class I18nEngine {
     // Invalidate cache on locale change
     this.cache.clear();
 
-    // Notify plugins and subscribers (with rollback on failure)
-    try {
-      this.plugins.notifyLocaleChange(locale, oldLocale);
-      this.notify();
-    } catch (e) {
-      // Rollback locale on notification failure to maintain consistency
-      this.state.locale = oldLocale;
-      const error = e instanceof Error ? e : new Error(String(e));
-      this.handleError(error, { key: "", locale });
-      return;
-    }
+    // Notify plugins
+    this.plugins.notifyLocaleChange(locale, oldLocale);
+
+    // Notify subscribers
+    this.notify();
 
     if (this.debugMode) {
       logger.debug(`🌍 Locale changed: ${oldLocale} → ${locale}`);
@@ -209,7 +203,7 @@ export class I18nEngine {
   }
 
   private notify(): void {
-    for (const sub of this.subscribers) {
+    for (const sub of Array.from(this.subscribers)) {
       sub(this.state.locale);
     }
   }
@@ -269,12 +263,7 @@ export class I18nEngine {
   }
 
   private isICUMessage(value: string): boolean {
-    // ICU messages have format: {variable, type, ...options}
-    // e.g. {count, plural, =1{...} other{...}}
-    // This regex matches known ICU format types to avoid false positives on
-    // simple interpolation strings like "Hello {name}, please {select}"
-    const icuPattern = /\{[^}]+,(?:plural|select|selectordinal|number|date|time)\s*,/;
-    return icuPattern.test(value);
+    return value.includes("{") && (value.includes(", plural") || value.includes(", select") || value.includes(", selectOrdinal"));
   }
 
   private compileICU(template: string, params: Record<string, string>): string {

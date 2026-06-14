@@ -1,18 +1,18 @@
 /**
  * file ko.ts
- * description @yyc3/i18n-core locales/ko.ts 한국어 번역
+ * description @yyc3/i18n-core locales/ko.ts 模块 — 한국어
  * module @yyc3/i18n-core
  * author YanYuCloudCube Team <admin@0379.email>
  * version 2.4.0
  * created 2026-04-24
- * updated 2026-06-09
+ * updated 2026-06-14
  * status active
- * tags [module],[i18n],[locale-ko]
+ * tags [module],[i18n]
  *
  * copyright YanYuCloudCube Team
  * license MIT
  *
- * brief @yyc3/i18n-core locales/ko.ts 한국어 번역
+ * brief @yyc3/i18n-core locales/ko.ts 模块
  */
 export const ko = {
   common: {
@@ -34,7 +34,7 @@ export const ko = {
   },
   overview: {
     stats: {
-      cronNext: "다음 시작 {time}",
+      cronNext: "다음 실행 {time}",
     },
   },
   welcome: {
