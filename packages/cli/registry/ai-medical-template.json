@@ -1,0 +1,25 @@
+{
+  "name": "ai-medical",
+  "label": "AI 医疗",
+  "description": "AI 辅助医疗诊断样板，集成影像分析、智能问诊与电子病历",
+  "style": "medical-health",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["ai", "medical", "healthcare"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["AIAssistant", "AdvancedBIReports", "ProtectedRoute", "NotificationCenter"],
+  "themes": ["medical-health"]
+}

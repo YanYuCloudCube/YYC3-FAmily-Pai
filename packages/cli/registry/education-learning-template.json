@@ -1,0 +1,18 @@
+{
+  "name": "education-learning",
+  "label": "教育学习",
+  "description": "教育学习 themed template from YYC³ assets",
+  "style": "education-learning",
+  "source": "yyc3-learning-platform",
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.js",
+    "components.json"
+  ]
+}

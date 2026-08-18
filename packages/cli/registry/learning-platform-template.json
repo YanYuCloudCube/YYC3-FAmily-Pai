@@ -1,0 +1,25 @@
+{
+  "name": "learning-platform",
+  "label": "学习平台",
+  "description": "在线教育学习平台样板，课程管理、直播课堂、学习进度追踪",
+  "style": "education-learning",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["education", "lms", "platform"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["TaskManagement", "AdvancedBIReports", "NotificationCenter", "EnhancedMobileExperience"],
+  "themes": ["education-learning"]
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "packages",
+  "entryPoints": [
+    "packages/core",
+    "packages/ai-hub",
+    "packages/emotion",
+    "packages/i18n-core",
+    "packages/ui",
+    "packages/plugins",
+    "packages/mcp-servers",
+    "packages/motion",
+    "packages/effects"
+  ],
+  "out": "docs/api",
+  "name": "YYC³ FAmily π³ API Reference",
+  "readme": "none",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "categorizeByGroup": true,
+  "searchInComments": true
+}

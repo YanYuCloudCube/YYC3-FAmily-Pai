@@ -130,6 +130,166 @@
       "type": "registry:style",
       "registry": "https://yyc3.top/r/minimal-zero-template.json",
       "label": "极简零依赖"
+    },
+    {
+      "name": "ai-intelligent-center",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/ai-intelligent-center-template.json",
+      "label": "AI 智能中心",
+      "description": "集成多模型对话、知识库与智能助手的 AI 综合中心样板",
+      "categories": ["ai", "dashboard", "chatbot"]
+    },
+    {
+      "name": "admin-dashboard",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/admin-dashboard-template.json",
+      "label": "管理仪表盘",
+      "description": "企业级后台管理仪表盘样板，包含权限、用户、数据看板",
+      "categories": ["admin", "dashboard", "enterprise"]
+    },
+    {
+      "name": "landing-page",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/landing-page-template.json",
+      "label": "落地页",
+      "description": "营销转化落地页样板，3D 视觉 + 粒子动效 + 表单收集",
+      "categories": ["landing", "marketing", "3d"]
+    },
+    {
+      "name": "ai-medical",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/ai-medical-template.json",
+      "label": "AI 医疗",
+      "description": "AI 辅助医疗诊断样板，集成影像分析、智能问诊与电子病历",
+      "categories": ["ai", "medical", "healthcare"]
+    },
+    {
+      "name": "learning-platform",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/learning-platform-template.json",
+      "label": "学习平台",
+      "description": "在线教育学习平台样板，课程管理、直播课堂、学习进度追踪",
+      "categories": ["education", "lms", "platform"]
+    },
+    {
+      "name": "smart-city",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/smart-city-template.json",
+      "label": "智慧城市",
+      "description": "智慧城市大屏样板，实时数据可视化、3D 地图、事件联动",
+      "categories": ["dashboard", "visualization", "government"]
+    },
+    {
+      "name": "3d-portal",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/3d-portal-template.json",
+      "label": "3D 门户",
+      "description": "3D 沉浸式门户样板，Spline 场景 + 粒子背景 + 3D 卡片",
+      "categories": ["3d", "portal", "showcase"]
+    },
+    {
+      "name": "crm-system",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/crm-system-template.json",
+      "label": "CRM 系统",
+      "description": "客户关系管理系统样板，客户全生命周期、销售漏斗、合同管理",
+      "categories": ["crm", "enterprise", "business"]
+    },
+    {
+      "name": "data-dashboard",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/data-dashboard-template.json",
+      "label": "数据仪表盘",
+      "description": "数据分析仪表盘样板，多维度数据可视化、实时图表、BI 报表",
+      "categories": ["dashboard", "data", "analytics"]
+    },
+    {
+      "name": "ai-code-ide",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/ai-code-ide-template.json",
+      "label": "AI 代码 IDE",
+      "description": "AI 辅助代码编辑器样板，Monaco Editor + AI 补全 + 多文件管理",
+      "categories": ["ai", "ide", "developer"]
+    },
+    {
+      "name": "financial-quant",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/financial-quant-template.json",
+      "label": "金融量化",
+      "description": "金融量化分析平台样板，实时行情、策略回测、风险监控",
+      "categories": ["finance", "quantitative", "dashboard"]
+    },
+    {
+      "name": "music-player",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/music-player-template.json",
+      "label": "音乐播放器",
+      "description": "音乐播放器样板，播放列表、歌词同步、可视化频谱",
+      "categories": ["music", "media", "entertainment"]
+    },
+    {
+      "name": "devops-monitor",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/devops-monitor-template.json",
+      "label": "DevOps 监控",
+      "description": "DevOps 监控平台样板，CI/CD 流水线、服务健康、日志聚合",
+      "categories": ["devops", "monitoring", "dashboard"]
+    },
+    {
+      "name": "saas-platform",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/saas-platform-template.json",
+      "label": "SaaS 平台",
+      "description": "多租户 SaaS 平台样板，订阅计费、多租户隔离、白标定制",
+      "categories": ["saas", "enterprise", "platform"]
+    },
+    {
+      "name": "ai-call-center",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/ai-call-center-template.json",
+      "label": "AI 呼叫中心",
+      "description": "AI 智能呼叫中心样板，语音识别、智能路由、实时质检",
+      "categories": ["ai", "callcenter", "enterprise"]
+    },
+    {
+      "name": "knowledge-wiki",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/knowledge-wiki-template.json",
+      "label": "知识 Wiki",
+      "description": "企业知识库 Wiki 样板，协同编辑、全文检索、权限分级",
+      "categories": ["knowledge", "wiki", "collaboration"]
+    },
+    {
+      "name": "ecommerce-shop",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/ecommerce-shop-template.json",
+      "label": "电商商店",
+      "description": "电商商店样板，商品管理、购物车、订单流程、支付集成",
+      "categories": ["ecommerce", "shopping", "business"]
+    },
+    {
+      "name": "portfolio",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/portfolio-template.json",
+      "label": "个人作品集",
+      "description": "个人作品集样板，3D 头像、动效展示、项目卡片",
+      "categories": ["portfolio", "personal", "showcase"]
+    },
+    {
+      "name": "table-converter",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/table-converter-template.json",
+      "label": "表格转换器",
+      "description": "表格数据转换工具样板，CSV/Excel/JSON 互转、数据清洗、可视化预览",
+      "categories": ["tool", "converter", "data"]
+    },
+    {
+      "name": "forum-community",
+      "type": "registry:style",
+      "registry": "https://yyc3.top/r/forum-community-template.json",
+      "label": "论坛社区",
+      "description": "论坛社区样板，话题讨论、用户等级、实时通知、富文本编辑",
+      "categories": ["forum", "community", "social"]
     }
   ]
 }

@@ -1,0 +1,25 @@
+{
+  "name": "data-dashboard",
+  "label": "数据仪表盘",
+  "description": "数据分析仪表盘样板，多维度数据可视化、实时图表、BI 报表",
+  "style": "dashboard-data",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["dashboard", "data", "analytics"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["AdvancedBIDashboard", "DashboardRealtimeData", "KPITracking", "AdvancedBIReports"],
+  "themes": ["dashboard-data"]
+}

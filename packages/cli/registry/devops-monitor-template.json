@@ -1,0 +1,25 @@
+{
+  "name": "devops-monitor",
+  "label": "DevOps 监控",
+  "description": "DevOps 监控平台样板，CI/CD 流水线、服务健康、日志聚合",
+  "style": "cli-devops",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["devops", "monitoring", "dashboard"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["SystemStatusMonitor", "DashboardRealtimeData", "NotificationCenter", "AdvancedBIReports"],
+  "themes": ["cli-devops"]
+}

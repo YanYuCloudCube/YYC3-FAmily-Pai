@@ -1,0 +1,13 @@
+{
+  "name": "cli-devops",
+  "label": "终端DevOps",
+  "description": "终端DevOps themed template from YYC³ assets",
+  "style": "cli-devops",
+  "source": "YYC3-DveOps",
+  "files": [
+    "components",
+    "hooks",
+    "styles",
+    "public"
+  ]
+}

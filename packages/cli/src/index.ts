@@ -10,7 +10,9 @@ import { init } from "./commands/init"
 import { mcp } from "./commands/mcp"
 import { migrate } from "./commands/migrate"
 import { registry } from "./commands/registry"
+import { samples } from "./commands/samples"
 import { search } from "./commands/search"
+import { themes } from "./commands/themes"
 import { view } from "./commands/view"
 import { getSplashScreen } from "./utils/splash"
 
@@ -47,6 +49,8 @@ async function main() {
     .addCommand(build)
     .addCommand(mcp)
     .addCommand(registry)
+    .addCommand(samples)
+    .addCommand(themes)
 
   return program
 }

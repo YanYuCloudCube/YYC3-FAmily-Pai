@@ -78,7 +78,7 @@
 ### 核心发布包 (10)
 
 | # | 包 | 版本 | 说明 | npm |
-|---|-----|------|------|-----|
+| --- | ----- | ------ | ------ | ----- |
 | 1 | **@yyc3/core** | 1.4.0 | 核心引擎 — 认证 / MCP / 技能 / 智能体 / 多模态 | [![npm](https://img.shields.io/npm/v/@yyc3/core?style=flat-square)](https://www.npmjs.com/package/@yyc3/core) |
 | 2 | **@yyc3/ai-hub** | 1.4.2 | AI 集成中心 — 八位家人 / Family Compass / 工作流 | [![npm](https://img.shields.io/npm/v/@yyc3/ai-hub?style=flat-square)](https://www.npmjs.com/package/@yyc3/ai-hub) |
 | 3 | **@yyc3/ui** | 2.0.2 | UI 组件库 — 56+ 组件 / shadcn/ui / 主题系统 | [![npm](https://img.shields.io/npm/v/@yyc3/ui?style=flat-square)](https://www.npmjs.com/package/@yyc3/ui) |
@@ -203,7 +203,7 @@ pnpm install
 ```
 
 | 命令 | 说明 |
-|------|------|
+| ------ | ------ |
 | `pnpm -r build` | 构建所有包 |
 | `pnpm -r test` | 测试所有包 (840+ tests) |
 | `pnpm -r typecheck` | 类型检查 |
@@ -216,7 +216,7 @@ pnpm install
 ## 👨‍👩‍👧‍👦 AI Family 八位家人
 
 | 角色 | 全名 | 职责 | 值班 |
-|------|------|------|------|
+| ------ | ------ | ------ | ------ |
 | 🧠 **Master** | 元启·天枢 | 总指挥 · 决策中枢 | 全天候 |
 | 🛡️ **Sentinel** | 智云·守护 | 安全官 · 免疫系统 | 16-22 |
 | 📚 **TianShu** | 格物·宗师 | 质量官 · 进化导师 | 00-06 |
@@ -233,7 +233,7 @@ pnpm install
 ### 五维驱动 · 五高架构 · 五标体系 · 五化转型
 
 | 维度 | 核心理念 | 核心指标 |
-|------|----------|----------|
+| ------ | ---------- | ---------- |
 | **五维** | 时间维 · 空间维 · 属性维 · 事件维 · 关联维 | 全景评估框架 |
 | **五高** | 高可用 · 高性能 · 高安全 · 高扩展 · 高智能 | 架构质量标准 |
 | **五标** | 标准化 · 规范化 · 自动化 · 可视化 · 智能化 | 工程实践体系 |
@@ -244,7 +244,7 @@ pnpm install
 ## 🔧 技术栈
 
 | 类别 | 技术 |
-|------|------|
+| ------ | ------ |
 | 语言 | TypeScript 5.3+ (ESM) |
 | 构建 | tsup (esbuild) |
 | 测试 | Vitest + @vitest/coverage-v8 |
@@ -329,7 +329,7 @@ pnpm install
 ## 📊 项目状态
 
 | 指标 | 状态 | 说明 |
-|------|------|------|
+| ------ | ------ | ------ |
 | 构建 | ✅ Passing | 所有 11 包构建成功 |
 | 类型检查 | ✅ Passing | TypeScript strict mode 零错误 |
 | Lint | ✅ Passing | ESLint 10.x 零错误 |
@@ -371,7 +371,7 @@ pnpm install
 ### Core Published Packages (10)
 
 | # | Package | Version | Description | npm |
-|---|---------|---------|-------------|-----|
+| --- | --------- | --------- | ------------- | ----- |
 | 1 | **@yyc3/core** | 1.4.0 | Core Engine — Auth / MCP / Skills / Agents / Multi-modal | [![npm](https://img.shields.io/npm/v/@yyc3/core?style=flat-square)](https://www.npmjs.com/package/@yyc3/core) |
 | 2 | **@yyc3/ai-hub** | 1.4.2 | AI Integration Hub — 8 Family Members / Family Compass / Workflows | [![npm](https://img.shields.io/npm/v/@yyc3/ai-hub?style=flat-square)](https://www.npmjs.com/package/@yyc3/ai-hub) |
 | 3 | **@yyc3/ui** | 2.0.2 | UI Component Library — 56+ Components / shadcn/ui / Theme System | [![npm](https://img.shields.io/npm/v/@yyc3/ui?style=flat-square)](https://www.npmjs.com/package/@yyc3/ui) |
@@ -496,7 +496,7 @@ pnpm install
 ```
 
 | Command | Description |
-|---------|-------------|
+| --------- | ------------- |
 | `pnpm -r build` | Build all packages |
 | `pnpm -r test` | Test all packages (840+ tests) |
 | `pnpm -r typecheck` | Type check |
@@ -509,7 +509,7 @@ pnpm install
 ## 👨‍👩‍👧‍👦 AI Family — 8 Members
 
 | Role | Full Name | Responsibility | Shift |
-|------|-----------|----------------|-------|
+| ------ | ----------- | ---------------- | ------- |
 | 🧠 **Master** | YuanQi · TianShu | Commander · Decision Center | 24/7 |
 | 🛡️ **Sentinel** | ZhiYun · ShouHu | Security Officer · Immune System | 16-22 |
 | 📚 **TianShu** | GeWu · ZongShi | Quality Officer · Evolution Mentor | 00-06 |
@@ -526,7 +526,7 @@ pnpm install
 ### Five Dimensions · Five Highs · Five Standards · Five Transformations
 
 | Dimension | Core Concept | Key Metrics |
-|-----------|-------------|-------------|
+| ----------- | ------------- | ------------- |
 | **5 Dimensions** | Time · Space · Attribute · Event · Association | Holistic Evaluation Framework |
 | **5 Highs** | High Availability · Performance · Security · Scalability · Intelligence | Architecture Quality Standards |
 | **5 Standards** | Standardization · Normalization · Automation · Visualization · Intelligence | Engineering Practice System |
@@ -537,7 +537,7 @@ pnpm install
 ## 🔧 Tech Stack
 
 | Category | Technology |
-|----------|-----------|
+| ---------- | ----------- |
 | Language | TypeScript 5.3+ (ESM) |
 | Build | tsup (esbuild) |
 | Testing | Vitest + @vitest/coverage-v8 |
@@ -554,7 +554,7 @@ pnpm install
 ## 📊 Project Status
 
 | Metric | Status | Detail |
-|--------|--------|--------|
+| -------- | -------- | -------- |
 | Build | ✅ Passing | All 11 packages build successfully |
 | Typecheck | ✅ Passing | TypeScript strict mode, zero errors |
 | Lint | ✅ Passing | ESLint 10.x, zero errors |
@@ -599,7 +599,7 @@ Please refer to [SECURITY.md](./SECURITY.md) for responsible disclosure of secur
 ## 📚 文档导航 / Docs Navigation
 
 | 文档 / Document | 说明 / Description |
-|----------------|-------------------|
+| ---------------- | ------------------- |
 | [协同公约规范手册](./docs/YYC3-AI-Family-协同公约规范手册.md) | AI Family 协同开发规范 |
 | [五维五高五标五化](./docs/YYC3-AI-Family-五维五高五标五化.md) | 架构哲学核心文件 |
 | [情感文化总铭](./docs/YYC3-AI-FAmily-情感文化总铭.md) | AI Family 情感文化总纲 |

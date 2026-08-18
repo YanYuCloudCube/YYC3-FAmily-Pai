@@ -1,0 +1,20 @@
+{
+  "name": "medical-health",
+  "label": "医疗健康",
+  "description": "医疗健康 themed template from YYC³ assets",
+  "style": "medical-health",
+  "source": "AI-Medical",
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "3d-portal",
+  "label": "3D 门户",
+  "description": "3D 沉浸式门户样板，Spline 场景 + 粒子背景 + 3D 卡片",
+  "style": "cyber-futuristic",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["3d", "portal", "showcase"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["SplineScene", "Card3D", "ParticleCanvas", "Spotlight"],
+  "themes": ["cyber-futuristic", "aurora-gradient"]
+}

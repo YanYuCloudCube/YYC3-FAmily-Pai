@@ -1,0 +1,20 @@
+{
+  "name": "business-management",
+  "label": "商务管理",
+  "description": "商务管理 themed template from YYC³ assets",
+  "style": "business-management",
+  "source": "yyc3-management",
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ]
+}

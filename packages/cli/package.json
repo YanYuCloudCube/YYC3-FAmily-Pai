@@ -1,6 +1,6 @@
 {
   "name": "@yyc3/cli",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "YYC³ UI 智能编程库 CLI — 言启象限 | 语枢未来",
   "type": "module",
   "bin": {

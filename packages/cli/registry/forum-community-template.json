@@ -1,0 +1,25 @@
+{
+  "name": "forum-community",
+  "label": "论坛社区",
+  "description": "论坛社区样板，话题讨论、用户等级、实时通知、富文本编辑",
+  "style": "education-learning",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["forum", "community", "social"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["NotificationCenter", "AdvancedSearch", "TeamCollaboration", "ProfileDialog"],
+  "themes": ["education-learning", "aurora-gradient"]
+}

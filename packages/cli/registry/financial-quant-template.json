@@ -1,0 +1,25 @@
+{
+  "name": "financial-quant",
+  "label": "金融量化",
+  "description": "金融量化分析平台样板，实时行情、策略回测、风险监控",
+  "style": "finance-quantitative",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["finance", "quantitative", "dashboard"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["FinanceModule", "AdvancedBIDashboard", "DashboardRealtimeData", "ProtectedRoute"],
+  "themes": ["finance-quantitative", "dashboard-data"]
+}

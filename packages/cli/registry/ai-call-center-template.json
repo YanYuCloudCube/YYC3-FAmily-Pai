@@ -1,0 +1,25 @@
+{
+  "name": "ai-call-center",
+  "label": "AI 呼叫中心",
+  "description": "AI 智能呼叫中心样板，语音识别、智能路由、实时质检",
+  "style": "ai-intelligent",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["ai", "callcenter", "enterprise"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["AIAssistant", "DashboardRealtimeData", "NotificationCenter", "AdvancedBIReports"],
+  "themes": ["ai-intelligent", "business-management"]
+}

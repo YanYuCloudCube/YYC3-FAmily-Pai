@@ -362,6 +362,9 @@ importers:
       '@types/node':
         specifier: ^20.11.0
         version: 20.19.39
+      '@typescript-eslint/utils':
+        specifier: ^8.58.0
+        version: 8.59.0(eslint@10.2.1)(typescript@5.9.3)
       '@vitest/coverage-v8':
         specifier: ^1.6.1
         version: 1.6.1(vitest@1.6.1(@types/node@20.19.39)(happy-dom@17.6.3)(jsdom@29.1.0(@noble/hashes@1.8.0)))
@@ -374,6 +377,9 @@ importers:
       prettier:
         specifier: ^3.2.0
         version: 3.8.3
+      rollup:
+        specifier: ^4.20.0
+        version: 4.60.2
       tsup:
         specifier: ^8.0.0
         version: 8.5.1(postcss@8.5.13)(typescript@5.9.3)(yaml@2.8.3)
@@ -383,6 +389,9 @@ importers:
       typescript-eslint:
         specifier: ^8.58.0
         version: 8.59.0(eslint@10.2.1)(typescript@5.9.3)
+      vite:
+        specifier: ^5.4.0
+        version: 5.4.21(@types/node@20.19.39)
       vitest:
         specifier: ^1.2.0
         version: 1.6.1(@types/node@20.19.39)(happy-dom@17.6.3)(jsdom@29.1.0(@noble/hashes@1.8.0))

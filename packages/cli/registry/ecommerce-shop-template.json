@@ -1,0 +1,25 @@
+{
+  "name": "ecommerce-shop",
+  "label": "电商商店",
+  "description": "电商商店样板，商品管理、购物车、订单流程、支付集成",
+  "style": "business-management",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["ecommerce", "shopping", "business"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["AdvancedSearch", "EnhancedMobileExperience", "NotificationCenter", "QuickActions"],
+  "themes": ["business-management", "aurora-gradient"]
+}

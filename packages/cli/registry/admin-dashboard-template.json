@@ -1,0 +1,25 @@
+{
+  "name": "admin-dashboard",
+  "label": "管理仪表盘",
+  "description": "企业级后台管理仪表盘样板，包含权限、用户、数据看板",
+  "style": "business-management",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["admin", "dashboard", "enterprise"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["AdvancedBIDashboard", "PermissionManagement", "NotificationCenter", "SystemStatusMonitor"],
+  "themes": ["business-management"]
+}
