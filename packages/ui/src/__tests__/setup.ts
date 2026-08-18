@@ -39,11 +39,11 @@ if (!Element.prototype.scrollIntoView) {
 
 // Mock ResizeObserver for jsdom (required by Radix UI)
 if (!globalThis.ResizeObserver) {
-  globalThis.ResizeObserver = class ResizeObserver {
+  globalThis.ResizeObserver = class {
     observe() { }
     unobserve() { }
     disconnect() { }
-  } as unknown as ResizeObserver
+  } as unknown as typeof ResizeObserver
 }
 
 // Mock navigator.serviceWorker for PWA components
