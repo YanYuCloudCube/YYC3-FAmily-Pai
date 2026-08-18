@@ -11,6 +11,10 @@ export default tseslint.config(
         ...globals.node,
         ...globals.es2021,
       },
+      parserOptions: {
+        project: './tsconfig.eslint.json',
+        tsconfigRootDir: import.meta.dirname,
+      },
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'warn',

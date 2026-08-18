@@ -26,5 +26,5 @@
     },
     "types": ["vitest/globals"]
   },
-  "include": ["src"]
+  "include": ["src", "tsup.config.ts"]
 }
