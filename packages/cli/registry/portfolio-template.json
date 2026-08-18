@@ -1,0 +1,25 @@
+{
+  "name": "portfolio",
+  "label": "个人作品集",
+  "description": "个人作品集样板，3D 头像、动效展示、项目卡片",
+  "style": "minimal-zero",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["portfolio", "personal", "showcase"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["Spotlight", "Card3D", "ParticleCanvas", "EnhancedButton"],
+  "themes": ["minimal-zero", "aurora-gradient"]
+}

@@ -1,7 +1,7 @@
 {
   "name": "@yyc3/ui",
-  "version": "2.0.2",
-  "description": "YYC³ AI Family UI 组件库 — 即拉即用的 React AI 智能系统 UI 组件 + 56个shadcn/ui标准组件",
+  "version": "3.0.0-alpha.2",
+  "description": "YYC³ AI Family UI 组件库 — 56 shadcn/ui 基础组件 + 40 业务组件 + 28 主题系统",
   "type": "module",
   "main": "./dist/index.js",
   "module": "./dist/index.js",
@@ -18,6 +18,50 @@
     "./components": {
       "types": "./dist/components.d.ts",
       "import": "./dist/components.js"
+    },
+    "./business": {
+      "types": "./dist/business.d.ts",
+      "import": "./dist/business.js"
+    },
+    "./business/ai": {
+      "types": "./dist/business/ai.d.ts",
+      "import": "./dist/business/ai.js"
+    },
+    "./business/enterprise": {
+      "types": "./dist/business/enterprise.d.ts",
+      "import": "./dist/business/enterprise.js"
+    },
+    "./business/data": {
+      "types": "./dist/business/data.d.ts",
+      "import": "./dist/business/data.js"
+    },
+    "./business/system": {
+      "types": "./dist/business/system.d.ts",
+      "import": "./dist/business/system.js"
+    },
+    "./business/platform": {
+      "types": "./dist/business/platform.d.ts",
+      "import": "./dist/business/platform.js"
+    },
+    "./business/charts": {
+      "types": "./dist/business/charts.d.ts",
+      "import": "./dist/business/charts.js"
+    },
+    "./business/security": {
+      "types": "./dist/business/security.d.ts",
+      "import": "./dist/business/security.js"
+    },
+    "./business/pwa": {
+      "types": "./dist/business/pwa.d.ts",
+      "import": "./dist/business/pwa.js"
+    },
+    "./business/enhanced": {
+      "types": "./dist/business/enhanced.d.ts",
+      "import": "./dist/business/enhanced.js"
+    },
+    "./business/dialogs": {
+      "types": "./dist/business/dialogs.d.ts",
+      "import": "./dist/business/dialogs.js"
     },
     "./themes": {
       "types": "./dist/themes.d.ts",

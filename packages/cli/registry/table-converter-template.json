@@ -1,0 +1,25 @@
+{
+  "name": "table-converter",
+  "label": "表格转换器",
+  "description": "表格数据转换工具样板，CSV/Excel/JSON 互转、数据清洗、可视化预览",
+  "style": "minimal-zero",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["tool", "converter", "data"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["DataTable", "AdvancedSearch", "MonacoEditor", "QuickActions"],
+  "themes": ["minimal-zero"]
+}

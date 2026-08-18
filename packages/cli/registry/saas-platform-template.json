@@ -1,0 +1,25 @@
+{
+  "name": "saas-platform",
+  "label": "SaaS 平台",
+  "description": "多租户 SaaS 平台样板，订阅计费、多租户隔离、白标定制",
+  "style": "business-management",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["saas", "enterprise", "platform"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["TenantManagement", "PermissionManagement", "AdvancedBIDashboard", "NotificationCenter"],
+  "themes": ["business-management"]
+}

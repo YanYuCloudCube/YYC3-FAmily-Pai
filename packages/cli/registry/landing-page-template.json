@@ -1,0 +1,25 @@
+{
+  "name": "landing-page",
+  "label": "落地页",
+  "description": "营销转化落地页样板，3D 视觉 + 粒子动效 + 表单收集",
+  "style": "cyber-futuristic",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["landing", "marketing", "3d"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["Spotlight", "Card3D", "ParticleCanvas", "EnhancedButton"],
+  "themes": ["cyber-futuristic", "aurora-gradient"]
+}

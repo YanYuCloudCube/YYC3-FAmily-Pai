@@ -1,0 +1,25 @@
+{
+  "name": "ai-code-ide",
+  "label": "AI 代码 IDE",
+  "description": "AI 辅助代码编辑器样板，Monaco Editor + AI 补全 + 多文件管理",
+  "style": "cli-devops",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["ai", "ide", "developer"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["AIAssistant", "MonacoEditor", "AdvancedSearch", "NotificationCenter"],
+  "themes": ["cli-devops"]
+}

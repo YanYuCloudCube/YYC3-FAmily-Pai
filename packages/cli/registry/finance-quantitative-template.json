@@ -1,0 +1,11 @@
+{
+  "name": "finance-quantitative",
+  "label": "金融量化",
+  "description": "金融量化 themed template from YYC³ assets",
+  "style": "finance-quantitative",
+  "source": "AI-Financial-Quantitative-Platform",
+  "files": [
+    "components",
+    "styles"
+  ]
+}

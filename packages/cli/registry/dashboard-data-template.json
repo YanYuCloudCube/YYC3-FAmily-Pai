@@ -1,0 +1,20 @@
+{
+  "name": "dashboard-data",
+  "label": "数据仪表盘",
+  "description": "数据仪表盘 themed template from YYC³ assets",
+  "style": "dashboard-data",
+  "source": "data-dashboard",
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ]
+}

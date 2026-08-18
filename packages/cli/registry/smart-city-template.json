@@ -1,0 +1,25 @@
+{
+  "name": "smart-city",
+  "label": "智慧城市",
+  "description": "智慧城市大屏样板，实时数据可视化、3D 地图、事件联动",
+  "style": "cyber-futuristic",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["dashboard", "visualization", "government"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["DashboardRealtimeData", "AdvancedBIReports", "SplineScene", "NotificationCenter"],
+  "themes": ["cyber-futuristic", "dashboard-data"]
+}

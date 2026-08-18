@@ -1,0 +1,25 @@
+{
+  "name": "music-player",
+  "label": "音乐播放器",
+  "description": "音乐播放器样板，播放列表、歌词同步、可视化频谱",
+  "style": "aurora-gradient",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["music", "media", "entertainment"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["ParticleCanvas", "EnhancedMobileExperience", "TouchGestures", "QuickActions"],
+  "themes": ["aurora-gradient", "cyber-futuristic"]
+}

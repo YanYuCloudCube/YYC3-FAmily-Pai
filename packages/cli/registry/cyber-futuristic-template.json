@@ -1,0 +1,20 @@
+{
+  "name": "cyber-futuristic",
+  "label": "赛博未来",
+  "description": "赛博未来 themed template from YYC³ assets",
+  "style": "cyber-futuristic",
+  "source": "YYC-机械风",
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ]
+}

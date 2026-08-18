@@ -1,0 +1,19 @@
+{
+  "name": "minimal-zero",
+  "label": "极简零依赖",
+  "description": "极简零依赖 themed template from YYC³ assets",
+  "style": "minimal-zero",
+  "source": "Minimalist Portfolio",
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "components.json",
+    "next.config.mjs"
+  ]
+}

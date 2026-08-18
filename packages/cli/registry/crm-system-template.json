@@ -1,0 +1,25 @@
+{
+  "name": "crm-system",
+  "label": "CRM 系统",
+  "description": "客户关系管理系统样板，客户全生命周期、销售漏斗、合同管理",
+  "style": "business-management",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["crm", "enterprise", "business"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["CustomerManagement", "TaskManagement", "AdvancedBIReports", "NotificationCenter"],
+  "themes": ["business-management"]
+}

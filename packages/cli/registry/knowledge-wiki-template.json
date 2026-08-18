@@ -1,0 +1,25 @@
+{
+  "name": "knowledge-wiki",
+  "label": "知识 Wiki",
+  "description": "企业知识库 Wiki 样板，协同编辑、全文检索、权限分级",
+  "style": "education-learning",
+  "source": "yyc3-xy-ai",
+  "framework": "next",
+  "type": "registry:style",
+  "categories": ["knowledge", "wiki", "collaboration"],
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ],
+  "components": ["AdvancedSearch", "TeamCollaboration", "PermissionManagement", "NotificationCenter"],
+  "themes": ["education-learning", "business-management"]
+}

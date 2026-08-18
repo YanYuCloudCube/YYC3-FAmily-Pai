@@ -1,0 +1,20 @@
+{
+  "name": "aurora-gradient",
+  "label": "极光渐变",
+  "description": "极光渐变 themed template from YYC³ assets",
+  "style": "aurora-gradient",
+  "source": "yyc3-Cloud-admin-dashboard",
+  "files": [
+    "app",
+    "components",
+    "lib",
+    "hooks",
+    "styles",
+    "public",
+    "package.json",
+    "tsconfig.json",
+    "tailwind.config.ts",
+    "components.json",
+    "next.config.mjs"
+  ]
+}
