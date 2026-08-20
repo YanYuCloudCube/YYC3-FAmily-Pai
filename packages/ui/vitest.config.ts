@@ -26,14 +26,19 @@ export default defineConfig({
         'src/hooks/use-mobile.ts',
         'src/core/hooks.ts',
         'src/core/index.ts',
-        'src/components/index.ts',
-        'src/components/family/index.ts',
         'src/components/layout.tsx',
-        'src/themes/index.ts',
+        // barrel 再导出文件（无逻辑）
+        '**/index.ts',
+        // 主题纯数据文件（theme-provider.tsx 保持考核）
+        'src/themes/*-theme.ts',
+        // v2 遗留顶层组件 → 已归档至 packages/ui/legacy/（死代码，未发布）
+        'legacy/**',
       ],
       thresholds: {
         statements: 90,
         branches: 75,
+        // v3.0.0：补齐 18 个交互测试文件后 functions 77%
+        // （React 内联箭头计数严苛，健康水位 75+）
         functions: 75,
         lines: 90,
       },
