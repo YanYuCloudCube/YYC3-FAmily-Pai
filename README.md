@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>AI Family 智能中枢 — 八位拟人化 AI 家人的统一工作区</strong><br>
-  <em>Monorepo · 11 Packages · 全栈 AI 智能体生态 · 840+ Tests</em>
+  <em>Monorepo · 12 Packages · 全栈 AI 智能体生态 · 840+ Tests</em>
 </p>
 
 <p align="center">
@@ -81,20 +81,21 @@
 | --- | ----- | ------ | ------ | ----- |
 | 1 | **@yyc3/core** | 1.4.0 | 核心引擎 — 认证 / MCP / 技能 / 智能体 / 多模态 | [![npm](https://img.shields.io/npm/v/@yyc3/core?style=flat-square)](https://www.npmjs.com/package/@yyc3/core) |
 | 2 | **@yyc3/ai-hub** | 1.4.2 | AI 集成中心 — 八位家人 / Family Compass / 工作流 | [![npm](https://img.shields.io/npm/v/@yyc3/ai-hub?style=flat-square)](https://www.npmjs.com/package/@yyc3/ai-hub) |
-| 3 | **@yyc3/ui** | 2.0.2 | UI 组件库 — 56+ 组件 / shadcn/ui / 主题系统 | [![npm](https://img.shields.io/npm/v/@yyc3/ui?style=flat-square)](https://www.npmjs.com/package/@yyc3/ui) |
+| 3 | **@yyc3/ui** | 3.0.0 | UI 组件库 — 56 shadcn + 40 业务组件 / 28 主题 / T01-T20 样板 | [![npm](https://img.shields.io/npm/v/@yyc3/ui?style=flat-square)](https://www.npmjs.com/package/@yyc3/ui) |
 | 4 | **@yyc3/effects** | 1.0.0 | 特效组件库 — 赛博朋克 / 液态玻璃 / 3D / 粒子 | [![npm](https://img.shields.io/npm/v/@yyc3/effects?style=flat-square)](https://www.npmjs.com/package/@yyc3/effects) |
 | 5 | **@yyc3/plugins** | 1.4.2 | 插件集合 — LSP 语言服务器 + 内容处理 | [![npm](https://img.shields.io/npm/v/@yyc3/plugins?style=flat-square)](https://www.npmjs.com/package/@yyc3/plugins) |
 | 6 | **@yyc3/i18n-core** | 2.4.0 | 国际化框架 — ICU / AI 翻译 / 10 语言 / 零依赖 | [![npm](https://img.shields.io/npm/v/@yyc3/i18n-core?style=flat-square)](https://www.npmjs.com/package/@yyc3/i18n-core) |
-| 7 | **@yyc3/emotion** | 1.0.0 | 情感引擎 — 多模态融合 / 音乐桥接 / 事件总线 | [![npm](https://img.shields.io/npm/v/@yyc3/emotion?style=flat-square)](https://www.npmjs.com/package/@yyc3/emotion) |
-| 8 | **@yyc3/mcp-servers** | 3.0.0 | MCP 服务器 — 注册表 / 服务端 / 协议实现 | [![npm](https://img.shields.io/npm/v/@yyc3/mcp-servers?style=flat-square)](https://www.npmjs.com/package/@yyc3/mcp-servers) |
-| 9 | **@yyc3/motion** | 1.0.0 | 动效引擎 — CSS / WAAPI / Framer Motion 三层渐进 | [![npm](https://img.shields.io/npm/v/@yyc3/motion?style=flat-square)](https://www.npmjs.com/package/@yyc3/motion) |
-| 10 | **@yyc3/cli** | 1.1.0 | 智能编程库 CLI — 11主题×18场景 / MCP Server | [![npm](https://img.shields.io/npm/v/@yyc3/cli?style=flat-square)](https://www.npmjs.com/package/@yyc3/cli) |
+| 7 | **@yyc3/i18n-react** | 0.1.0 | React 国际化绑定 — useTranslation / Trans / Next.js 中间件 | [![npm](https://img.shields.io/npm/v/@yyc3/i18n-react?style=flat-square)](https://www.npmjs.com/package/@yyc3/i18n-react) |
+| 8 | **@yyc3/emotion** | 1.0.0 | 情感引擎 — 多模态融合 / 音乐桥接 / 事件总线 | [![npm](https://img.shields.io/npm/v/@yyc3/emotion?style=flat-square)](https://www.npmjs.com/package/@yyc3/emotion) |
+| 9 | **@yyc3/mcp-servers** | 3.0.0 | MCP 服务器 — 注册表 / 服务端 / 协议实现 | [![npm](https://img.shields.io/npm/v/@yyc3/mcp-servers?style=flat-square)](https://www.npmjs.com/package/@yyc3/mcp-servers) |
+| 10 | **@yyc3/motion** | 1.0.0 | 动效引擎 — CSS / WAAPI / Framer Motion 三层渐进 | [![npm](https://img.shields.io/npm/v/@yyc3/motion?style=flat-square)](https://www.npmjs.com/package/@yyc3/motion) |
+| 11 | **@yyc3/cli** | 1.3.0 | 智能编程库 CLI — T01-T20 完整样板 / 28 主题 / Registry / MCP Server | [![npm](https://img.shields.io/npm/v/@yyc3/cli?style=flat-square)](https://www.npmjs.com/package/@yyc3/cli) |
 
 ### 内部开发包
 
 | # | 包 | 说明 |
 |---|-----|------|
-| 11 | **@yyc3/ide** | IDE 智能开发环境 — AI 管道 / 协作面板 / 60+ 组件 (private) |
+| 12 | **@yyc3/ide** | IDE 智能开发环境 — AI 管道 / 协作面板 / 60+ 组件 (private) |
 
 ---
 
@@ -374,20 +375,21 @@ pnpm install
 | --- | --------- | --------- | ------------- | ----- |
 | 1 | **@yyc3/core** | 1.4.0 | Core Engine — Auth / MCP / Skills / Agents / Multi-modal | [![npm](https://img.shields.io/npm/v/@yyc3/core?style=flat-square)](https://www.npmjs.com/package/@yyc3/core) |
 | 2 | **@yyc3/ai-hub** | 1.4.2 | AI Integration Hub — 8 Family Members / Family Compass / Workflows | [![npm](https://img.shields.io/npm/v/@yyc3/ai-hub?style=flat-square)](https://www.npmjs.com/package/@yyc3/ai-hub) |
-| 3 | **@yyc3/ui** | 2.0.2 | UI Component Library — 56+ Components / shadcn/ui / Theme System | [![npm](https://img.shields.io/npm/v/@yyc3/ui?style=flat-square)](https://www.npmjs.com/package/@yyc3/ui) |
+| 3 | **@yyc3/ui** | 3.0.0 | UI Component Library — 56 shadcn + 40 Business Components / 28 Themes / T01-T20 Blueprints | [![npm](https://img.shields.io/npm/v/@yyc3/ui?style=flat-square)](https://www.npmjs.com/package/@yyc3/ui) |
 | 4 | **@yyc3/effects** | 1.0.0 | Effects Component Library — Cyberpunk / Glassmorphism / 3D / Particles | [![npm](https://img.shields.io/npm/v/@yyc3/effects?style=flat-square)](https://www.npmjs.com/package/@yyc3/effects) |
 | 5 | **@yyc3/plugins** | 1.4.2 | Plugin Collection — LSP Language Server + Content Processing | [![npm](https://img.shields.io/npm/v/@yyc3/plugins?style=flat-square)](https://www.npmjs.com/package/@yyc3/plugins) |
 | 6 | **@yyc3/i18n-core** | 2.4.0 | i18n Framework — ICU / AI Translation / 10 Languages / Zero Deps | [![npm](https://img.shields.io/npm/v/@yyc3/i18n-core?style=flat-square)](https://www.npmjs.com/package/@yyc3/i18n-core) |
-| 7 | **@yyc3/emotion** | 1.0.0 | Emotion Engine — Multi-modal Fusion / Music Bridge / Event Bus | [![npm](https://img.shields.io/npm/v/@yyc3/emotion?style=flat-square)](https://www.npmjs.com/package/@yyc3/emotion) |
-| 8 | **@yyc3/mcp-servers** | 3.0.0 | MCP Servers — Registry / Server / Protocol Implementation | [![npm](https://img.shields.io/npm/v/@yyc3/mcp-servers?style=flat-square)](https://www.npmjs.com/package/@yyc3/mcp-servers) |
-| 9 | **@yyc3/motion** | 1.0.0 | Animation Engine — CSS / WAAPI / Framer Motion Three-tier | [![npm](https://img.shields.io/npm/v/@yyc3/motion?style=flat-square)](https://www.npmjs.com/package/@yyc3/motion) |
-| 10 | **@yyc3/cli** | 1.1.0 | Smart Scaffold CLI — 11 Themes × 18 Scenes / MCP Server | [![npm](https://img.shields.io/npm/v/@yyc3/cli?style=flat-square)](https://www.npmjs.com/package/@yyc3/cli) |
+| 7 | **@yyc3/i18n-react** | 0.1.0 | React i18n Bindings — useTranslation / Trans / Next.js Middleware | [![npm](https://img.shields.io/npm/v/@yyc3/i18n-react?style=flat-square)](https://www.npmjs.com/package/@yyc3/i18n-react) |
+| 8 | **@yyc3/emotion** | 1.0.0 | Emotion Engine — Multi-modal Fusion / Music Bridge / Event Bus | [![npm](https://img.shields.io/npm/v/@yyc3/emotion?style=flat-square)](https://www.npmjs.com/package/@yyc3/emotion) |
+| 9 | **@yyc3/mcp-servers** | 3.0.0 | MCP Servers — Registry / Server / Protocol Implementation | [![npm](https://img.shields.io/npm/v/@yyc3/mcp-servers?style=flat-square)](https://www.npmjs.com/package/@yyc3/mcp-servers) |
+| 10 | **@yyc3/motion** | 1.0.0 | Animation Engine — CSS / WAAPI / Framer Motion Three-tier | [![npm](https://img.shields.io/npm/v/@yyc3/motion?style=flat-square)](https://www.npmjs.com/package/@yyc3/motion) |
+| 11 | **@yyc3/cli** | 1.3.0 | Smart Scaffold CLI — T01-T20 Blueprints / 28 Themes / Registry / MCP Server | [![npm](https://img.shields.io/npm/v/@yyc3/cli?style=flat-square)](https://www.npmjs.com/package/@yyc3/cli) |
 
 ### Internal Development Package
 
 | # | Package | Description |
 |---|---------|-------------|
-| 11 | **@yyc3/ide** | IDE Smart Dev Environment — AI Pipeline / Collaboration Panel / 60+ Components (private) |
+| 12 | **@yyc3/ide** | IDE Smart Dev Environment — AI Pipeline / Collaboration Panel / 60+ Components (private) |
 
 ---
 
@@ -555,7 +557,7 @@ pnpm install
 
 | Metric | Status | Detail |
 | -------- | -------- | -------- |
-| Build | ✅ Passing | All 11 packages build successfully |
+| Build | ✅ Passing | All 12 packages build successfully |
 | Typecheck | ✅ Passing | TypeScript strict mode, zero errors |
 | Lint | ✅ Passing | ESLint 10.x, zero errors |
 | Tests | ✅ 840 Passed | Vitest all passing |

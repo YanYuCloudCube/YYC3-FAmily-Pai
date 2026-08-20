@@ -141,6 +141,48 @@ npx create-yyc3-app <name> -t <template>
 | `landing` | 品牌展示 + Spline 3D + 动效 | 3200 |
 | `api` | RESTful API + 认证 + 中间件 | 3400 |
 
+## 完整业务样板（T01-T20）
+
+v1.3.0 起，20 套完整 Next.js 业务样板（源自 UI-MONO blueprints）作为**实体蓝图**随 `@yyc3/cli` 分发，离线可用。生成时自动完成：复制蓝图 → `package.json` 定制（项目名/端口/`@yyc3/ui ^3.0.0`）→ `components.json`（shadcn 协议）→ 主题注入（可选）→ 依赖安装。
+
+```bash
+# 推荐：create-yyc3-app
+npx create-yyc3-app my-admin --blueprint admin-dashboard
+npx create-yyc3-app my-ai --blueprint T01 --theme cyberpunk
+
+# 或：yyc3 init（-t 命中样板编号/语义名/目录名均可）
+yyc3 init -t admin-dashboard -n my-admin
+
+# 查看 / 校验
+yyc3 list --blueprints          # 20 套样板清单（含端口与实体状态）
+yyc3 samples admin-dashboard    # 单套详情（组件/主题/生成命令）
+```
+
+| 编号 | 样板 | 场景 | 端口 |
+|------|------|------|------|
+| T01 | `ai-intelligent-center` | AI 智能中心 | 3300 |
+| T02 | `admin-dashboard` | 管理后台 | 3201 |
+| T03 | `landing-page` | 企业官网 | 3200 |
+| T04 | `ai-medical` | AI 医疗 | 3205 |
+| T05 | `learning-platform` | 学习平台 | 3203 |
+| T06 | `smart-city` | 智慧城市 | 3206 |
+| T07 | `3d-portal` | 3D 门户 | 3207 |
+| T08 | `crm-system` | CRM 系统 | 3208 |
+| T09 | `data-dashboard` | 数据大屏 | 3202 |
+| T10 | `ai-code-ide` | AI 编程 IDE | 3209 |
+| T11 | `financial-quant` | 金融量化 | 3210 |
+| T12 | `music-player` | 音乐播放器 | 3213 |
+| T13 | `devops-monitor` | DevOps 监控 | 3211 |
+| T14 | `saas-platform` | SaaS 平台 | 3212 |
+| T15 | `ai-call-center` | AI 呼叫中心 | 3214 |
+| T16 | `knowledge-wiki` | 知识 Wiki | 3204 |
+| T17 | `ecommerce-shop` | 电商商店 | 3215 |
+| T18 | `portfolio` | 个人作品集 | 3216 |
+| T19 | `table-converter` | 表格转换器 | 3217 |
+| T20 | `forum-community` | 论坛社区 | 3218 |
+
+> 端到端验证：`node scripts/verify-blueprints.mjs --deep`（20 套冒烟 + P0 五套 `next build`）
+
 ## 技术架构
 
 - **基于**: shadcn/ui v4.5.0（MIT）全量源码融合

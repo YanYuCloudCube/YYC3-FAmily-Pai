@@ -6,6 +6,13 @@ import prompts from "prompts"
 import chalk from "chalk"
 import ora from "ora"
 import fs from "fs-extra"
+import {
+  BLUEPRINTS,
+  findBlueprint,
+  scaffoldBlueprint,
+  type BlueprintMeta,
+} from "./templates"
+import { findSample } from "./templates/samples"
 
 type ThemeConfig = {
   title: string
@@ -338,6 +345,67 @@ function generateScenePages(targetDir: string, scenes: SceneConfig[]): Promise<v
   )
 }
 
+/**
+ * 完整业务样板生成（T01-T20）
+ *
+ * 流程：复制蓝图 → package.json 定制（名称/端口/@yyc3 依赖）→
+ *       components.json → 主题注入（可选）→ 依赖安装
+ */
+async function runBlueprintScaffold(
+  blueprint: BlueprintMeta,
+  name: string,
+  targetDir: string,
+  options: {
+    theme?: string
+    port?: number
+    install?: boolean
+  }
+) {
+  const sample = findSample(blueprint.name)
+  const label = sample?.label ?? blueprint.name
+
+  console.log(
+    chalk.cyan(`\n📦 样板: ${blueprint.id} ${label} (${blueprint.dir})`)
+  )
+
+  const result = await scaffoldBlueprint({
+    blueprint,
+    targetDir,
+    theme: options.theme,
+    port: options.port,
+    install: options.install !== false,
+    onPhase: (phase, detail) => {
+      const messages: Record<string, string> = {
+        copy: "复制蓝图文件",
+        customize: `定制 package.json（名称/端口/@yyc3 依赖）`,
+        config: "写入 components.json",
+        theme: `注入主题 ${detail ?? ""}`,
+        install: "安装依赖（可能需要几分钟）",
+      }
+      console.log(chalk.gray(`  → ${messages[phase] ?? phase}`))
+    },
+  })
+
+  console.log(chalk.green(`\n✅ 项目 ${result.projectName} 创建成功！`))
+  console.log(chalk.blue("\n下一步："))
+  console.log(`  cd ${name}`)
+  if (result.installed) {
+    console.log(`  pnpm dev    # http://localhost:${result.port}`)
+  } else {
+    console.log(`  pnpm install && pnpm dev    # http://localhost:${result.port}`)
+  }
+  console.log(
+    chalk.gray(
+      `\n样板: ${blueprint.id} ${label} | 主题: ${result.theme?.label ?? "蓝图原生"} | 端口: ${result.port}`
+    )
+  )
+  console.log(
+    chalk.gray(
+      `可用样板: yyc3 samples | 切换主题: yyc3 themes | 添加组件: yyc3 add <name>`
+    )
+  )
+}
+
 async function createProject(
   name: string,
   options: {
@@ -346,6 +414,8 @@ async function createProject(
     preset?: string
     theme?: string
     scenes?: string
+    blueprint?: string
+    install?: boolean
   }
 ) {
   const targetDir = resolve(process.cwd(), name)
@@ -355,6 +425,74 @@ async function createProject(
     process.exit(1)
   }
 
+  // ===== 完整业务样板模式（T01-T20 实体蓝图）=====
+  let blueprintQuery = options.blueprint
+
+  if (
+    !blueprintQuery &&
+    !options.template &&
+    !options.theme &&
+    !options.preset &&
+    !options.scenes
+  ) {
+    // 全交互模式：首问创建方式
+    const { mode } = await prompts([
+      {
+        type: "select",
+        name: "mode",
+        message: "选择创建方式",
+        choices: [
+          {
+            title: "完整业务样板 (T01-T20)",
+            description: "来自 UI-MONO 的 20 套完整 Next.js 应用，开箱即用",
+            value: "blueprint",
+          },
+          {
+            title: "主题 × 场景自由组合",
+            description: "轻量脚手架，自选视觉主题与业务场景页面",
+            value: "scenes",
+          },
+        ],
+      },
+    ])
+
+    if (mode === "blueprint") {
+      const { blueprint } = await prompts([
+        {
+          type: "select",
+          name: "blueprint",
+          message: "选择业务样板",
+          choices: BLUEPRINTS.map((b) => {
+            const sample = findSample(b.name)
+            return {
+              title: `${b.id} ${sample?.label ?? b.name}`,
+              description: `${sample?.description ?? ""} · 端口 ${b.port}`,
+              value: b.name,
+            }
+          }),
+          initial: 1,
+        },
+      ])
+      blueprintQuery = blueprint
+    }
+  }
+
+  if (blueprintQuery) {
+    const blueprint = findBlueprint(blueprintQuery)
+    if (!blueprint) {
+      console.error(
+        chalk.red(
+          `未知样板: ${blueprintQuery}\n可选: ${BLUEPRINTS.map((b) => b.name).join(", ")}`
+        )
+      )
+      process.exit(1)
+    }
+
+    await runBlueprintScaffold(blueprint, name, targetDir, options)
+    return
+  }
+
+  // ===== 主题 × 场景组合模式（原有流程）=====
   let themeValue = options.theme || options.preset
   let sceneValues: string[] = options.scenes ? options.scenes.split(",") : []
   let port = options.port
@@ -548,9 +686,13 @@ async function createProject(
 const program = new Command()
   .name("create-yyc3-app")
   .description(
-    "YYC³ 项目脚手架 — Theme × Scene 正交组合，一键创建 Next.js 项目"
+    "YYC³ 项目脚手架 — 完整业务样板 (T01-T20) 或 Theme × Scene 正交组合"
   )
   .argument("<name>", "项目名称")
+  .option(
+    "--blueprint <blueprint>",
+    "完整业务样板（T01-T20 编号或语义名，如 T02 / admin-dashboard）"
+  )
   .option(
     "--theme <theme>",
     `视觉主题 (${THEMES.map((t) => t.value).join("/")})`
@@ -562,6 +704,7 @@ const program = new Command()
   .option("-t, --template <template>", "[兼容旧版] 项目模板")
   .option("-p, --port <port>", "开发端口", parseInt)
   .option("--preset <preset>", "[兼容旧版] 等同 --theme")
+  .option("--no-install", "跳过依赖安装")
   .action(createProject)
 
 program.parse()

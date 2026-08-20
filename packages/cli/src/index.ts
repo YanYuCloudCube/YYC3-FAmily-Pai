@@ -7,6 +7,7 @@ import { diff } from "./commands/diff"
 import { docs } from "./commands/docs"
 import { info } from "./commands/info"
 import { init } from "./commands/init"
+import { list } from "./commands/list"
 import { mcp } from "./commands/mcp"
 import { migrate } from "./commands/migrate"
 import { registry } from "./commands/registry"
@@ -46,6 +47,7 @@ async function main() {
     .addCommand(search)
     .addCommand(migrate)
     .addCommand(info)
+    .addCommand(list)
     .addCommand(build)
     .addCommand(mcp)
     .addCommand(registry)

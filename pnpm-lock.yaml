@@ -396,6 +396,61 @@ importers:
         specifier: ^1.2.0
         version: 1.6.1(@types/node@20.19.39)(happy-dom@17.6.3)(jsdom@29.1.0(@noble/hashes@1.8.0))
 
+  packages/i18n-react:
+    dependencies:
+      '@yyc3/i18n-core':
+        specifier: '>=2.4.0'
+        version: 2.4.0(lit@3.3.2)
+    devDependencies:
+      '@eslint/js':
+        specifier: ^10.0.1
+        version: 10.0.1(eslint@10.2.1)
+      '@testing-library/jest-dom':
+        specifier: ^6.9.1
+        version: 6.9.1
+      '@testing-library/react':
+        specifier: ^16.0.0
+        version: 16.3.2(@testing-library/dom@10.4.1)(@types/react-dom@19.2.3(@types/react@19.2.14))(@types/react@19.2.14)(react-dom@19.2.5(react@19.2.5))(react@19.2.5)
+      '@types/react':
+        specifier: 19.2.14
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: 19.2.3
+        version: 19.2.3(@types/react@19.2.14)
+      '@vitejs/plugin-react':
+        specifier: ^4.2.1
+        version: 4.7.0(vite@5.4.21(@types/node@22.19.19))
+      '@vitest/coverage-v8':
+        specifier: ^3.2.4
+        version: 3.2.4(vitest@3.2.4(@types/node@22.19.19)(happy-dom@17.6.3)(jsdom@29.1.0(@noble/hashes@1.8.0))(msw@2.14.2(@types/node@22.19.19)(typescript@5.9.3)))
+      eslint:
+        specifier: ^10.1.0
+        version: 10.2.1
+      globals:
+        specifier: ^17.4.0
+        version: 17.5.0
+      jsdom:
+        specifier: ^29.0.2
+        version: 29.1.0(@noble/hashes@1.8.0)
+      react:
+        specifier: ^19.1.0
+        version: 19.2.5
+      react-dom:
+        specifier: ^19.1.0
+        version: 19.2.5(react@19.2.5)
+      tsup:
+        specifier: ^8.0.0
+        version: 8.5.1(postcss@8.5.13)(typescript@5.9.3)(yaml@2.8.3)
+      typescript:
+        specifier: ^5.5.0
+        version: 5.9.3
+      typescript-eslint:
+        specifier: ^8.58.0
+        version: 8.59.0(eslint@10.2.1)(typescript@5.9.3)
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/node@22.19.19)(happy-dom@17.6.3)(jsdom@29.1.0(@noble/hashes@1.8.0))(msw@2.14.2(@types/node@22.19.19)(typescript@5.9.3))
+
   packages/ide:
     dependencies:
       idb:
@@ -2916,6 +2971,15 @@ packages:
   '@yyc3/core@1.4.0':
     resolution: {integrity: sha512-kOROJg7UtFlTEc/8JirtOmRnd1g01X+iQWxi0G/BsAcJSim4GBSAYNtPCXu6jQZ+TiNXsnLyQ2qKYi5up4tVJA==}
     engines: {node: '>=18.0.0'}
+
+  '@yyc3/i18n-core@2.4.0':
+    resolution: {integrity: sha512-46d9HCNX3MD2lVk3InKbwTItayxq9my4edud9Ujo9k+lyOORKpJmdxPCthUG//5tKxaicJEWB5V0VKKuPRnR8Q==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      lit: ^3.0.0
+    peerDependenciesMeta:
+      lit:
+        optional: true
 
   abbrev@1.1.1:
     resolution: {integrity: sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q==}
@@ -7888,7 +7952,7 @@ snapshots:
 
   '@types/babel__core@7.20.5':
     dependencies:
-      '@babel/parser': 7.29.2
+      '@babel/parser': 7.29.3
       '@babel/types': 7.29.0
       '@types/babel__generator': 7.27.0
       '@types/babel__template': 7.4.4
@@ -7900,7 +7964,7 @@ snapshots:
 
   '@types/babel__template@7.4.4':
     dependencies:
-      '@babel/parser': 7.29.2
+      '@babel/parser': 7.29.3
       '@babel/types': 7.29.0
 
   '@types/babel__traverse@7.28.0':
@@ -8347,6 +8411,10 @@ snapshots:
     dependencies:
       eventemitter3: 5.0.4
       zod: 3.25.76
+
+  '@yyc3/i18n-core@2.4.0(lit@3.3.2)':
+    optionalDependencies:
+      lit: 3.3.2
 
   abbrev@1.1.1: {}
 

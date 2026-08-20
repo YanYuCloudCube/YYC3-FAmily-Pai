@@ -25,6 +25,7 @@ import {
   listCategories,
   type SampleCategory,
 } from "../templates/samples"
+import { findBlueprint } from "../templates/blueprints"
 
 const samplesOptionsSchema = z.object({
   category: z.string().optional(),
@@ -142,12 +143,17 @@ function printSamplesTable(list: typeof SAMPLES, category?: string) {
 }
 
 function printSampleDetail(sample: (typeof SAMPLES)[number]) {
+  const blueprint = findBlueprint(sample.name)
+
   logger.break()
   logger.log(highlighter.info(`Sample: ${sample.name}`))
   logger.break()
 
   printEntries({
     name: sample.name,
+    ...(blueprint
+      ? { blueprint: `${blueprint.id} (${blueprint.dir})`, port: String(blueprint.port) }
+      : {}),
     label: sample.label,
     description: sample.description,
     framework: sample.framework,
@@ -179,6 +185,9 @@ function printSampleDetail(sample: (typeof SAMPLES)[number]) {
 
   logger.break()
   logger.log(`  Create project: ${highlighter.info(`yyc3 init ${sample.name} my-project`)}`)
+  logger.log(
+    `  Or:            ${highlighter.info(`create-yyc3-app my-project --blueprint ${sample.name}`)}`
+  )
   logger.break()
 }
 
