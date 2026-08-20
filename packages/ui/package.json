@@ -167,6 +167,22 @@
     {
       "path": "dist/index.js",
       "limit": "15 kB"
+    },
+    {
+      "path": "dist/shadcn.js",
+      "limit": "30 kB"
+    },
+    {
+      "path": "dist/business.js",
+      "limit": "10 kB"
+    },
+    {
+      "path": "dist/themes.js",
+      "limit": "10 kB"
+    },
+    {
+      "path": "dist/core.js",
+      "limit": "10 kB"
     }
   ]
 }
