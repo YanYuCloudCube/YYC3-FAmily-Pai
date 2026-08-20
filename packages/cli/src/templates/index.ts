@@ -7,6 +7,30 @@ import { vite } from "./vite"
 
 export { createTemplate, resolveTemplate } from "./create-template"
 export type { TemplateInitOptions, TemplateOptions } from "./create-template"
+export {
+  BLUEPRINTS,
+  BLUEPRINT_DEP_OVERRIDES,
+  BLUEPRINT_UI_VERSION,
+  blueprintDefaultTheme,
+  blueprintDirExists,
+  findBlueprint,
+  resolveBlueprintsRoot,
+} from "./blueprints"
+export type { BlueprintMeta } from "./blueprints"
+export {
+  scaffoldBlueprint,
+  buildComponentsJson,
+  buildReadme,
+  customizePackageJson,
+  injectTheme,
+  injectThemeIntoGlobalsCss,
+  replacePort,
+} from "./scaffold-blueprint"
+export type {
+  ScaffoldBlueprintOptions,
+  ScaffoldBlueprintResult,
+  ScaffoldPhase,
+} from "./scaffold-blueprint"
 
 export const templates = {
   next,

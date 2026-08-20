@@ -5,6 +5,7 @@
     { "path": "packages/ai-hub" },
     { "path": "packages/emotion" },
     { "path": "packages/i18n-core" },
+    { "path": "packages/i18n-react" },
     { "path": "packages/ui" },
     { "path": "packages/effects" },
     { "path": "packages/plugins" },

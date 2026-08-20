@@ -1,0 +1,6 @@
+import type { Metadata } from "next"
+import "./globals.css"
+export const metadata: Metadata = { title: "YYC³ CRM", description: "客户管理·跟进记录·销售漏斗" }
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return <html lang="zh-CN" suppressHydrationWarning><body className="antialiased"><div className="flex h-screen bg-background"><aside className="w-64 border-r border-border bg-sidebar-background flex flex-col shrink-0"><div className="h-16 flex items-center px-6 border-b border-border"><div className="flex items-center gap-2"><div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center"><span className="text-primary-foreground text-xs font-bold">CRM</span></div><div><div className="text-sm font-semibold">YYC³ CRM</div><div className="text-xs text-muted-foreground">客户管理系统</div></div></div></div><nav className="flex-1 p-3 space-y-1">{[{ l: "客户列表", i: "👥" }, { l: "跟进记录", i: "📝" }, { l: "销售漏斗", i: "📊" }, { l: "合同管理", i: "📄" }, { l: "数据分析", i: "📈" }].map(item => <a key={item.l} href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-sidebar-foreground/70 hover:bg-sidebar-accent transition-colors"><span>{item.i}</span>{item.l}</a>)}</nav></aside><main className="flex-1 overflow-y-auto">{children}</main></div></body></html>
+}

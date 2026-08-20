@@ -24,8 +24,8 @@ const searchOptionsSchema = z.object({
 
 export const search = new Command()
   .name("search")
-  .alias("list")
-  .description("search items from registries")
+  // 注：原 shadcn 的 "list" 别名已让位给独立的 yyc3 list 聚合命令（模板/样板/主题）
+  .description("search items from registries (see also: yyc3 list)")
   .argument(
     "<registries...>",
     "the registry names or urls to search items from. Names must be prefixed with @."

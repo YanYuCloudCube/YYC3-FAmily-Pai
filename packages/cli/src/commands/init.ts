@@ -19,7 +19,12 @@ import {
   getTemplateForFramework,
   resolveTemplate,
   templates,
+  BLUEPRINTS,
+  findBlueprint,
+  scaffoldBlueprint,
+  type BlueprintMeta,
 } from "../templates/index"
+import { findSample } from "../templates/samples"
 import { addComponents } from "../utils/add-components"
 import { createProject } from "../utils/create-project"
 import { loadEnvFiles } from "../utils/env-loader"
@@ -121,7 +126,7 @@ export const init = new Command()
   .argument("[components...]", "names, url or local path to component")
   .option(
     "-t, --template <template>",
-    "the template to use. (next, start, vite, react-router, laravel, astro)"
+    "the template to use. (next, start, vite, react-router, laravel, astro, or a T01-T20 blueprint like admin-dashboard)"
   )
   .option("-b, --base <base>", "the component library to use. (radix, base)")
   .option("--monorepo", "scaffold a monorepo project.")
@@ -170,6 +175,87 @@ export const init = new Command()
         cwd: path.resolve(opts.cwd),
       })
       const presetsByName = new Map(Object.entries(DEFAULT_PRESETS))
+
+      // 蓝图脚手架执行（-t 命中 / 空目录位置参数 / 交互式选择 三处复用）
+      const scaffoldBlueprintProject = async (
+        blueprint: BlueprintMeta,
+        projectName: string
+      ): Promise<void> => {
+        // 样板路径不走 shadcn init 流程，先摘除备份恢复监听
+        process.removeListener("exit", restoreBackupOnExit)
+
+        const targetDir = path.resolve(options.cwd, projectName)
+        const sample = findSample(blueprint.name)
+
+        logger.break()
+        logger.log(
+          `  样板: ${highlighter.info(`${blueprint.id} ${sample?.label ?? blueprint.name}`)}`
+        )
+        if (sample?.description) {
+          logger.log(`  ${sample.description}`)
+        }
+        logger.break()
+
+        try {
+          const result = await scaffoldBlueprint({
+            blueprint,
+            targetDir,
+            install: options.silent ? false : undefined,
+            onPhase: (phase, detail) => {
+              const messages: Record<string, string> = {
+                copy: "复制蓝图文件",
+                customize: "定制 package.json",
+                config: "写入 components.json",
+                theme: `注入主题 ${detail ?? ""}`,
+                install: "安装依赖",
+              }
+              logger.log(`  → ${messages[phase] ?? phase}`)
+            },
+          })
+
+          logger.break()
+          logger.log(
+            `项目创建成功: ${highlighter.info(result.projectName)}（端口 ${result.port}）`
+          )
+          logger.break()
+          logger.log("  下一步：")
+          logger.log(`    cd ${projectName}`)
+          logger.log(
+            `    ${result.installed ? "pnpm dev" : "pnpm install && pnpm dev"}`
+          )
+          logger.break()
+        } catch (error) {
+          handleError(error)
+        }
+        process.exit(0)
+      }
+
+      // ===== 完整业务样板路由（T01-T20 实体蓝图）=====
+      // 两种入口：
+      //   yyc3 init -t <blueprint> -n <name>   （-t 值命中蓝图编号/语义名/目录名）
+      //   yyc3 init <blueprint> [name]         （空目录下的位置参数形式）
+      const blueprintFromFlag = options.template
+        ? findBlueprint(options.template)
+        : undefined
+
+      let blueprintFromArg: BlueprintMeta | undefined
+      const firstComponent = components[0]
+      if (
+        !blueprintFromFlag &&
+        firstComponent &&
+        !fsExtra.existsSync(path.resolve(options.cwd, "package.json"))
+      ) {
+        blueprintFromArg = findBlueprint(firstComponent)
+      }
+
+      const blueprint = blueprintFromFlag ?? blueprintFromArg
+      if (blueprint) {
+        const projectName =
+          options.name ??
+          (blueprintFromArg && components[1] ? components[1] : blueprint.name)
+        await scaffoldBlueprintProject(blueprint, projectName)
+        return
+      }
 
       let presetBase: string | undefined
 
@@ -315,16 +401,38 @@ export const init = new Command()
             type: "select",
             name: "template",
             message: "Select a template",
-            choices: Object.entries(templates).map(([value, t]) => ({
-              title: t.title,
-              value,
-              description: t.description,
-              disabled: options.monorepo && value === "laravel",
-            })),
+            choices: [
+              // 完整业务样板（T01-T20 实体蓝图）
+              ...BLUEPRINTS.map((b) => {
+                const sample = findSample(b.name)
+                return {
+                  title: `★ ${b.id} ${sample?.label ?? b.name}`,
+                  value: b.name,
+                  description: `${sample?.description ?? ""} · 完整样板 · 端口 ${b.port}`,
+                }
+              }),
+              // 框架模板（next / vite / start / ...）
+              ...Object.entries(templates).map(([value, t]) => ({
+                title: t.title,
+                value,
+                description: t.description,
+                disabled: options.monorepo && value === "laravel",
+              })),
+            ],
           })
 
           if (!template) {
             process.exit(1)
+          }
+
+          // 蓝图选择 → 实体样板脚手架路径
+          const selectedBlueprint = findBlueprint(template)
+          if (selectedBlueprint) {
+            await scaffoldBlueprintProject(
+              selectedBlueprint,
+              options.name ?? selectedBlueprint.name
+            )
+            return
           }
 
           options.template = template

@@ -114,10 +114,13 @@ npx create-yyc3-app my-app
 ```bash
 npx create-yyc3-app my-app
 
+# 从 20 套完整业务样板生成（推荐，开箱即用的完整应用）
+npx create-yyc3-app my-app --blueprint admin-dashboard
+
 # 指定主题
 npx create-yyc3-app my-app --theme cyberpunk
 
-# 指定场景
+# 指定场景（轻量脚手架模式）
 npx create-yyc3-app my-app --scenes ai-chat,admin-dashboard
 
 # 指定端口
@@ -147,7 +150,7 @@ yyc3 diff button
 
 | 命令 | 说明 | 示例 |
 | ------ | ------ | ------ |
-| `yyc3 init` | 初始化项目配置 | `yyc3 init` |
+| `yyc3 init` | 初始化项目配置（`-t` 可命中 T01-T20 样板） | `yyc3 init -t admin-dashboard -n my-app` |
 | `yyc3 add <component>` | 添加组件到项目 | `yyc3 add button card` |
 | `yyc3 build` | 构建注册表 | `yyc3 build` |
 | `yyc3 diff <component>` | 对比组件变更 | `yyc3 diff button` |
@@ -155,6 +158,7 @@ yyc3 diff button
 | `yyc3 info` | 环境信息 | `yyc3 info` |
 | `yyc3 view <component>` | 预览组件 | `yyc3 view card` |
 | `yyc3 search <query>` | 搜索组件 | `yyc3 search table` |
+| `yyc3 list` | 列出模板/样板/主题 | `yyc3 list --blueprints` |
 | `yyc3 migrate` | 迁移工具 | `yyc3 migrate --radix` |
 | `yyc3 apply` | 应用变更 | `yyc3 apply` |
 | `yyc3 mcp` | MCP Server 管理 | `yyc3 mcp init` |
@@ -254,6 +258,46 @@ yyc3 samples --category ai
 
 # JSON 输出（便于脚本消费）
 yyc3 samples ai-intelligent-center --json
+```
+
+### 从样板生成项目（v1.3.0+）
+
+20 套样板均为**完整 Next.js 应用实体**（随 `@yyc3/cli` 包分发，离线可用）。生成时会自动完成：复制蓝图 → 改写 `package.json`（项目名/端口/`@yyc3/ui ^3.0.0`）→ 写入 `components.json`（shadcn 协议）→ 主题注入（可选）→ 依赖安装。
+
+```bash
+# 方式一：create-yyc3-app（推荐）
+npx create-yyc3-app my-admin --blueprint admin-dashboard
+npx create-yyc3-app my-ai --blueprint T01 --theme cyberpunk   # 编号 + 主题注入
+npx create-yyc3-app my-crm --blueprint crm-system --no-install # 跳过安装
+
+# 方式二：yyc3 init
+yyc3 init -t admin-dashboard -n my-admin          # -t 命中样板即走实体管线
+yyc3 init admin-dashboard my-admin                # 空目录下的位置参数形式
+
+# 方式三：全交互（不带任何参数，首问选择「完整业务样板」）
+npx create-yyc3-app my-app
+
+# 查看全部可用样板 / 模板 / 主题
+yyc3 list
+yyc3 list --blueprints --json
+```
+
+生成完成后即可开发：
+
+```bash
+cd my-admin
+pnpm dev          # 端口与样板一致（如 admin-dashboard → 3201）
+yyc3 add button   # components.json 已就位，组件添加开箱可用
+```
+
+### 验证脚本
+
+仓库根目录提供端到端验证（CI 可复用）：
+
+```bash
+pnpm --filter @yyc3/cli build
+node scripts/verify-blueprints.mjs          # 20 套全量冒烟
+node scripts/verify-blueprints.mjs --deep   # + P0 五套 (T02/T03/T08/T09/T14) 安装并 next build
 ```
 
 ---
