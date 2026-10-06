@@ -106,15 +106,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Validate version matches tag
+      - name: Skip packages whose version differs from tag
         run: |
           PKG_VERSION=$(node -p "require('./packages/${{ matrix.package }}/package.json').version")
           TAG_VERSION=${GITHUB_REF#refs/tags/v}
-          echo "Package version: $PKG_VERSION"
-          echo "Tag version: $TAG_VERSION"
+          echo "Package version: $PKG_VERSION | Tag version: $TAG_VERSION"
           if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
-            echo "::error::Package version $PKG_VERSION does not match tag $TAG_VERSION"
-            exit 1
+            echo "::notice::@yyc3/${{ matrix.package }} 版本($PKG_VERSION)与 tag($TAG_VERSION)不一致，本轮跳过发布；需要发布时单独打对应版本的 tag"
+            echo "SKIP_PUBLISH=true" >> "$GITHUB_ENV"
           fi
 
       - name: Determine dist-tag
@@ -129,9 +128,11 @@ jobs:
           fi
 
       - name: Build package
+        if: env.SKIP_PUBLISH != 'true'
         run: pnpm --filter @yyc3/${{ matrix.package }} run build
 
       - name: Publish to npm
+        if: env.SKIP_PUBLISH != 'true'
         run: pnpm --filter @yyc3/${{ matrix.package }} publish --access public
           --provenance --tag ${{ steps.tag.outputs.tag }}
         env:
