@@ -589,7 +589,7 @@ export class ThemeManager extends EventEmitter {
       this.registerTheme(theme);
       return theme;
     } catch (error) {
-      throw new Error(`Failed to import theme: ${error}`);
+      throw new Error(`Failed to import theme: ${error}`, { cause: error });
     }
   }
 
