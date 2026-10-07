@@ -1,6 +1,6 @@
 {
   "name": "@yyc3/ui",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.3",
   "description": "YYC³ AI Family UI 组件库 — 56 shadcn/ui 基础组件 + 40 业务组件 + 28 主题系统",
   "type": "module",
   "main": "./dist/index.js",

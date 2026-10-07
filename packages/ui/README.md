@@ -767,6 +767,42 @@ const { theme, mode, setMode } = useTheme()
 
 ---
 
+### 实用 Hooks 库（2026-10 移植批次，17 个）
+
+源自家族 UI 资产库（yyc3-ui-organized 零依赖集合）实测移植，全部带测试（`src/hooks/__tests__/`，9 个测试文件 84 个用例）：
+
+| Hook | 说明 |
+|------|------|
+| `useAI` | AI 对话（SSE 流式/多提供商/配置持久化/失败降级模拟） |
+| `usePersistedState` | localStorage 持久化状态（`yyc3_` 前缀） |
+| `useRecentViews` | 最近访问追踪（去重、上限 8、排除 dashboard） |
+| `useChannelConfig` | 按 channel 持久化的 AI 配置 + 4 组预设（General/Coding/Creative/Local-Secure） |
+| `useChannelManager` | 多渠道管理（创建/删除/重命名/激活，保护 main 渠道） |
+| `useChatPersistence` | 聊天记录持久化（5MB 配额清理、30 天保留、导入导出） |
+| `useUISettings` | UI 设置持久化（v1→v2 迁移、主题色/字体/字号解析） |
+| `useResponsive` | 响应式状态（设备类型/方向/触摸/pixelRatio） |
+| `useViewport` | 视口尺寸 |
+| `useScrollPosition` | 滚动位置（passive 监听） |
+| `useVisibility` | 页面可见性 |
+| `useNetworkStatus` | 网络在线状态与 effectiveType |
+| `useBatteryStatus` | 电池状态（支持时） |
+| `useFoldableScreen` | 折叠屏折叠/展开检测 |
+| `useNavigationContext` | 跨模块导航上下文联动（高亮/筛选/推荐） |
+| `generateRecommendations` | 导航推荐生成辅助函数 |
+| `useNotifications` | 应用内通知状态（增/已读/全部已读/删/清空/未读数/新标志） |
+
+> `useMediaQuery` 由 core 层提供（与 core/hooks.ts 统一）；类型 `AIConfig/AIMessage/UISettings/Chat/Channel/Notification` 等随 hooks 一并导出。
+
+#### 新增原子组件
+
+| 组件 | 说明 |
+|------|------|
+| `GlassCard` | 液态玻璃容器（毛玻璃/边框/悬停/glowColor 发光/可点击缩放） |
+| `TypingIndicator` | 终端风格 AI 打字指示器（脉冲动画/生成日志） |
+
+---
+
+
 ## 🎨 最佳实践
 
 ### ✅ 推荐做法
