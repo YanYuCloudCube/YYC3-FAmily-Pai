@@ -30,7 +30,8 @@
     "./multimodal": {
       "types": "./dist/multimodal/index.d.ts",
       "import": "./dist/multimodal/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [

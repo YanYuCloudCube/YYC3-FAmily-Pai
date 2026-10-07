@@ -4,14 +4,15 @@
   "description": "YYC³ UI 智能编程库 CLI — 言启象限 | 语枢未来",
   "type": "module",
   "bin": {
-    "yyc3": "./dist/bin.js",
+    "yyc3-ui": "./dist/bin.js",
     "create-yyc3-app": "./dist/create-app.js"
   },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [

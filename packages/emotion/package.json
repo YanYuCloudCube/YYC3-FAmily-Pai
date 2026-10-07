@@ -22,7 +22,8 @@
     "./event-bus": {
       "types": "./dist/event-bus/index.d.ts",
       "import": "./dist/event-bus/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [

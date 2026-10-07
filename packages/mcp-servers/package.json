@@ -18,7 +18,8 @@
     "./registry": {
       "types": "./dist/registry/index.d.ts",
       "import": "./dist/registry/index.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [

@@ -219,7 +219,17 @@ jobs:
         run: pnpm -r build
 
       - name: Check package sizes
-        run: pnpm -r exec size-limit
+        # 仅对声明了 size-limit 配置的项目执行（docs-site 等无配置项目直接报
+        # "Create Size Limit config" 错误，导致 pnpm -r exec size-limit 整体失败）
+        run: |
+          for d in packages/*/; do
+            if node -e "process.exit(require('./$d/package.json')['size-limit'] ? 0 : 1)"; then
+              echo "▶ size-limit: $d"
+              (cd "$d" && npx size-limit)
+            else
+              echo "↷ skip (无 size-limit 配置): $d"
+            fi
+          done
 
   secrets-scan:
     name: Scan for Secrets
