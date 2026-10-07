@@ -18,7 +18,8 @@
     "./content": {
       "types": "./dist/content.d.ts",
       "import": "./dist/content.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "sideEffects": false,
   "files": [

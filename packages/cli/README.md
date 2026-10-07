@@ -1,3 +1,5 @@
+> ℹ️ **2026-10 bin 更名**：可执行文件 `yyc3` → `yyc3-ui`（避免与 [yyc3-cli](https://github.com/YYC-Cube/YYC3-CLI) 管理 CLI 的同名 bin 冲突）。命令用法不变，仅前缀变化。
+
 ---
 file: README.md
 description: "@yyc3/cli — YYC³ UI 智能编程库 CLI"
@@ -60,27 +62,27 @@ category: package
 
 ### 📦 组件管理
 
-- **`yyc3 add`** — 从注册表添加 UI 组件
-- **`yyc3 init`** — 初始化项目配置
-- **`yyc3 build`** — 构建组件注册表
-- **`yyc3 diff`** — 组件差异对比
+- **`yyc3-ui add`** — 从注册表添加 UI 组件
+- **`yyc3-ui init`** — 初始化项目配置
+- **`yyc3-ui build`** — 构建组件注册表
+- **`yyc3-ui diff`** — 组件差异对比
 
 ### 🔍 搜索与浏览
 
-- **`yyc3 search`** — 模糊搜索组件
-- **`yyc3 view`** — 预览组件效果
-- **`yyc3 docs`** — 查看组件文档
-- **`yyc3 info`** — 环境信息诊断
+- **`yyc3-ui search`** — 模糊搜索组件
+- **`yyc3-ui view`** — 预览组件效果
+- **`yyc3-ui docs`** — 查看组件文档
+- **`yyc3-ui info`** — 环境信息诊断
 
 ### 🔄 迁移工具
 
-- **`yyc3 migrate`** — 自动迁移（Radix / Icons / RTL）
-- **`yyc3 apply`** — 应用变更到项目
+- **`yyc3-ui migrate`** — 自动迁移（Radix / Icons / RTL）
+- **`yyc3-ui apply`** — 应用变更到项目
 
 ### 🔌 MCP Server
 
-- **`yyc3 mcp init`** — 初始化 MCP Server
-- **`yyc3 registry`** — 注册表管理命令
+- **`yyc3-ui mcp init`** — 初始化 MCP Server
+- **`yyc3-ui registry`** — 注册表管理命令
 
 ---
 
@@ -150,21 +152,21 @@ yyc3 diff button
 
 | 命令 | 说明 | 示例 |
 | ------ | ------ | ------ |
-| `yyc3 init` | 初始化项目配置（`-t` 可命中 T01-T20 样板） | `yyc3 init -t admin-dashboard -n my-app` |
-| `yyc3 add <component>` | 添加组件到项目 | `yyc3 add button card` |
-| `yyc3 build` | 构建注册表 | `yyc3 build` |
-| `yyc3 diff <component>` | 对比组件变更 | `yyc3 diff button` |
-| `yyc3 docs <component>` | 查看组件文档 | `yyc3 docs dialog` |
-| `yyc3 info` | 环境信息 | `yyc3 info` |
-| `yyc3 view <component>` | 预览组件 | `yyc3 view card` |
-| `yyc3 search <query>` | 搜索组件 | `yyc3 search table` |
-| `yyc3 list` | 列出模板/样板/主题 | `yyc3 list --blueprints` |
-| `yyc3 migrate` | 迁移工具 | `yyc3 migrate --radix` |
-| `yyc3 apply` | 应用变更 | `yyc3 apply` |
-| `yyc3 mcp` | MCP Server 管理 | `yyc3 mcp init` |
-| `yyc3 registry` | 注册表管理 | `yyc3 registry add` |
-| `yyc3 samples` | 查看 20 套样板 | `yyc3 samples --list` |
-| `yyc3 themes` | 查看 28 套主题 | `yyc3 themes --list` |
+| `yyc3-ui init` | 初始化项目配置（`-t` 可命中 T01-T20 样板） | `yyc3-ui init -t admin-dashboard -n my-app` |
+| `yyc3-ui add <component>` | 添加组件到项目 | `yyc3-ui add button card` |
+| `yyc3-ui build` | 构建注册表 | `yyc3-ui build` |
+| `yyc3-ui diff <component>` | 对比组件变更 | `yyc3-ui diff button` |
+| `yyc3-ui docs <component>` | 查看组件文档 | `yyc3-ui docs dialog` |
+| `yyc3-ui info` | 环境信息 | `yyc3-ui info` |
+| `yyc3-ui view <component>` | 预览组件 | `yyc3-ui view card` |
+| `yyc3-ui search <query>` | 搜索组件 | `yyc3-ui search table` |
+| `yyc3-ui list` | 列出模板/样板/主题 | `yyc3-ui list --blueprints` |
+| `yyc3-ui migrate` | 迁移工具 | `yyc3-ui migrate --radix` |
+| `yyc3-ui apply` | 应用变更 | `yyc3-ui apply` |
+| `yyc3-ui mcp` | MCP Server 管理 | `yyc3-ui mcp init` |
+| `yyc3-ui registry` | 注册表管理 | `yyc3-ui registry add` |
+| `yyc3-ui samples` | 查看 20 套样板 | `yyc3-ui samples --list` |
+| `yyc3-ui themes` | 查看 28 套主题 | `yyc3-ui themes --list` |
 
 ---
 
