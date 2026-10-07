@@ -1,0 +1,66 @@
+{
+  "name": "@yyc3/theme",
+  "version": "1.0.0",
+  "description": "YYC³ ThemeManager —— 多主题运行时管理（注册/继承合并/CSS 变量动态更新/深浅自动跟随/预览/偏好持久化/导入导出/事件通知）",
+  "author": "YanYuCloudCube Team <admin@0379.email>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint src/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm typecheck"
+  },
+  "dependencies": {
+    "eventemitter3": "^5.0.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.11.0",
+    "globals": "^17.12.0",
+    "jsdom": "^26.0.0",
+    "tsup": "8.4.0",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.70.1",
+    "vitest": "^3.2.4"
+  },
+  "keywords": [
+    "yyc3",
+    "theme",
+    "thememanager",
+    "css-variables",
+    "dark-mode",
+    "react"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YanYuCloudCube/YYC3-FAmily-Pai.git",
+    "directory": "packages/theme"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}

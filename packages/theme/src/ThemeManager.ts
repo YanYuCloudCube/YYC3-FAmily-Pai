@@ -8,10 +8,10 @@
  * status: active
  * tags: [theme],[manager],[runtime]
  *
- * notes: 2026-10-07 移植自 YYC3-UI-MONO-v2/packages/theme ——
- *        1) EventEmitter 由 Node 'events' 改为 eventemitter3（浏览器安全，包内已有依赖）；
- *        2) 源文件引用的 ./utils/logger 实际不存在（死引用），内联轻量实现；
- *        3) matchMedia/document 增加 SSR 与测试环境防御。
+ * notes: 2026-10-07 归属迁移 —— 自 YYC3-UI-MONO-v2/packages/theme 移植并独立为
+ *        @yyc3/theme 包（@yyc3/ui 以子路径 ./theme-manager 转依赖再导出）。
+ *        适配：Node 'events' → eventemitter3；死引用 ./utils/logger 内联；
+ *        matchMedia/document SSR 防御；importTheme 抛错附 cause。
  *
  * @module ThemeManager
  */

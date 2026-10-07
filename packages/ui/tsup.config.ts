@@ -19,6 +19,7 @@ export default defineConfig({
     themes: 'src/themes/index.ts',
     hooks: 'src/hooks/index.ts',
     'theme-manager': 'src/theme-manager/index.ts',
+    performance: 'src/performance/index.ts',
     shadcn: 'src/shadcn.ts',
   },
   format: ['esm'],
@@ -26,7 +27,7 @@ export default defineConfig({
   splitting: true,
   sourcemap: true,
   clean: true,
-  external: ['react', 'react-dom', '@yyc3/core'],
+  external: ['react', 'react-dom', '@yyc3/core', '@yyc3/theme', '@yyc3/ai-hooks'],
   treeshake: true,
   minify: false,
 })

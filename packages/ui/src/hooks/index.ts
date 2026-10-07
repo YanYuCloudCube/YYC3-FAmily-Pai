@@ -49,6 +49,33 @@ export type { NavigationContext, UseNavigationContextResult } from './useNavigat
 export { useNotifications } from './useNotifications';
 export type { Notification } from './useNotifications';
 
+// ── 数据库 / DevOps / 手势（2026-10 批次三）──
+export { useDatabaseConfig } from './useDatabaseConfig';
+export type { UseDatabaseConfigReturn } from './useDatabaseConfig';
+export { useDevOps } from './useDevOps';
+export type { UseDevOpsReturn } from './useDevOps';
+export { useGestures, Swipeable, PinchZoom, Draggable } from './useGestures';
+export type { GestureType } from './useGestures';
+export { databaseService } from '../services/DatabaseService';
+export type {
+  DatabaseConfig,
+  LocalAPIProxyConfig,
+  ConnectionStatus,
+  ConnectionHealth,
+  SyncStrategy,
+  DatabaseStats,
+} from '../services/DatabaseService';
+export { devOpsService } from '../services/DevOpsService';
+export type {
+  MCPServer,
+  MCPToolResult,
+  Workflow,
+  InfraService,
+  DiagnosticIssue,
+  OpsLogEntry,
+  DevOpsMetrics,
+} from '../services/DevOpsService';
+
 // ── 共享类型（ChatMessage 与 components 既有导出冲突，不在此重导出）──
 export type {
   AIProvider,
