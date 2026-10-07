@@ -17,6 +17,8 @@ export default defineConfig({
     'business/enhanced': 'src/components/business/enhanced/index.ts',
     'business/dialogs': 'src/components/business/dialogs/index.ts',
     themes: 'src/themes/index.ts',
+    hooks: 'src/hooks/index.ts',
+    'theme-manager': 'src/theme-manager/index.ts',
     shadcn: 'src/shadcn.ts',
   },
   format: ['esm'],
