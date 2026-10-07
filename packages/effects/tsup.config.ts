@@ -1,7 +1,7 @@
 import { defineConfig } from "tsup"
 
 export default defineConfig({
-  entry: ["src/index.ts"],
+  entry: ["src/index.ts", "src/webgl/index.ts"],
   format: ["esm"],
   dts: {
     resolve: false,

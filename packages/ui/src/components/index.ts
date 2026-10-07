@@ -22,5 +22,9 @@ export * from './input'
 export * from './modal'
 export * from './layout'
 
+// 原子组件（2026-10 移植批次）
+export * from './glass-card'
+export * from './typing-indicator'
+
 // 业务组件
 export * from './business'
