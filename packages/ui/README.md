@@ -678,6 +678,8 @@ import { ThemeProvider, useTheme } from '@yyc3/ui/themes'
 | `./components` | ~18KB | 通用 UI 组件 | 需要 Button/Card 等 |
 | `./family` | ~15KB | AI Family 面板 | 核心 AI 功能界面 |
 | `./themes` | ~8KB | 主题系统 | 仅需主题能力 |
+| `./hooks` | ~10KB | 17 个实用 Hooks | 仅需 hooks（2026-10 移植批次） |
+| `./theme-manager` | ~6KB | ThemeManager 运行时 | 多主题运行时管理（继承/CSS 变量/预览/持久化） |
 
 ### 打包体积对比
 
