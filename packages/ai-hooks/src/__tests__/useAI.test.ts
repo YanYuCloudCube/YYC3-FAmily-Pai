@@ -1,6 +1,6 @@
 /**
  * @file useAI.test.ts
- * @description useAI Hook 测试（2026-10-07 移植，针对 yyc3-zero-dep-components/ai 纯 react 版）
+ * @description useAI Hook 测试（归属迁移自 @yyc3/ui hooks 批次）
  * @author YYC³ Team
  */
 

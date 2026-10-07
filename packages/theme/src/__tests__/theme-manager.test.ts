@@ -1,7 +1,7 @@
 /**
  * @file theme-manager.test.ts
- * @description ThemeManager 单元测试（2026-10-07 移植批次新写——
- *              源资产仅附 Playwright E2E spec，不适用于包测试）
+ * @description ThemeManager 单元测试（2026-10-07 —— 源资产仅附 Playwright E2E spec，
+ *              不适用于包测试，此为新写单测；归属迁移自 @yyc3/ui）
  * @author YYC³ Team
  */
 
@@ -30,7 +30,6 @@ function stubMatchMedia(matches = false) {
 describe('ThemeManager', () => {
   beforeEach(() => {
     localStorage.clear();
-    document.documentElement.getAttribute('style')?.split(';').forEach(() => {});
     document.documentElement.removeAttribute('style');
     document.body.className = '';
     document.body.removeAttribute('data-theme');
@@ -94,9 +93,8 @@ describe('ThemeManager', () => {
     const tm = new ThemeManager({ defaultMode: 'light' });
     const dark = tm.getAllThemes().find(t => t.id === 'dark')!;
 
-    // 覆盖值
     expect(dark.colors.background).toBe('#111827');
-    // 继承体系中的共用值（与 light 定义一致）
+
     const light = tm.getAllThemes().find(t => t.id === 'light')!;
     expect(dark.colors.success).toBe(light.colors.success);
     expect(dark.fonts.fontFamily).toBe(light.fonts.fontFamily);
@@ -115,9 +113,8 @@ describe('ThemeManager', () => {
 
     expect(custom.id).toBe('brand');
     expect(custom.colors.primary).toBe('#ff0000');
-    // 未覆盖字段继承
     expect(custom.colors.background).toBe('#ffffff');
-    // 已注册可应用
+
     tm.applyTheme('brand');
     expect(tm.getCurrentTheme()?.id).toBe('brand');
     expect(
@@ -175,7 +172,6 @@ describe('ThemeManager', () => {
     expect(restored.id).toBe('light');
     expect(restored.colors.primary).toBe('#3b82f6');
 
-    // 导入改名后成为可用新主题
     const modified = JSON.parse(json);
     modified.id = 'imported';
     const t2 = tm.importTheme(JSON.stringify(modified));
@@ -188,10 +184,8 @@ describe('ThemeManager', () => {
     const mql = stubMatchMedia(false);
     const tm = new ThemeManager({ defaultMode: 'auto', defaultTheme: 'light' });
 
-    // 初始：系统浅色 → light
     expect(tm.getCurrentMode()).toBe('light');
 
-    // 系统切到深色 → 自动应用 dark
     (mql as any).__emit(true);
     expect(tm.getCurrentTheme()?.id).toBe('dark');
     tm.destroy();
@@ -209,7 +203,6 @@ describe('ThemeManager', () => {
 
     vi.advanceTimersByTime(150);
     expect(document.getElementById('theme-preview')).toBeNull();
-    // 清除后恢复当前主题变量
     expect(
       document.documentElement.style.getPropertyValue('--color-background')
     ).toBe('#ffffff');

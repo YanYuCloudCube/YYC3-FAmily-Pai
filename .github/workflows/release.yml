@@ -43,7 +43,7 @@ jobs:
 
       - name: Test all packages
         run: |
-          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli effects; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli effects theme ai-hooks; do
             echo "▶️ Testing @yyc3/$pkg ..."
             pnpm --filter @yyc3/$pkg test
             EXIT_CODE=$?
