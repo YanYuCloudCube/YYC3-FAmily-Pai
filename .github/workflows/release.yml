@@ -71,6 +71,9 @@ jobs:
     name: Publish @yyc3/${{ matrix.package }}
     needs: quality-gate
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     strategy:
       matrix:
         package:
@@ -85,6 +88,8 @@ jobs:
             motion,
             cli,
             effects,
+            theme,
+            ai-hooks,
           ]
 
     steps:
@@ -106,13 +111,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Skip packages whose version differs from tag
+      - name: Skip if version differs from tag or already on npm
         run: |
           PKG_VERSION=$(node -p "require('./packages/${{ matrix.package }}/package.json').version")
           TAG_VERSION=${GITHUB_REF#refs/tags/v}
           echo "Package version: $PKG_VERSION | Tag version: $TAG_VERSION"
           if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
             echo "::notice::@yyc3/${{ matrix.package }} 版本($PKG_VERSION)与 tag($TAG_VERSION)不一致，本轮跳过发布；需要发布时单独打对应版本的 tag"
+            echo "SKIP_PUBLISH=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          if npm view "@yyc3/${{ matrix.package }}@$PKG_VERSION" version >/dev/null 2>&1; then
+            echo "::notice::npm 已存在 @yyc3/${{ matrix.package }}@$PKG_VERSION，跳过重复发布"
             echo "SKIP_PUBLISH=true" >> "$GITHUB_ENV"
           fi
 
@@ -133,7 +143,8 @@ jobs:
 
       - name: Publish to npm
         if: env.SKIP_PUBLISH != 'true'
-        run: pnpm --filter @yyc3/${{ matrix.package }} publish --access public --no-git-checks
+        run:
+          pnpm --filter @yyc3/${{ matrix.package }} publish --access public --no-git-checks
           --provenance --tag ${{ steps.tag.outputs.tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.YYC3_NPM_TOKEN }}
@@ -239,7 +250,7 @@ jobs:
       - name: Verify npm packages
         run: |
           echo "📦 Verifying published packages..."
-          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli effects theme ai-hooks; do
             VERSION=$(npm view @yyc3/$pkg version 2>/dev/null || echo "not found")
             echo "  @yyc3/$pkg: $VERSION"
           done
@@ -247,7 +258,7 @@ jobs:
       - name: Verify no workspace protocol leaked
         run: |
           echo "🔍 Checking for leaked workspace: protocol..."
-          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli; do
+          for pkg in core ai-hub emotion i18n-core ui plugins mcp-servers motion cli effects theme ai-hooks; do
             DEPS=$(npm view @yyc3/$pkg dependencies --json 2>/dev/null || echo "{}")
             if echo "$DEPS" | grep -q "workspace:"; then
               echo "::error::@yyc3/$pkg has workspace: protocol in published dependencies!"
@@ -262,6 +273,6 @@ jobs:
           echo "🎉 Release ${{ github.ref_name }} completed successfully!"
           echo ""
           echo "Published:"
-          echo "  - 9 npm packages (@yyc3/*)"
+          echo "  - 12 npm packages (@yyc3/*) eligible per tag match"
           echo "  - Docker image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.ref_name }}"
           echo "  - Changelog updated"
