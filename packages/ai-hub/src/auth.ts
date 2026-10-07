@@ -14,7 +14,7 @@
  *
  * brief 认证管理模块
  */
-import OpenAI from 'openai';
+import type OpenAI from 'openai';
 import { HubConfig } from './types.js';
 import { logger } from './logger.js';
 import { YYC3Error, YYC3ErrorCode } from './errors/index.js';
@@ -108,7 +108,8 @@ export class YYC3Auth {
       throw new YYC3Error(YYC3ErrorCode.AUTH_OPENAI_KEY_MISSING);
     }
 
-    const client = new OpenAI({ apiKey });
+    const { default: OpenAIClient } = await import('openai');
+    const client = new OpenAIClient({ apiKey });
 
     return {
       type: 'openai',
