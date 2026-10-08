@@ -146,8 +146,8 @@ jobs:
         run:
           pnpm --filter @yyc3/${{ matrix.package }} publish --access public --no-git-checks
           --provenance --tag ${{ steps.tag.outputs.tag }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.YYC3_NPM_TOKEN }}
+        # OIDC Trusted Publishing（零静态 token）：id-token: write + --provenance
+        # ⚠️ 前置条件：npmjs.com 逐包完成 Trusted Publishers 绑定（repo + release.yml），未绑定前推新 tag 会 401
 
   docker-release:
     name: Docker Release
