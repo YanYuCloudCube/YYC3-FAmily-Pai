@@ -418,4 +418,25 @@ npm deprecate @yyc3/core@1.2.3 "Critical bug, use 1.2.4 instead"
 └── CHANGELOG.md
 ```
 
+---
+
+## 落地实录（2026-10-08）：发布战役全绿 + OIDC 迁移
+
+本文档阶段 1-7 的建议已在实战中全部落地并经受检验。当日 7 包批量发布（ui 3.0.0-alpha.4@beta、mcp-servers 3.0.0、ai-hub 1.4.3、effects 1.1.0、cli 1.2.0、theme 1.0.0、ai-hooks 1.0.0），过程中修复 4 个发布链路问题：
+
+| Commit | 问题 | 修复 |
+|---|---|---|
+| `30f913b8` | ai-hub `prepublishOnly` 含 `pnpm docs` → pnpm 解析为内置「打开主页」（xdg-open），CI 无浏览器 exit 3 | 移除（typedoc 产物不在 files） |
+| `d8802f3a` | Update Changelog job：根目录无 CHANGELOG.md → git add exit 128 | 无文件优雅跳过（各包独立 changelog + .changeset） |
+| `bdb6d1fd` | publish 矩阵单包构建，ui 的 workspace 依赖（theme/ai-hooks）dist 未建 → TS2307 | `pnpm -r --filter "@yyc3/<pkg>..." run build` 连带依赖链 |
+| `216f4863` | ui 三个新出口（hooks/theme-manager/performance）声明目录形式，tsup 产物为单文件 → ERR_MODULE_NOT_FOUND | 出口改单文件路径 + bump alpha.4 |
+
+**两条发布手册铁律（实战沉淀）**：
+1. **单次 push tag ≤3 条**——超过 3 条 GitHub 不产生任何 push 事件（静默哑火，5 条 tag 全部不触发 workflow，需分批删除重推）
+2. **npmmirror 镜像同步有延迟**（元数据先到、tarball 后到）——发布后实测需 `--registry=https://registry.npmjs.org`
+
+**OIDC Trusted Publishing 迁移（`8009be02`）**：publish job 去 `NODE_AUTH_TOKEN`（`id-token: write` + `--provenance` 早已就绪）；前置条件为 npmjs.com 逐包绑定 Trusted Publishers（repo + release.yml），绑定验证通过后 `YYC3_NPM_TOKEN` secret 可退役。废版 alpha.3 已按「阶段 6 战时条例」deprecate（借道一次性 workflow_dispatch 执行，用后即删）——印证「优先 deprecate、绝不 unpublish」。
+
+**幂等发布升级**：「Skip if version differs or already on npm」由 fail 改为 notice + 跳过——一条 tag 只发对应版本，其余 11 个矩阵 job 优雅跳过，批量补发不炸不噪音。
+
 现在，YYC³ 就在 **Monorepo → 多包并行测试 → 安全扫描 → 版本一致性校验 → 自动发布 → 文档同步 → 快速回滚** 的完整闭环上运行。  

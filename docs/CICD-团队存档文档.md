@@ -18,6 +18,7 @@ language: zh-CN
 ## 团队存档信息
 
 ### 1. 项目基础信息
+
 ```
 - 项目名称 & 描述：YYC³ AI Family (yyc3-family-pai) — 八位拟人化AI家人的智能中枢 (Monorepo)
 
@@ -40,12 +41,13 @@ language: zh-CN
 ---
 
 ### 2. NPM 发包策略
+
 ```
 - 使用公共 npm registry 还是私有源：公共 npm registry (https://registry.npmjs.org/)
 
 - scope（如 @company）：@yyc3
 
-- 发包权限：YYC3_NPM_TOKEN (GitHub Secrets)，当前无双人审批流程
+- 发包权限：✅ **OIDC Trusted Publishing（2026-10-08 迁移，零静态 token）**——npmjs.com 逐包绑定 Trusted Publishers（repo: `YanYuCloudCube/YYC3-FAmily-Pai`，workflow: `release.yml`）；历史方式为 YYC3_NPM_TOKEN (GitHub Secrets)，token 可在绑定验证通过后从 Secrets 退役，当前无双人审批流程
 
 - 版本策略：conventional-changelog (angular 规范) 自动生成 CHANGELOG
             手动升级 package.json version → prepublishOnly 钩子触发构建测试
@@ -58,6 +60,7 @@ language: zh-CN
 ---
 
 ### 3. 代码质量与测试
+
 ```
 - 使用哪个代码风格工具：ESLint v10 (Flat Config) + TypeScript ESLint v8
                          globals v17 | 无 Prettier (使用 ESLint 内置格式化)
@@ -85,6 +88,7 @@ language: zh-CN
 ---
 
 ### 4. CI/CD 环境
+
 ```
 - 使用 GitHub Actions 作为 CI/CD 平台：✅ 6 个 Workflow
    ├── packages-ci.yml     → 包矩阵测试 (Node 20+22) + Codecov 覆盖率上报
@@ -110,6 +114,7 @@ language: zh-CN
 ---
 
 ### 5. 安全与合规
+
 ```
 - 是否强制 npm audit（安全漏洞阈值）：⚠️ 未在 CI 中强制 (建议添加 audit --audit-level=high)
 
@@ -130,6 +135,7 @@ language: zh-CN
 ---
 
 ### 6. 发布后动作
+
 ```
 - 是否需要发布后将版本号提交回仓库：✅ version 脚本自动处理
                                      (conventional-changelog + git add)
@@ -145,6 +151,7 @@ language: zh-CN
 ```
 
 ### 6. 发布后动作
+
 ```
 - 是否需要发布后将版本号提交回仓库：
 
@@ -163,8 +170,9 @@ language: zh-CN
 ## 附录：关键配置速查
 
 ### 包结构映射
+
 | 包名 | NPM Scope | 入口文件 | 构建工具 | 测试数 |
-|------|-----------|----------|----------|--------|
+| ------ | ----------- | ---------- | ---------- | -------- |
 | core | @yyc3/core | dist/index.js | tsup | ~250+ |
 | ai-hub | @yyc3/ai-hub | dist/index.js | tsup | 110 |
 | ui | @yyc3/ui | dist/index.js | tsup | 25 |
@@ -172,6 +180,7 @@ language: zh-CN
 | i18n-core | @yyc3/i18n-core | dist/index.js | tsc | 443 |
 
 ### CI 矩阵配置
+
 ```yaml
 packages-ci:
   node-version: [20, 22]  # 包测试矩阵
@@ -187,14 +196,15 @@ docker-publish:
 ```
 
 ### Secrets 清单
+
 | Secret 名称 | 用途 | 必需 |
-|-------------|------|------|
+| ------------- | ------ | ------ |
 | CODECOV_TOKEN | 覆盖率上报 | 可选 |
-| YYC3_NPM_TOKEN | NPM 发布权限 | 必须 |
+| YYC3_NPM_TOKEN | NPM 发布权限 | 已退役（2026-10-08 迁移 OIDC Trusted Publishing；npmjs.com 绑定验证通过后可删除） |
 | GITHUB_TOKEN | GHCR 推送 + cosign | 自动 |
 
 ---
 
-**文档版本**: v1.0  
-**最后更新**: 2026-04-24  
+**文档版本**: v1.0
+**最后更新**: 2026-04-24
 **维护者**: YYC³ Quality Assurance Team
