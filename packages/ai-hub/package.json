@@ -46,7 +46,7 @@
     "test:coverage": "vitest run --coverage",
     "clean": "rm -rf dist docs/api",
     "docs": "typedoc",
-    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm typecheck && pnpm docs"
+    "prepublishOnly": "pnpm clean && pnpm build && pnpm test && pnpm typecheck"
   },
   "keywords": [
     "yyc3",
