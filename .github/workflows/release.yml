@@ -139,7 +139,7 @@ jobs:
 
       - name: Build package
         if: env.SKIP_PUBLISH != 'true'
-        run: pnpm --filter @yyc3/${{ matrix.package }} run build
+        run: pnpm -r --filter "@yyc3/${{ matrix.package }}..." run build
 
       - name: Publish to npm
         if: env.SKIP_PUBLISH != 'true'
