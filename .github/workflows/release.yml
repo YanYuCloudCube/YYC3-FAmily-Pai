@@ -105,7 +105,8 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: 22
-          registry-url: "https://registry.npmjs.org"
+          # ⚠️ OIDC Trusted Publishing：不得设置 registry-url——它会写入空 token 的
+          # .npmrc（//registry.npmjs.org/:_authToken=），反而阻断 OIDC 交换
           cache: pnpm
 
       - name: Install dependencies
@@ -141,13 +142,20 @@ jobs:
         if: env.SKIP_PUBLISH != 'true'
         run: pnpm -r --filter "@yyc3/${{ matrix.package }}..." run build
 
-      - name: Publish to npm
+      - name: Upgrade npm CLI for OIDC trusted publishing
         if: env.SKIP_PUBLISH != 'true'
-        run:
-          pnpm --filter @yyc3/${{ matrix.package }} publish --access public --no-git-checks
-          --provenance --tag ${{ steps.tag.outputs.tag }}
-        # OIDC Trusted Publishing（零静态 token）：id-token: write + --provenance
-        # ⚠️ 前置条件：npmjs.com 逐包完成 Trusted Publishers 绑定（repo + release.yml），未绑定前推新 tag 会 401
+        run: npm install -g npm@^11
+        # Node 22 自带 npm 10.x；Trusted Publishing 要求 npm ≥ 11.5.1 + Node ≥ 22.14.0
+
+      - name: Pack package（pnpm pack 替换 workspace 协议）
+        if: env.SKIP_PUBLISH != 'true'
+        run: pnpm --filter @yyc3/${{ matrix.package }} pack --pack-destination /tmp/pack
+
+      - name: Publish to npm（OIDC 交换，零静态 token）
+        if: env.SKIP_PUBLISH != 'true'
+        run: npm publish /tmp/pack/*.tgz --access public --provenance --tag ${{ steps.tag.outputs.tag }}
+        # ⚠️ 前置条件：npmjs.com 逐包完成 Trusted Publishers 绑定（repo + release.yml），
+        # 未绑定前推新 tag 的该包 publish 将 401；绑定与 token 并存不冲突，OIDC 优先
 
   docker-release:
     name: Docker Release
