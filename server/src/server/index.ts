@@ -22,6 +22,9 @@ export class ServerManager {
   private configManager: ConfigManager;
   private transportManager: TransportManager;
   private apiManager?: ApiManager;
+  /** 监听边界：默认 127.0.0.1（N3 权限裁决：未鉴权端点不暴露 LAN） */
+  private readonly host = process.env.YYC3_MCP_HOST ?? '127.0.0.1';
+
   private httpServer?: Server;
   private port: number;
 
@@ -87,7 +90,7 @@ export class ServerManager {
       this.setupHttpServerEventHandlers();
 
       await new Promise<void>((resolve, reject) => {
-        this.httpServer!.listen(this.port, () => {
+        this.httpServer!.listen(this.port, this.host, () => {
           this.logger.info(`SSE transport running on http://localhost:${this.port}`);
           this.logger.info(`Connect to http://localhost:${this.port}/mcp for SSE MCP connections`);
           resolve();
@@ -138,7 +141,7 @@ export class ServerManager {
 
     // Start listening
     await new Promise<void>((resolve, reject) => {
-      this.httpServer!.listen(this.port, () => {
+      this.httpServer!.listen(this.port, this.host, () => {
         this.logger.info(`MCP Prompts Server running on http://localhost:${this.port}`);
         this.logger.info(`Connect to http://localhost:${this.port}/mcp for MCP connections`);
         resolve();
