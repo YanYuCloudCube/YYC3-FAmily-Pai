@@ -22,7 +22,7 @@ import { z } from 'zod';
 
 // Import generated Zod schemas from contracts (SSOT for parameter validation)
 
-import { ConsolidatedSystemControl, createConsolidatedSystemControl } from './system-control.js';
+import { ConsolidatedSystemControl, createConsolidatedSystemControl } from './system-control/index.js';
 import { ToolDescriptionManager } from './tool-description-manager.js';
 import { ConfigManager } from '../config/index.js';
 import { FrameworkManager, createFrameworkManager } from '../frameworks/framework-manager.js';

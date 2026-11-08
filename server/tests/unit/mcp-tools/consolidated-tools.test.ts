@@ -5,7 +5,7 @@ import {
   createPromptExecutionService,
 } from '../../../src/mcp-tools/prompt-engine/index.js';
 import { createConsolidatedPromptManager } from '../../../src/mcp-tools/prompt-manager/index.js';
-import { createConsolidatedSystemControl } from '../../../src/mcp-tools/system-control.js';
+import { createConsolidatedSystemControl } from '../../../src/mcp-tools/system-control/index.js';
 import type { GateManager } from '../../../src/gates/gate-manager.js';
 import { MockLogger, MockMcpServer, testPrompts } from '../../helpers/test-helpers.js';
 

@@ -32,7 +32,6 @@ const SRC_DIR = path.join(__dirname, '..', 'src');
 // Grandfathered files - current violators being tracked for decomposition
 // These files are temporarily exempted until they are refactored
 const GRANDFATHERED_FILES = [
-  'mcp-tools/system-control.ts', // 2717 lines - needs service decomposition
   'mcp-tools/prompt-engine/core/engine.ts', // 2343 lines
   'mcp-tools/index.ts', // 1487 lines
   'runtime/application.ts', // 1303 lines
